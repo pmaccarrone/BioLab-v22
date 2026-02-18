@@ -137,8 +137,8 @@ const MATERIALI_DATA = {
  "url": "https://www.entropyresins.com/technology/super-sap"
  },
  {
- "titolo": "Sicomin - Green Epoxy Systems",
- "url": "https://www.sicomin.com/products/epoxy-systems"
+ "titolo": "Sicomin - Bio-resine epossidiche",
+ "url": "https://www.sicomin.com/"
  }
  ],
  "credits": {
@@ -250,19 +250,15 @@ const MATERIALI_DATA = {
  "fonte": "Bioplastic Cook Book",
  "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3",
  "link_risorse": [
- {
- "titolo": "Bioplastic Cook Book - Margaret Dunne",
- "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
- },
- {
- "titolo": "Fabricademy - Biofabricating Materials",
- "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/gelatinefoil/"
- },
- {
- "titolo": "HKU Labs - Gelatine Bioplastics",
- "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/gelatine-bioplastics"
- }
- ],
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    },
+    {
+      "titolo": "Wikipedia - Microbially Induced Calcite Precipitation",
+      "url": "https://en.wikipedia.org/wiki/Microbially_induced_calcium_carbonate_precipitation"
+    }
+  ],
  "credits": {
  "designer": [
  "Margaret Dunne (Bioplastic Cook Book)",
@@ -318,19 +314,19 @@ const MATERIALI_DATA = {
  "fonte": "Materiom",
  "url": "https://materiom.org/recipe/41",
  "link_risorse": [
- {
- "titolo": "Materiom - Agar bioplastic Ag02",
- "url": "https://materiom.org/recipe/41"
- },
- {
- "titolo": "Green Plastics - E.S. Stevens",
- "url": "https://trinitycollegetrees.wordpress.com/2017/04/07/bioplastics/"
- },
- {
- "titolo": "HKU Labs - Agar Bioplastics",
- "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/agar-bioplastics"
- }
- ],
+    {
+      "titolo": "Trinity College - Bioplastics (amido)",
+      "url": "https://trinitycollegetrees.wordpress.com/2017/04/07/bioplastics/"
+    },
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    },
+    {
+      "titolo": "Lab Pastoe - Starch Bioplastics",
+      "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/starch-bioplastics"
+    }
+  ],
  "credits": {
  "autori": [
  "E.S. Stevens (Green Plastics book)"
@@ -386,19 +382,19 @@ const MATERIALI_DATA = {
  "fonte": "Letteratura scientifica + Gastronomia molecolare",
  "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/alginatefoil/",
  "link_risorse": [
- {
- "titolo": "TextileLab Waag - Alginate Foil",
- "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/alginatefoil/"
- },
- {
- "titolo": "PMC - Mechanical Properties of Alginate Hydrogels",
- "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10386690/"
- },
- {
- "titolo": "El Bulli - Spherification Technique",
- "url": "https://www.molecularrecipes.com/spherification/"
- }
- ],
+    {
+      "titolo": "Suzanne Lee - Grow Your Own Clothes (TED)",
+      "url": "https://www.ted.com/talks/suzanne_lee_grow_your_own_clothes"
+    },
+    {
+      "titolo": "Science Buddies - Vegan Kombucha Leather",
+      "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/GreenChem_p010/green-chemistry/vegan-kombucha-leather"
+    },
+    {
+      "titolo": "PMC - Bacterial Cellulose Applications",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10386690/"
+    }
+  ],
  "credits": {
  "designer": [
  "Loes Bogers (TextileLab Waag)",
@@ -450,15 +446,15 @@ const MATERIALI_DATA = {
  "fonte": "TextileLab Waag",
  "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/biofoam/",
  "link_risorse": [
- {
- "titolo": "TextileLab Waag - Biofoam",
- "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/biofoam/"
- },
- {
- "titolo": "Material Factors - Biofoam Recipe",
- "url": "https://www.materialfactors.org/recipes/biofoam"
- }
- ],
+    {
+      "titolo": "Natural Pigments - Resins, Gums and Balsams in Painting",
+      "url": "https://www.naturalpigments.com/artist-materials/resins-balsams"
+    },
+    {
+      "titolo": "Natural Pigments - Shellac: Applications and Use in Art",
+      "url": "https://www.naturalpigments.com/artist-materials/shellac-use-art"
+    }
+  ],
  "credits": {
  "designer": [
  "Loes Bogers (TextileLab Amsterdam)"
@@ -576,15 +572,15 @@ const MATERIALI_DATA = {
  "fonte": "Letteratura packaging",
  "url": "https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/carnauba-wax",
  "link_risorse": [
- {
- "titolo": "ScienceDirect - Carnauba Wax Overview",
- "url": "https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/carnauba-wax"
- },
- {
- "titolo": "USDA - Carnauba Wax Report",
- "url": "https://www.ams.usda.gov/sites/default/files/media/waxes%20report%202014.pdf"
- }
- ],
+    {
+      "titolo": "PMC - Basalt Fibre-Reinforced Laminates with Bio Resin (2024)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11281058/"
+    },
+    {
+      "titolo": "ScienceDirect - Basalt fibers: sustainable green material for composites",
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0950061824019767"
+    }
+  ],
  "credits": {
  "origine": "Brasile (Copernicia prunifera palm)",
  "note": "FDA GRAS, E903 in EU. Usata dal 1900s per lucidatura e coating alimentare"
@@ -634,19 +630,19 @@ const MATERIALI_DATA = {
  "fonte": "Letteratura scientifica",
  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10342135/",
  "link_risorse": [
- {
- "titolo": "PMC - Chitosan Antibacterial Films Review",
- "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10342135/"
- },
- {
- "titolo": "MDPI - Biodegradable Chitosan Films",
- "url": "https://www.mdpi.com/2304-8158/12/18/3519"
- },
- {
- "titolo": "Nature - Chitosan Bioplastic from Shrimp",
- "url": "https://www.nature.com/articles/s41598-024-61377-9"
- }
- ],
+    {
+      "titolo": "MDPI - Mycelium-Based Composites",
+      "url": "https://www.mdpi.com/2304-8158/12/18/3519"
+    },
+    {
+      "titolo": "Nature - Mycelium Composite Materials",
+      "url": "https://www.nature.com/articles/s41598-024-61377-9"
+    },
+    {
+      "titolo": "Ecovative - Grow.bio",
+      "url": "https://grow.bio/"
+    }
+  ],
  "credits": {
  "aziende": [
  "Kitozyme",
@@ -756,23 +752,15 @@ const MATERIALI_DATA = {
  "fonte": "BioCouture / TED",
  "url": "https://www.ted.com/talks/suzanne_lee_grow_your_own_clothes",
  "link_risorse": [
- {
- "titolo": "TED Talk - Suzanne Lee: Grow your own clothes",
- "url": "https://www.ted.com/talks/suzanne_lee_grow_your_own_clothes"
- },
- {
- "titolo": "TextileLab Waag - Kombucha Leather",
- "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/kombuchapaper/"
- },
- {
- "titolo": "Material Factors - Bacterial Cellulose",
- "url": "https://www.materialfactors.org/recipes/bacterial-cellulose"
- },
- {
- "titolo": "Science Buddies - Kombucha Leather",
- "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/GreenChem_p010/green-chemistry/vegan-kombucha-leather"
- }
- ],
+    {
+      "titolo": "MDPI - Sustainable Packaging from Bacterial Cellulose and Sugarcane Bagasse (2024)",
+      "url": "https://www.mdpi.com/1996-1944/17/15/3732"
+    },
+    {
+      "titolo": "Good Start Packaging - Guide to Sugarcane Fiber Packaging",
+      "url": "https://www.goodstartpackaging.com/sugarcane-fiber-packaging-guide/"
+    }
+  ],
  "credits": {
  "designer": [
  "Suzanne Lee (BioCouture, fondatrice)",
@@ -833,19 +821,19 @@ const MATERIALI_DATA = {
  "fonte": "Ecovative Design",
  "url": "https://grow.bio/",
  "link_risorse": [
- {
- "titolo": "Grow.bio - Mycelium Materials",
- "url": "https://grow.bio/"
- },
- {
- "titolo": "Mushroom Packaging - Ecovative",
- "url": "https://mushroompackaging.com/"
- },
- {
- "titolo": "Ellen MacArthur Foundation - Ecovative Case Study",
- "url": "https://www.ellenmacarthurfoundation.org/circular-examples/packaging-from-mushroom-plastic-ecovative"
- }
- ],
+    {
+      "titolo": "PMC - Algal-Based Bioplastics: Global Trends and Commercialization (2024)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11189328/"
+    },
+    {
+      "titolo": "Packaging Digest - Algae's Role in Sustainable Packaging",
+      "url": "https://www.packagingdigest.com/sustainability/algae-could-revolutionize-sustainable-packaging"
+    },
+    {
+      "titolo": "WEF - Biodegradable Plastics from Spirulina Algae",
+      "url": "https://www.weforum.org/stories/2023/08/biodegradable-plastics-spirulina-algae/"
+    }
+  ],
  "credits": {
  "fondatori": [
  "Eben Bayer",
@@ -902,19 +890,19 @@ const MATERIALI_DATA = {
  "fonte": "Science Buddies / Storico",
  "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/Chem_p101/chemistry/turn-milk-into-plastic",
  "link_risorse": [
- {
- "titolo": "Science Buddies - Milk Plastic",
- "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/Chem_p101/chemistry/turn-milk-into-plastic"
- },
- {
- "titolo": "Scientific American - Milk Plastic",
- "url": "https://www.scientificamerican.com/article/bring-science-home-milk-plastic/"
- },
- {
- "titolo": "Materiom - Casein Plastic",
- "url": "https://materiom.org/recipe/106"
- }
- ],
+    {
+      "titolo": "Kaffeeform - Material (composito da fondi di caffè)",
+      "url": "https://www.kaffeeform.com/en/material/"
+    },
+    {
+      "titolo": "Dezeen - Kaffeeform: cups from recycled coffee grounds",
+      "url": "https://www.dezeen.com/2015/05/22/kaffeeform-recycled-ground-coffee-waste-cup-julian-lechner/"
+    },
+    {
+      "titolo": "MaterialDistrict - Coffee cups made from waste coffee grounds",
+      "url": "https://materialdistrict.com/article/coffee-cups-waste-coffee-grounds/"
+    }
+  ],
  "credits": {
  "inventori": [
  "Auguste Trillat (1893, insolubilizzazione caseina con formaldeide)"
@@ -1082,15 +1070,15 @@ const MATERIALI_DATA = {
  "fonte": "FabTextiles",
  "url": "http://fabtextiles.org/the-secrets-of-bioplastic/",
  "link_risorse": [
- {
- "titolo": "FabTextiles - The Secrets of Bioplastic",
- "url": "http://fabtextiles.org/the-secrets-of-bioplastic/"
- },
- {
- "titolo": "Bioplastic Cook Book - Margaret Dunne",
- "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
- }
- ],
+    {
+      "titolo": "Loes Bogers - Gelatine Foil Recipe (Fabricademy)",
+      "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/gelatinefoil/"
+    },
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    }
+  ],
  "credits": {
  "istituzioni": [
  "FabTextiles",
@@ -1118,15 +1106,15 @@ const MATERIALI_DATA = {
  "fonte": "Fabricademy",
  "url": "https://materiom.org/recipe/43",
  "link_risorse": [
- {
- "titolo": "Materiom - Agar|Gelatin bioplastic AgGe01",
- "url": "https://materiom.org/recipe/43"
- },
- {
- "titolo": "Fabricademy - Biofabricating",
- "url": "https://class.textile-academy.org/2020/tanja.lovric/assignments/week06/"
- }
- ],
+    {
+      "titolo": "Fabricademy - Bioplastics Week (agar+gelatina)",
+      "url": "https://class.textile-academy.org/2020/tanja.lovric/assignments/week06/"
+    },
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    }
+  ],
  "credits": {
  "autori": [
  "Materiom community"
@@ -1233,15 +1221,15 @@ const MATERIALI_DATA = {
  "fonte": "FabTextiles",
  "url": "http://fabtextiles.org/coffee-leather-bag/",
  "link_risorse": [
- {
- "titolo": "FabTextiles - Coffee BIO-Leather Bag",
- "url": "http://fabtextiles.org/coffee-leather-bag/"
- },
- {
- "titolo": "CraftHub - Bio-Leather from Coffee",
- "url": "https://www.crafthub.eu/material/bio-leather-made-from-waste-coffee-grounds/"
- }
- ],
+    {
+      "titolo": "CraftHub - Bio-leather from Coffee Grounds",
+      "url": "https://www.crafthub.eu/material/bio-leather-made-from-waste-coffee-grounds/"
+    },
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    }
+  ],
  "credits": {
  "istituzioni": [
  "FabTextiles",
@@ -1269,15 +1257,15 @@ const MATERIALI_DATA = {
  "fonte": "Remix el Barrio",
  "url": "https://fablabbcn.org/projects/remix-el-barrio",
  "link_risorse": [
- {
- "titolo": "Fab Lab Barcelona - Remix el Barrio",
- "url": "https://fablabbcn.org/projects/remix-el-barrio"
- },
- {
- "titolo": "Materiom - Pectin bioplastic",
- "url": "https://materiom.org/recipe/50"
- }
- ],
+    {
+      "titolo": "Fab Lab Barcelona - Remix El Barrio (scarti agrumi)",
+      "url": "https://fablabbcn.org/projects/remix-el-barrio"
+    },
+    {
+      "titolo": "Materiom - Orange Peel Bioplastic",
+      "url": "https://commons.materiom.org/"
+    }
+  ],
  "credits": {
  "istituzioni": [
  "Fab Lab Barcelona"
@@ -1308,15 +1296,15 @@ const MATERIALI_DATA = {
  "fonte": "Materiom",
  "url": "https://materiom.org/recipe/60",
  "link_risorse": [
- {
- "titolo": "Materiom - Eggshell Composite Eg01",
- "url": "https://materiom.org/recipe/60"
- },
- {
- "titolo": "Green Lab Wiki - Eggshell Composite",
- "url": "https://wiki.greenlab.org/2019/05/09/making-composite-materials-from-food-waste-algae/"
- }
- ],
+    {
+      "titolo": "Materiom - Eggshell Composite",
+      "url": "https://commons.materiom.org/"
+    },
+    {
+      "titolo": "GreenLab Wiki - Compositi da scarti alimentari",
+      "url": "https://wiki.greenlab.org/2019/05/09/making-composite-materials-from-food-waste-algae/"
+    }
+  ],
  "credits": {
  "codice": "Eg01",
  "istituzioni": [
@@ -1459,15 +1447,15 @@ const MATERIALI_DATA = {
  "fonte": "Materiom",
  "url": "https://materiom.org/recipe/152",
  "link_risorse": [
- {
- "titolo": "Materiom - Conductive agar Ag03",
- "url": "https://materiom.org/recipe/152"
- },
- {
- "titolo": "Fabricademy - Conductive Bioplastics",
- "url": "https://class.textile-academy.org/2022/marisa-satsia/assignments/week06/"
- }
- ],
+    {
+      "titolo": "Fabricademy - Bioplastics (agar conduttivo)",
+      "url": "https://class.textile-academy.org/2022/marisa-satsia/assignments/week06/"
+    },
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    }
+  ],
  "credits": {
  "codice": "Conductive Ag03",
  "istituzioni": [
@@ -1496,15 +1484,15 @@ const MATERIALI_DATA = {
  "fonte": "FabTextiles",
  "url": "https://materiom.org/recipe/411",
  "link_risorse": [
- {
- "titolo": "Materiom - Agar|Spirulina bioplastic AgSp01",
- "url": "https://materiom.org/recipe/411"
- },
- {
- "titolo": "ITP NYU - Green Ocean Agar Recipe",
- "url": "https://itp.nyu.edu/courses/material/2023/11/05/green-ocean-agar-agar-bioplastic-recipe/"
- }
- ],
+    {
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
+      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+    },
+    {
+      "titolo": "Fabricademy - Bio-chromatic textiles (spirulina)",
+      "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/bioplastic-spirulina/"
+    }
+  ],
  "credits": {
  "codice": "AgSp01",
  "istituzioni": [
@@ -1635,15 +1623,15 @@ const MATERIALI_DATA = {
  "fonte": "Materiom / RISD",
  "url": "https://materiom.org/recipe/106",
  "link_risorse": [
- {
- "titolo": "Materiom - Casein plastic",
- "url": "https://materiom.org/recipe/106"
- },
- {
- "titolo": "Science Buddies - Turn Milk into Plastic",
- "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/Chem_p101/chemistry/turn-milk-into-plastic"
- }
- ],
+    {
+      "titolo": "Science Buddies - Turn Milk Into Plastic (Caseina)",
+      "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/Chem_p101/chemistry/turn-milk-into-plastic"
+    },
+    {
+      "titolo": "Scientific American - Milk Plastic",
+      "url": "https://www.scientificamerican.com/article/bring-science-home-milk-plastic/"
+    }
+  ],
  "credits": {
  "inventori": [
  "Auguste Trillat (1893)"
