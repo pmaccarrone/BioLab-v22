@@ -16,11 +16,11 @@
     /* Modal image */
     .app-modal-img{width:100%;max-height:400px;object-fit:cover;border-radius:8px}
     @media(max-width:768px){
-        .app-modal-img{max-height:150px !important}
-        .app-modal{overflow-y:auto !important;-webkit-overflow-scrolling:touch}
-        .app-modal-layout{flex-direction:column !important}
-        .app-modal-img-wrap{flex-shrink:0 !important}
-        .app-modal-content{overflow:visible !important;padding:12px !important}
+        .app-modal{overflow:auto !important;display:flex !important;flex-direction:column !important}
+        .app-modal-layout{flex:1 !important;overflow:visible !important;min-height:0 !important}
+        .app-modal-content{flex:1 !important;max-height:none !important;overflow:visible !important}
+        .app-modal-img-wrap{min-height:150px !important;height:150px !important}
+        .app-modal-img{object-fit:contain !important;object-position:center !important;background:#f0f0f0}
     }
     </style>
 </head>
