@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLab - Applicazioni</title>
+    <link rel="stylesheet" href="biolab.css">
+    <style>
+    /* Card thumbnail — small square, left side */
+    .app-card{display:flex;flex-direction:row;gap:10px;overflow:hidden;align-items:flex-start}
+    .app-card-thumb{width:56px;height:56px;flex-shrink:0;overflow:hidden;border-radius:6px;background:#f0ede6;display:flex;align-items:center;justify-content:center;margin-top:2px}
+    .app-card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .app-card-thumb.no-img{background:#f5f2ec}
+    .app-card-thumb.no-img img{display:none}
+    .app-card-body{flex:1;min-width:0}
+    /* Modal image */
+    .app-modal-img{width:100%;max-height:400px;object-fit:cover;border-radius:8px}
+    @media(max-width:768px){
+        .app-modal{overflow:auto !important;display:flex !important;flex-direction:column !important}
+        .app-modal-layout{flex:1 !important;overflow:visible !important;min-height:0 !important}
+        .app-modal-content{flex:1 !important;max-height:none !important;overflow:visible !important}
+        .app-modal-img-wrap{min-height:150px !important;height:150px !important}
+        .app-modal-img{object-fit:contain !important;object-position:center !important;background:#f0f0f0}
+    }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="bl-header" id="blHeader"></header>
+
+<!-- ===== MODAL DETTAGLIO ===== -->
+<div class="app-modal-overlay" id="appModal" onclick="closeModal(event)">
+    <div class="app-modal" onclick="event.stopPropagation()">
+        <button class="app-modal-close" onclick="closeModal()">&times;</button>
+        <div class="app-modal-layout">
+            <div class="app-modal-img-wrap" id="modalImgWrap">
+                <img class="app-modal-img" id="modalImg" src="" alt="">
+                <div class="app-modal-img-placeholder" id="modalImgPh">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    <span>Immagine non disponibile</span>
+                </div>
+            </div>
+            <div class="app-modal-content">
+                <div class="app-modal-cat" id="modalCat"></div>
+                <h2 class="app-modal-title" id="modalTitle"></h2>
+                <div class="app-modal-base" id="modalBase"></div>
+                <div class="app-modal-body" id="modalBody"></div>
+                <div class="app-modal-ingredienti" id="modalIng"></div>
+                <div class="app-modal-note" id="modalNote"></div>
+                <div class="app-modal-actions">
+                    <a class="app-modal-link" id="modalLink" href="#" target="_blank" rel="noopener">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        <span id="modalLinkText">Visita il sito</span>
+                    </a>
+                    <button class="app-modal-close-btn" onclick="closeModal()">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CONTENUTO PAGINA ===== -->
+<div class="bl-page-content">
+    <div class="bl-section-title">
+        <h1>Progetti Reali</h1>
+        <p>Chi usa i biomateriali nel mondo reale? Aziende, designer e ricercatori come ispirazione per i tuoi esperimenti. Clicca su un progetto per saperne di piu.</p>
+    </div>
+
+    <!-- FILTRI CATEGORIA -->
+    <div class="app-toolbar">
+        <div class="ing-filters" id="appFilters">
+            <span class="ing-filter active" data-cat="ALL" onclick="filterApps(null)" id="appFilterAll">Tutti</span>
+            <span class="ing-filter" data-cat="packaging" onclick="filterApps('packaging')">Packaging</span>
+            <span class="ing-filter" data-cat="gioiello" onclick="filterApps('gioiello')">Gioiello</span>
+            <span class="ing-filter" data-cat="tessuto" onclick="filterApps('tessuto')">Tessuto / Pelle</span>
+            <span class="ing-filter" data-cat="pannello" onclick="filterApps('pannello')">Pannello</span>
+            <span class="ing-filter" data-cat="design_scultura" onclick="filterApps('design_scultura')">Design / Scultura</span>
+            <span class="ing-filter" data-cat="didattica" onclick="filterApps('didattica')">Didattica / Kit</span>
+        </div>
+        <input type="text" class="mat-search" id="appSearch" placeholder="Cerca progetto, materiale..." oninput="renderApps()">
+    </div>
+
+    <div class="app-count" id="appCount">0 progetti</div>
+
+    <!-- GRIGLIA CARD -->
+    <div class="app-grid" id="appGrid"></div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bl-footer">
+    <p>Strumento didattico sperimentale &middot; Le formulazioni sono indicative &middot; BioLab v22</p>
+    <p class="bl-footer-credit">Sviluppato con <a href="https://www.anthropic.com" target="_blank" rel="noopener">Claude AI</a> by Anthropic</p>
+</footer>
+
+<!-- ===== CORE ===== -->
+<script src="database_biomateriali_v11.js"></script>
+<script src="biolab-core.js"></script>
+
+<!-- ===== DATI E JS PAGINA ===== -->
+<script>
+(function() {
+    'use strict';
+
+    // ---- CATEGORIE ----
+    // Categorie: icon è UI-only, il resto viene da ESEMPI_REALI.categorie nel DB
+    var CATEGORIE = (function() {
+        var icons = {
+            packaging: '\u{1F4E6}', gioiello: '\u{1F48E}', tessuto: '\u{1F9F5}',
+            pannello: '\u{1F9F1}', design_scultura: '\u{1F3A8}', didattica: '\u{1F393}'
+        };
+        var cats = {};
+        var dbCats = (typeof ESEMPI_REALI !== 'undefined' && ESEMPI_REALI.categorie) || {};
+        for (var k in dbCats) {
+            cats[k] = { label: dbCats[k].label, color: dbCats[k].color, bg: dbCats[k].bg, icon: icons[k] || '' };
+        }
+        return cats;
+    })();
+
+    // Progetti: letti dal database (ESEMPI_REALI.progetti) con normalizzazione campi
+    var PROGETTI_RAW = (typeof ESEMPI_REALI !== 'undefined' && ESEMPI_REALI.progetti) || [];
+    var PROGETTI = PROGETTI_RAW.map(function(p) {
+        return {
+            nome: p.nome || '',
+            desc: p.desc || '',
+            base: p.base || '',
+            link: p.link || '',
+            cat: p.cat || p.categoria || '',
+            img: p.img || null,
+            ingredienti: p.ingredienti || [],
+            dettaglio: p.dettaglio || p.desc || '',
+            note: p.note || ''
+        };
+    });
+
+    // Mapping nome progetto → file immagine in asset/imm_applicazioni/
+    // Keys = p.nome.toLowerCase() esatti dal DB (ESEMPI_REALI.progetti)
+    // Values = nomi file esatti in asset/imm_applicazioni/
+    var IMG_MAP = {
+        'notpla (ooho)':                            'notpla.jpg',
+        'shellworks':                               'shellworks.jpg',
+        'ecovative mushroom packaging':             'ecovative-packaging.jpg',
+        'galalite (storica)':                       'galalite2.jpg',
+        'shell homage (billie van katwijk)':        'shell-homage.jpg',
+        'margarita talep':                          'margarita-talep.jpg',
+        'vegea':                                    'vegea.jpg',
+        'pinatex (ananas anam)':                    'pinatex.jpg',
+        'desserto':                                 'desserto.jpg',
+        'tomtex':                                   'tomtex.jpg',
+        'mylo (bolt threads)':                      'mylo.jpg',
+        'reishi (mycoworks)':                       'reishi.jpg',
+        'celium (polybion)':                        'celium2.jpg',
+        'biocouture / biofabricate (suzanne lee)':  'biocouture.jpg',
+        'chip[s] board':                            'chips-board.jpg.pn.jpg',
+        'natural fiber welding':                    'nfw.jpg',
+        'neri oxman \u2014 vespers':                'oxman-vespers3.jpg',
+        'neri oxman \u2014 aguahoja':               'oxman-aguahoja.jpg',
+        'ponto biodesign':                          'Ponto-Biodesign.jpg',
+        'hy-fi tower (the living)':                 'hyfi.jpg',
+        'myco-type (risd)':                         'myco-type.jpg',
+        'fabricademy':                              'fabricademy.jpg',
+        'grow.bio (ecovative)':                     'grow-bio(ecovative).jpg',
+        'grown.bio':                                'grow-bio.jpg',
+    };
+
+    function getImg(nome) {
+        if (!nome) return null;
+        var low = nome.toLowerCase().trim();
+        // Exact match
+        if (IMG_MAP[low]) return IMG_MAP[low];
+        // Partial: nome contains key or key contains nome
+        for (var key in IMG_MAP) {
+            if (low.indexOf(key) >= 0 || key.indexOf(low) >= 0) return IMG_MAP[key];
+        }
+        // Word match: any significant word in nome matches a key
+        var words = low.replace(/[()\/\-,.:]/g, ' ').split(/\s+/).filter(function(w) { return w.length > 3; });
+        for (var w = 0; w < words.length; w++) {
+            for (var key2 in IMG_MAP) {
+                if (key2.indexOf(words[w]) >= 0) return IMG_MAP[key2];
+            }
+        }
+        return null;
+    }
+
+    var IMG_BASE = '../asset/imm_applicazioni/';
+
+    var currentCat = null;
+
+    // ---- INIT ----
+    document.addEventListener('DOMContentLoaded', function() {
+        // Debug: log unmatched images
+        var allBtn = document.getElementById('appFilterAll');
+        if (allBtn) allBtn.textContent = 'Tutti (' + PROGETTI.length + ')';
+        renderApps();
+    });
+
+    // ---- FILTER ----
+    window.filterApps = function(cat) {
+        currentCat = cat;
+        document.querySelectorAll('#appFilters .ing-filter').forEach(function(el) {
+            el.classList.remove('active');
+            if (cat === null && el.dataset.cat === 'ALL') el.classList.add('active');
+            else if (el.dataset.cat === cat) el.classList.add('active');
+        });
+        renderApps();
+    };
+
+    // ---- MODAL ----
+    window.openModal = function(idx) {
+        var p = PROGETTI[idx];
+        if (!p) return;
+        var c = CATEGORIE[p.cat] || { label: p.cat, color: '#666', bg: '#f5f5f5' };
+
+        // Image
+        var imgEl = document.getElementById('modalImg');
+        var phEl = document.getElementById('modalImgPh');
+        var imgFile = p.img || getImg(p.nome);
+        imgEl.style.display = 'none';
+        phEl.style.display = 'flex';
+        if (imgFile) {
+            imgEl.onload = function() { this.style.display = 'block'; phEl.style.display = 'none'; };
+            imgEl.onerror = function() { this.style.display = 'none'; phEl.style.display = 'flex'; };
+            imgEl.src = IMG_BASE + imgFile;
+            imgEl.alt = p.nome;
+        }
+
+        document.getElementById('modalCat').textContent = c.label;
+        document.getElementById('modalCat').style.background = c.bg;
+        document.getElementById('modalCat').style.color = c.color;
+
+        document.getElementById('modalTitle').textContent = p.nome;
+        document.getElementById('modalBase').innerHTML = 'Base materiale: <strong>' + esc(p.base) + '</strong>';
+        document.getElementById('modalBody').textContent = p.dettaglio;
+
+        // Ingredienti — match con DB per rendere aggiungibili al carrello
+        var ingEl = document.getElementById('modalIng');
+        if (p.ingredienti && p.ingredienti.length > 0) {
+            var ingHtml = '<strong>Ingredienti principali:</strong> ';
+            ingHtml += p.ingredienti.map(function(i) {
+            var dbId = _matchIngrediente(i);
+            if (dbId) {
+                var inCart = BioLab.isInCart(dbId);
+                var cls = inCart ? 'app-modal-ing-tag in-cart' : 'app-modal-ing-tag addable';
+                var btn = inCart
+                    ? '<span class="' + cls + '">' + esc(i) + ' <span class="ing-check">&#10003;</span></span>'
+                    : '<span class="' + cls + '" onclick="event.stopPropagation(); _addIngFromApp(\'' + dbId + '\',' + idx + ')" title="Aggiungi al carrello">' + esc(i) + ' <span class="ing-plus">+</span></span>';
+                return btn;
+            }
+            return '<span class="app-modal-ing-tag">' + esc(i) + '</span>';
+        }).join(' ');
+            ingEl.innerHTML = ingHtml;
+            ingEl.style.display = 'block';
+        } else {
+            ingEl.style.display = 'none';
+        }
+
+        // Note
+        var noteEl = document.getElementById('modalNote');
+        if (p.note) {
+            noteEl.style.display = 'block';
+            noteEl.textContent = p.note;
+        } else {
+            noteEl.style.display = 'none';
+        }
+
+        // Link
+        var linkEl = document.getElementById('modalLink');
+        if (p.link) {
+            linkEl.href = p.link;
+            linkEl.style.display = 'inline-flex';
+            var domain = p.link.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+            document.getElementById('modalLinkText').textContent = 'Visita ' + domain;
+        } else {
+            linkEl.style.display = 'none';
+        }
+
+        document.getElementById('appModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeModal = function(ev) {
+        if (ev && ev.target !== ev.currentTarget) return;
+        document.getElementById('appModal').classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    // ESC to close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    // ---- RENDER ----
+    window.renderApps = function() {
+        var search = (document.getElementById('appSearch').value || '').toLowerCase().trim();
+        var indices = [];
+        PROGETTI.forEach(function(p, i) {
+            if (currentCat && p.cat !== currentCat) return;
+            if (search) {
+                var hay = (p.nome + ' ' + p.desc + ' ' + p.base + ' ' + p.cat + ' ' + (p.ingredienti || []).join(' ')).toLowerCase();
+                if (hay.indexOf(search) === -1) return;
+            }
+            indices.push(i);
+        });
+
+        var grid = document.getElementById('appGrid');
+        if (indices.length === 0) {
+            grid.innerHTML = '<div class="mat-empty">Nessun progetto corrisponde ai filtri</div>';
+            document.getElementById('appCount').textContent = '0 progetti';
+            return;
+        }
+
+        var html = '';
+        indices.forEach(function(i) {
+            var p = PROGETTI[i];
+            var c = CATEGORIE[p.cat] || { label: p.cat, color: '#666', bg: '#f5f5f5' };
+            var imgFile = p.img || getImg(p.nome);
+            html += '<div class="app-card" style="border-left-color:' + c.color + '" onclick="openModal(' + i + ')">';
+            // Thumbnail (small)
+            if (imgFile) {
+                html += '<div class="app-card-thumb"><img src="' + IMG_BASE + esc(imgFile) + '" alt="' + esc(p.nome) + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\')"></div>';
+            } else {
+                html += '<div class="app-card-thumb no-img"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
+            }
+            html += '<div class="app-card-body">';
+            html += '<div class="app-card-cat" style="background:' + c.bg + ';color:' + c.color + '">' + c.label + '</div>';
+            html += '<div class="app-card-name">' + esc(p.nome) + '</div>';
+            html += '<div class="app-card-desc">' + esc(p.desc) + '</div>';
+            html += '<div class="app-card-base">Base: <strong>' + esc(p.base) + '</strong></div>';
+            if (p.ingredienti && p.ingredienti.length > 0) {
+                html += '<div class="app-card-tags">';
+                p.ingredienti.forEach(function(ing) {
+                    html += '<span class="app-card-tag">' + esc(ing) + '</span>';
+                });
+                html += '</div>';
+            }
+            if (p.note) {
+                html += '<div class="app-card-note">' + esc(p.note) + '</div>';
+            }
+            html += '<div class="app-card-cta">Scopri di piu &rarr;</div>';
+            html += '</div>'; // close body
+            html += '</div>';
+        });
+
+        grid.innerHTML = html;
+        document.getElementById('appCount').textContent = indices.length + ' progetti';
+    };
+
+    function esc(s) { return !s ? '' : String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    // Mapping nomi ingredienti nei progetti → ID nel database
+    var ING_MAP = {
+        'alginato': 'alginato', 'agar': 'agar', 'chitosano': 'chitosano',
+        'cloruro di calcio': 'cacl2', 'cacl2': 'cacl2',
+        'caseina (da latte)': 'caseina', 'caseina': 'caseina',
+        'acido acetico': 'aceto', 'amido di patata': 'amido_patata',
+        'scoby': 'scoby', 'cellulosa batterica': 'scoby',
+        'micelio fungino': 'micelio', 'micelio (radici fungine)': 'micelio',
+        'micelio (ganoderma)': 'micelio', 'micelio': 'micelio',
+        'fondi di caffè': 'fondi_caffe', 'fondi di caffe': 'fondi_caffe',
+        'tè zuccherato': 'te_nero', 'te zuccherato': 'te_nero',
+        'formaldeide (storica) o borace': 'borace', 'borace': 'borace',
+        'chitina (da gusci di crostacei)': 'chitosano', 'chitina': 'chitosano',
+        'fibre di cotone riciclato': 'fibre_cotone',
+        'bucce': 'bucce_agrumi', 'coloranti naturali': 'curcuma',
+        'pectina': 'pectina', 'glicerina': 'glicerina'
+    };
+
+    window._matchIngrediente = function(nome) {
+        if (!nome) return null;
+        var low = nome.toLowerCase().trim();
+        if (ING_MAP[low]) return ING_MAP[low];
+        // Fuzzy: try partial match
+        for (var key in ING_MAP) {
+            if (low.indexOf(key) >= 0 || key.indexOf(low) >= 0) return ING_MAP[key];
+        }
+        return null;
+    };
+
+    window._addIngFromApp = function(dbId, modalIdx) {
+        BioLab.addToCart(dbId);
+        BioLab.updateCartBadge();
+        // Re-render modal ingredients to show checkmark
+        openModal(modalIdx);
+    };
+
+})();
+</script>
+
+</body>
+</html>
