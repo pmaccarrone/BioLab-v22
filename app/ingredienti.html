@@ -23,7 +23,8 @@
         .ing-topbar { display:flex; flex-direction:column; gap:8px; }
         .ing-search { width:100%; box-sizing:border-box; }
         .ing-filters { padding-right:0; overflow-x:auto; -webkit-overflow-scrolling:touch;
-            white-space:nowrap; flex-shrink:0; scrollbar-width:none; }
+            white-space:nowrap; flex-shrink:0; scrollbar-width:none;
+            max-width:100%; width:100%; box-sizing:border-box; display:block !important; }
         .ing-filters::-webkit-scrollbar { display:none; }
         .ing-compare-btn { position:static; transform:none; align-self:flex-end; margin-top:-4px; }
     }
