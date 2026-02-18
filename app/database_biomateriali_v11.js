@@ -251,12 +251,12 @@ const MATERIALI_DATA = {
  "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3",
  "link_risorse": [
     {
-      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
-      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+      "titolo": "Frontiers in Materials — MICP: Concepts and Applications in Bioconcrete (2019)",
+      "url": "https://www.frontiersin.org/journals/materials/articles/10.3389/fmats.2019.00126/full"
     },
     {
-      "titolo": "Wikipedia - Microbially Induced Calcite Precipitation",
-      "url": "https://en.wikipedia.org/wiki/Microbially_induced_calcium_carbonate_precipitation"
+      "titolo": "ASM Journals — Optimizing Biological CaCO₃ Precipitation by S. pasteurii (2023)",
+      "url": "https://journals.asm.org/doi/10.1128/aem.01794-22"
     }
   ],
  "credits": {
@@ -510,15 +510,15 @@ const MATERIALI_DATA = {
  "fonte": "Bioplastic Cook Book",
  "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3",
  "link_risorse": [
- {
- "titolo": "Bioplastic Cook Book - Starch Foam",
- "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
- },
- {
- "titolo": "Fabricademy - Agar Foam",
- "url": "https://class.textile-academy.org/2020/tanja.lovric/assignments/week06/"
- }
- ],
+    {
+      "titolo": "PMC — Flax Fiber/Epoxy Composites with High Biobased Content (2023)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10575258/"
+    },
+    {
+      "titolo": "Easy Composites — Natural Flax Fibre Reinforcement in Composites (guida pratica)",
+      "url": "https://www.easycomposites.co.uk/learning/flax-fibre-in-composites"
+    }
+  ],
  "credits": {
  "designer": [
  "Margaret Dunne (Bioplastic Cook Book)"
@@ -694,15 +694,15 @@ const MATERIALI_DATA = {
  "fonte": "Bioplastic Cook Book",
  "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3",
  "link_risorse": [
- {
- "titolo": "Bioplastic Cook Book",
- "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
- },
- {
- "titolo": "Fabricademy - Composite Bioplastics",
- "url": "https://class.textile-academy.org/2023/ala-janbek/assignments/week06/"
- }
- ],
+    {
+      "titolo": "PMC — Critical Review on Wood-Based Polymer Composites: Processing and Properties (2022)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8838915/"
+    },
+    {
+      "titolo": "Oklahoma State University — What is Wood Plastic Composite? (guida tecnica)",
+      "url": "https://extension.okstate.edu/fact-sheets/what-is-wood-plastic-composite.html"
+    }
+  ],
  "credits": {
  "designer": [
  "Margaret Dunne"
