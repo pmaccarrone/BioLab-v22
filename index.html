@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLab — Simulatore Didattico per Biomateriali</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f4f4f4; color: #333;
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 1.2rem 1rem;
+        }
+        .landing {
+            max-width: 580px; text-align: center;
+        }
+        .landing-logo {
+            width: 56px; height: 56px; margin: 0 auto 0.8rem;
+        }
+        .landing-logo img {
+            width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+        }
+        h1 { font-size: 1.5rem; color: #1a472a; margin-bottom: 0.2rem; }
+        .subtitle { font-size: 0.88rem; color: #666; margin-bottom: 1.2rem; line-height: 1.4; }
+
+        .landing-nav {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+        .landing-card {
+            display: flex; flex-direction: column;
+            background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
+            text-decoration: none; color: #333; overflow: hidden;
+            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+        }
+        .landing-card:hover {
+            border-color: #2d5a3d; box-shadow: 0 4px 16px rgba(45,90,61,0.12);
+            transform: translateY(-2px);
+        }
+        .card-img {
+            width: 100%; aspect-ratio: 1; object-fit: cover;
+            background: #e8e8e8; display: block;
+        }
+        .card-body {
+            padding: 0.5rem 0.5rem 0.6rem; text-align: center;
+        }
+        .card-title { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.15rem; color: #1a472a; }
+        .card-desc { font-size: 0.68rem; color: #888; line-height: 1.4; }
+
+        .footer-info {
+            font-size: 0.7rem; color: #aaa; line-height: 1.6;
+            max-width: 400px; text-align: center; margin: 0 auto;
+        }
+        .footer-info a { color: #2d5a3d; text-decoration: none; }
+        .footer-info a:hover { text-decoration: underline; }
+
+        @media (max-width: 520px) {
+            .landing-nav { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="landing">
+    <div class="landing-logo">
+        <img src="asset/logo_albertina.png" alt="Logo Accademia Albertina">
+    </div>
+
+    <h1>BioLab</h1>
+    <p class="subtitle">
+        Configuratore Biomateriali<br>
+        Accademia Albertina di Belle Arti di Torino · Scuola PAI<br>
+        Tipologia dei Nuovi Materiali · Prof. Paolo Maccarrone
+    </p>
+
+    <div class="landing-nav">
+        <a href="app/materiali.html" class="landing-card">
+            <img class="card-img" src="asset/onboarding/onboarding_catalogo.jpg" alt="Materiali">
+            <div class="card-body">
+                <div class="card-title">Materiali</div>
+                <div class="card-desc">Catalogo documentato</div>
+            </div>
+        </a>
+        <a href="app/ingredienti.html" class="landing-card">
+            <img class="card-img" src="asset/onboarding/onboarding_ingredienti.jpg" alt="Ingredienti">
+            <div class="card-body">
+                <div class="card-title">Ingredienti</div>
+                <div class="card-desc">81 ingredienti, 11 famiglie</div>
+            </div>
+        </a>
+        <a href="app/applicazioni.html" class="landing-card">
+            <img class="card-img" src="asset/onboarding/onboarding_progetto.jpg" alt="Applicazioni">
+            <div class="card-body">
+                <div class="card-title">Applicazioni</div>
+                <div class="card-desc">Progetti reali, ispirazioni</div>
+            </div>
+        </a>
+        <a href="app/lab.html#sperimenta" class="landing-card">
+            <img class="card-img" src="asset/onboarding/onboarding_laboratorio.jpg" alt="Laboratorio">
+            <div class="card-body">
+                <div class="card-title">Laboratorio</div>
+                <div class="card-desc">Simula e prevedi</div>
+            </div>
+        </a>
+        <a href="app/lab.html#tutor" class="landing-card">
+            <img class="card-img" src="asset/onboarding/onboarding_tutor.jpg" alt="Tutor">
+            <div class="card-body">
+                <div class="card-title">Tutor</div>
+                <div class="card-desc">Percorso guidato</div>
+            </div>
+        </a>
+        <a href="app/criticita.html" class="landing-card">
+            <img class="card-img" src="asset/onboarding/onboarding_criticita.jpg" alt="Criticità">
+            <div class="card-body">
+                <div class="card-title">Criticità</div>
+                <div class="card-desc">Diagnostica e soluzioni</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="footer-info">
+        Strumento didattico sperimentale · Le formulazioni sono indicative · BioLab v22<br>
+        Sviluppato con <a href="https://www.anthropic.com" target="_blank">Claude AI by Anthropic</a><br>
+        <a href="app/about.html">Credits e fonti</a> · Database v11.1
+    </div>
+</div>
+
+</body>
+</html>

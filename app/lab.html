@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioLab — Laboratorio</title>
+<link rel="stylesheet" href="biolab.css">
+
+</head>
+<body>
+
+<!-- ===== HEADER (generato da core.js initNav) ===== -->
+<header class="bl-header" id="blHeader"></header>
+
+<!-- ===== MAIN CONTENT: LABORATORIO ===== -->
+<div class="bl-page-content">
+    <!-- MODE TOGGLE -->
+    <div class="lab-mode-bar">
+        <span class="lab-mode-label">Modalita:</span>
+        <button class="lab-mode-btn active" id="modeSpecBtn" onclick="setLabMode('sperimenta')">Sperimenta</button>
+        <button class="lab-mode-btn" id="modeTutorBtn" onclick="setLabMode('tutor')">Tutor</button>
+        <span class="lab-mode-hint" id="modeHint">Libero: aggiungi ingredienti, osserva le predizioni</span>
+    </div>
+
+    <div class="lab-layout">
+        <!-- LEFT: TAVOLO -->
+        <div class="tavolo-panel">
+            <div class="tavolo-header">
+                Tavolo di Lavoro
+                <span class="count" id="tavoloCount">0</span>
+            </div>
+            <div class="tavolo-body">
+                <div class="tavolo-ingredienti" id="tavoloArea">
+                    <div class="tavolo-hint">Clicca sugli ingredienti nel carrello per aggiungerli al tavolo</div>
+                </div>
+                
+                <div class="compat-section">
+                    <div class="compat-title">Verifica Compatibilita</div>
+                    <div id="compatResults">
+                        <div class="compat-empty">Aggiungi almeno 2 ingredienti</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RIGHT: RESULTS + ACCORDIONS -->
+        <div class="result-panel">
+            <!-- === SPERIMENTA MODE (visible by default) === -->
+            <div id="specMode">
+            <div class="result-header" id="resultHeader">Materiale Risultante
+                <a href="#" class="section-jump" onclick="event.preventDefault(); if(!document.getElementById('accDescrizione').classList.contains('acc-open')) toggleAccordion('accDescrizione'); setTimeout(function(){document.getElementById('accDescrizione').scrollIntoView({behavior:'smooth', block:'start'});},100);">Descrizione &#8595;</a>
+            </div>
+            <div class="result-body">
+                <div class="result-section">
+                    <div class="result-label">Tipo previsto</div>
+                    <div class="result-type" id="resultType">-</div>
+                    <div class="result-base" id="resultBase">Aggiungi ingredienti al tavolo</div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-label">Proprieta stimate</div>
+                    <div class="bar-row"><span class="bar-label">Trasparenza</span><div class="bar-track"><div class="bar-fill" id="barTrasp" style="width:0%"></div></div><span class="bar-qual" id="qualTrasp"></span></div>
+                    <div class="bar-row"><span class="bar-label">Flessibilita</span><div class="bar-track"><div class="bar-fill" id="barFlex" style="width:0%"></div></div><span class="bar-qual" id="qualFlex"></span></div>
+                    <div class="bar-row"><span class="bar-label">Resist. H&#8322;O</span><div class="bar-track"><div class="bar-fill" id="barH2O" style="width:0%"></div></div><span class="bar-qual" id="qualH2O"></span></div>
+                    <div class="bar-row"><span class="bar-label">Resist. mecc.</span><div class="bar-track"><div class="bar-fill" id="barMecc" style="width:0%"></div></div><span class="bar-qual" id="qualMecc"></span></div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-label">Requisiti</div>
+                    <div class="result-tags" id="resultTags">-</div>
+                </div>
+                
+                <div class="limits-section" id="limitsSection" style="display:none;">
+                    <div class="limits-title">Limiti e soluzioni</div>
+                    <div id="limitsContent"></div>
+                </div>
+                
+                <div class="suggestions-section" id="suggestionsSection" style="display:none;">
+                    <div class="suggestions-title">Suggerimenti</div>
+                    <div id="suggestionsContent"></div>
+                </div>
+
+                <!-- ACCORDION: TECNICA -->
+                <div class="acc-section acc-tecnica" id="accTecnica">
+                    <div class="acc-header" onclick="toggleAccordion('accTecnica')">
+                        <span>Tecnica di lavorazione</span>
+                        <span class="acc-chevron">&#9654;</span>
+                    </div>
+                    <div class="acc-body">
+                        <div class="acc-body-inner">
+                            <div class="tecnica-section" id="tecnicaSection">
+                                <div class="tecnica-options">
+                                    <button class="tecnica-btn active" data-tecnica="colata" onclick="setTecnica('colata')">Colata</button>
+                                    <button class="tecnica-btn" data-tecnica="reticolazione" onclick="setTecnica('reticolazione')">Reticolazione ionica</button>
+                                    <button class="tecnica-btn" data-tecnica="compressione" onclick="setTecnica('compressione')">Compressione a caldo</button>
+                                    <button class="tecnica-btn" data-tecnica="aerazione" onclick="setTecnica('aerazione')">Aerazione / Schiuma</button>
+                                    <button class="tecnica-btn" data-tecnica="fermentazione" onclick="setTecnica('fermentazione')">Fermentazione</button>
+                                    <button class="tecnica-btn" data-tecnica="stratificazione" onclick="setTecnica('stratificazione')">Stratificazione</button>
+                                </div>
+                                <div class="tecnica-hint" id="tecnicaHint"></div>
+                                <div class="coating-row" id="coatingRow">
+                                    <label><input type="checkbox" id="coatingCheck" onchange="toggleCoating()"> Lipide come coating superficiale</label>
+                                    <span class="coating-hint" id="coatingHint"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACCORDION: FORMULA (stub per Pezzo 2) -->
+                <div class="acc-section acc-formula acc-open" id="accFormula">
+                    <div class="acc-header" onclick="toggleAccordion('accFormula')">
+                        <span>Ipotesi di Formula <small style="font-weight:normal;color:#888;font-size:0.65rem;">formulazioni variabili da verificare</small></span>
+                        <span class="acc-chevron">&#9654;</span>
+                    </div>
+                    <div class="acc-body">
+                        <div class="acc-body-inner">
+                            <div id="formulaContent">
+                                <div class="formula-empty">Usa le caselle sul tavolo per selezionare</div>
+                            </div>
+                            <div class="smart-messages" id="smartMessages"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ACCORDION: ANNOTAZIONI -->
+                <div class="acc-section acc-annotazioni" id="accAnnotazioni">
+                    <div class="acc-header" onclick="toggleAccordion('accAnnotazioni')">
+                        <span>Annotazioni personali</span>
+                        <span class="acc-chevron">&#9654;</span>
+                    </div>
+                    <div class="acc-body">
+                        <div class="acc-body-inner">
+                            <textarea id="formulaAnnotations" class="annotations-textarea" placeholder="Scrivi qui le tue note sulla formula: osservazioni, varianti da provare, risultati dei test..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ACCORDION: FORMULE SALVATE (stub per Pezzo 2) -->
+                <div class="acc-section acc-salvate" id="accSalvate">
+                    <div class="acc-header" onclick="toggleAccordion('accSalvate')">
+                        <span>Formule Salvate <span class="acc-badge" style="background:#aaa;color:#fff;" id="savedCount">0</span></span>
+                        <span class="acc-chevron">&#9654;</span>
+                    </div>
+                    <div class="acc-body">
+                        <div class="acc-body-inner">
+                            <div class="saved-formulas-list" id="savedFormulasList">
+                                <div class="saved-empty">Nessuna formula salvata</div>
+                            </div>
+                            <div style="display:none;">
+                                <input type="file" id="importFile" accept=".json" onchange="importLabData(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ACCORDION: DESCRIZIONE MATERIALE (stub per Pezzo 3) -->
+                <div class="acc-section acc-descrizione" id="accDescrizione">
+                    <div class="acc-header" onclick="toggleAccordion('accDescrizione')">
+                        <span>Descrizione Materiale Ipotizzato</span>
+                        <span class="acc-chevron">&#9654;</span>
+                    </div>
+                    <div class="acc-body">
+                        <div class="acc-body-inner">
+                            <div class="description-disclaimer">Previsione basata sulle famiglie chimiche, non sulle interazioni specifiche tra ingredienti. Il risultato reale dipende da proporzioni, temperatura e tecnica.</div>
+                            <div class="description-content" id="descriptionContent">
+                                <div class="description-empty">Aggiungi ingredienti al tavolo per vedere una descrizione del possibile materiale</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- /specMode -->
+
+            <!-- === TUTOR MODE (hidden by default) === -->
+            <div id="tutorMode" style="display:none">
+                <div class="tutor-container" id="tutorContainer">
+                    <div class="tutor-empty">
+                        <div class="tutor-empty-icon">&#9741;</div>
+                        Attiva la modalita Tutor per ricevere suggerimenti<br>
+                        basati sugli ingredienti nel tuo carrello.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="lab-action-bar" id="labActionBar">
+                <button onclick="saveFormula()" class="lab-act-btn act-save" title="Salva formula corrente">Salva formula</button>
+                <button onclick="printFormula()" class="lab-act-btn act-print" title="Stampa scheda A4 della formula">Stampa scheda</button>
+                <button onclick="printPortfolio()" class="lab-act-btn act-port" title="Stampa riepilogo di tutte le formule salvate">Portfolio</button>
+                <button onclick="exportLabData()" class="lab-act-btn act-exp" title="Scarica backup dati">Esporta</button>
+                <button onclick="document.getElementById('importFile').click()" class="lab-act-btn act-imp" title="Ripristina dati da backup">Importa</button>
+                <button onclick="askClaude()" class="lab-act-btn act-claude" title="Chiedi consiglio a Claude AI sulla formula">Chiedi a Claude</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3 id="modalTitle">Dettaglio</h3>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-actions" id="modalActions"></div>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== DATABASE ===== -->
+<script src="biolab-core.js"></script>
+<script src="database_biomateriali_v11.js"></script>
+<script src="tutor.js"></script>
+
+<script>
+// =============================================================
+// LAB.HTML — PEZZO 1
+// Tavolo + Barre + calculateMaterial + Compatibilita + Tecniche
+// =============================================================
+
+// =============================================
+// MODALITA LAB: sperimenta (default) / tutor
+// =============================================
+let labMode = 'sperimenta';
+
+function setLabMode(mode) {
+    labMode = mode;
+    var specBtn = document.getElementById('modeSpecBtn');
+    var tutorBtn = document.getElementById('modeTutorBtn');
+    var specPanel = document.getElementById('specMode');
+    var tutorPanel = document.getElementById('tutorMode');
+    var hint = document.getElementById('modeHint');
+    var tavoloPanel = document.querySelector('.tavolo-panel');
+    var resultPanel = document.querySelector('.result-panel');
+
+    if (mode === 'tutor') {
+        specBtn.classList.remove('active');
+        tutorBtn.classList.add('active');
+        specPanel.style.display = 'none';
+        tutorPanel.style.display = 'block';
+        if (tavoloPanel) tavoloPanel.style.display = 'none';
+        if (resultPanel) resultPanel.style.flex = '1 1 100%';
+        hint.textContent = 'Guidato: il tutor analizza i tuoi ingredienti e suggerisce direzioni';
+        if (typeof BioLab !== 'undefined' && typeof BioLab.Tutor !== 'undefined') {
+            BioLab.Tutor.render();
+        }
+    } else {
+        specBtn.classList.add('active');
+        tutorBtn.classList.remove('active');
+        specPanel.style.display = 'block';
+        tutorPanel.style.display = 'none';
+        if (tavoloPanel) tavoloPanel.style.display = '';
+        if (resultPanel) resultPanel.style.flex = '';
+        hint.textContent = 'Libero: aggiungi ingredienti, osserva le predizioni';
+    }
+}
+
+// =============================================
+// STATO (carrello = BioLab.cart da biolab-core.js)
+// =============================================
+let tavolo = [];
+let formulaSelection = new Set();
+let customDosages = {};
+let descUpdateTimer = null;
+let currentTecnica = 'colata';
+let coatingAttivo = false;
+
+// =============================================
+// COSTANTI CALIBRATE — lette dal database (database_biomateriali_v11.js)
+// FAMILY_PROP_RATES, FAMILY_INTERACTIONS, TAVOLO_LIMITS, FAMILY_DOSE_RULES,
+// TECNICA_MODIFIERS, TECNICA_REQUIRES, BAR_QUAL_LABELS, FAMILY_COLORS
+// sono definiti come const globali nel DB.
+// getCategoryColor e getCategoryClass sono in biolab-core.js.
+
+// Helper: scrive solo le formule lab nell'archivio unificato
+function _writeLabFormulas(labFormulas) {
+    var archive = BioLab.loadArchive().filter(function(a) { return a.origine !== 'lab'; });
+    labFormulas.forEach(function(f) { f.origine = 'lab'; archive.push(f); });
+    localStorage.setItem(BioLab.ARCHIVE_KEY, JSON.stringify(archive));
+}
+
+function showToast(message, type, duration) {
+    type = type || 'info'; duration = duration || 3000;
+    var container = document.getElementById('toastContainer');
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.innerHTML = message;
+    container.appendChild(toast);
+    setTimeout(function() { toast.remove(); }, duration);
+}
+
+function showConfirmModal(title, message, onConfirm, onCancel) {
+    document.querySelectorAll('.confirm-modal-overlay').forEach(function(m) { m.remove(); });
+    var overlay = document.createElement('div');
+    overlay.className = 'confirm-modal-overlay';
+    overlay.innerHTML = '<div class="confirm-modal"><div class="confirm-modal-header">' + title + '</div>' +
+        '<div class="confirm-modal-body">' + message + '</div>' +
+        '<div class="confirm-modal-actions"><button class="btn-confirm-cancel">Annulla</button>' +
+        '<button class="btn-confirm-ok">Conferma</button></div></div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('.btn-confirm-cancel').onclick = function() { overlay.remove(); if (onCancel) onCancel(); };
+    overlay.querySelector('.btn-confirm-ok').onclick = function() { overlay.remove(); if (onConfirm) onConfirm(); };
+    overlay.onclick = function(e) { if (e.target === overlay) { overlay.remove(); if (onCancel) onCancel(); } };
+    document.addEventListener('keydown', function escH(e) { if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', escH); } });
+}
+
+function closeModal(e) {
+    if (!e || e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function toggleAccordion(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle('acc-open');
+}
+
+// =============================================
+// CART MANAGEMENT
+// =============================================
+function toggleCartPanel() {
+    document.getElementById('cartPanel').classList.toggle('open');
+}
+
+function updateCart() {
+    var body = document.getElementById('cartPanelBody');
+    var badge = document.getElementById('cartBadge');
+    var clearBtn = document.getElementById('cartClearBtn');
+    var cart = BioLab.cart;
+    if (badge) {
+        badge.textContent = cart.length;
+        badge.style.display = cart.length > 0 ? '' : 'none';
+    }
+    
+    if (!body) return;
+    if (cart.length === 0) {
+        body.innerHTML = '<div class="bl-cart-empty">Carrello vuoto</div>';
+        if (clearBtn) clearBtn.style.display = 'none';
+        return;
+    }
+    
+    // Show/hide Svuota
+    if (clearBtn) clearBtn.style.display = cart.length > 1 ? 'inline-block' : 'none';
+    
+    var html = '';
+    cart.forEach(function(ing) {
+        if (!ing || !ing.id) return;
+        var inTavolo = tavolo.includes(ing.id);
+        var clickAction = inTavolo ? "removeFromTavolo('" + ing.id + "')" : "addToTavolo('" + ing.id + "')";
+        html += '<div class="cart-item' + (inTavolo ? ' in-tavolo' : '') + '">' +
+            '<span class="dot" style="background:' + getCategoryColor(ing.famiglia) + '"></span>' +
+            '<span class="name" onclick="' + clickAction + '" title="Click: ' + (inTavolo ? 'rimuovi dal' : 'aggiungi al') + ' tavolo">' + (ing.nome || ing.id) + '</span>' +
+            '<span class="cart-actions">' +
+            '<span class="cart-btn btn-remove" onclick="event.stopPropagation(); removeFromCart(\'' + ing.id + '\')">x</span>' +
+            '</span></div>';
+    });
+    body.innerHTML = html;
+    // Aggiorna tutor (legge il carrello)
+    if (labMode === 'tutor' && typeof BioLab !== 'undefined' && BioLab.Tutor) {
+        BioLab.Tutor.render();
+    }
+}
+
+function removeFromCart(id) {
+    var item = BioLab.cart.find(function(c) { return c.id === id; });
+    var nome = item ? item.nome : id;
+    BioLab.confirm('Rimuovere <strong>' + nome + '</strong> dal carrello?', function() {
+        BioLab.removeFromCart(id);
+        if (tavolo.includes(id)) {
+            tavolo = tavolo.filter(function(i) { return i !== id; });
+            formulaSelection.delete(id);
+            delete customDosages[id];
+        }
+        updateCart();
+        updateTavolo();
+        saveLabState();
+    });
+}
+
+function clearCart() {
+    if (BioLab.cart.length === 0) { showToast('Il carrello e gia vuoto', 'info'); return; }
+    showConfirmModal('Svuota carrello', 'Svuotare completamente il carrello?', function() {
+        BioLab.clearCart(); tavolo = []; formulaSelection.clear(); customDosages = {};
+        updateCart(); updateTavolo(); saveLabState();
+        showToast('Carrello svuotato', 'info');
+    });
+}
+
+// =============================================
+// TAVOLO FUNCTIONS
+// =============================================
+function updateTavolo() {
+    var area = document.getElementById('tavoloArea');
+    var countEl = document.getElementById('tavoloCount');
+    if (!area || !countEl) return;
+    
+    countEl.textContent = tavolo.length;
+    var ings = (typeof INGREDIENTI_DATA !== 'undefined') ? INGREDIENTI_DATA.ingredienti || {} : {};
+    
+    // Sync formulaSelection
+    formulaSelection = new Set([...formulaSelection].filter(function(id) { return tavolo.includes(id); }));
+    
+    if (tavolo.length === 0) {
+        area.className = 'tavolo-ingredienti';
+        area.innerHTML = '<div class="tavolo-hint">Clicca sugli ingredienti nel carrello per aggiungerli al tavolo</div>';
+        formulaSelection.clear(); customDosages = {};
+    } else {
+        area.className = 'tavolo-ingredienti has-items';
+        area.innerHTML = '<div class="tavolo-chips">' + tavolo.map(function(id) {
+            var ing = ings[id];
+            var nome = ing ? ing.nome : id.replace(/_/g, ' ');
+            var famiglia = ing ? ing.famiglia : 'teorico';
+            var dotClass = getCategoryClass(famiglia);
+            var isSelected = formulaSelection.has(id);
+            var chipClass = isSelected ? 'tavolo-chip selected' : 'tavolo-chip' + (formulaSelection.size > 0 ? ' deselected' : '');
+            return '<div class="' + chipClass + '">' +
+                '<input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleFormulaIngredient(\'' + id + '\', this.checked)">' +
+                '<span class="dot ' + dotClass + '"></span>' + nome +
+                '<span class="remove" onclick="removeFromTavolo(\'' + id + '\')">&times;</span></div>';
+        }).join('') + '</div>' +
+        '<div class="tavolo-select-hint">Seleziona ingredienti per la formula</div>';
+    }
+    
+    // Recipe reference box
+    var refBox = document.getElementById('recipeRefBox');
+    if (!refBox) {
+        refBox = document.createElement('div');
+        refBox.id = 'recipeRefBox';
+        area.parentNode.insertBefore(refBox, area.nextSibling);
+    }
+    if (window._loadedRecipeRef && tavolo.length > 0) {
+        var ref = window._loadedRecipeRef;
+        var rh = '<div style="margin:0.5rem 0;padding:0.6rem;background:#e3f2fd;border-radius:6px;border-left:3px solid #1976d2;font-size:0.72rem;">';
+        rh += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">';
+        rh += '<strong style="color:#1565c0;">Ricetta di riferimento: ' + ref.nome + '</strong>';
+        rh += '<span onclick="window._loadedRecipeRef=null;updateTavolo();" style="cursor:pointer;color:#999;font-size:0.8rem;" title="Chiudi">&times;</span></div>';
+        if (ref.dosaggi) rh += '<div style="color:#37474f;line-height:1.5;margin-bottom:0.3rem;">' + ref.dosaggi + '</div>';
+        var dettagli = [];
+        if (ref.colore) dettagli.push('Colore: ' + ref.colore);
+        if (ref.consistenza) dettagli.push(ref.consistenza);
+        if (ref.trasparenza) dettagli.push('Trasp: ' + ref.trasparenza);
+        if (dettagli.length > 0) rh += '<div style="color:#78909c;font-size:0.67rem;">' + dettagli.join(' &middot; ') + '</div>';
+        if (ref.problemi && ref.problemi !== 'Nessuna.' && ref.problemi !== '') rh += '<div style="color:#c62828;font-size:0.67rem;margin-top:0.2rem;">' + ref.problemi + '</div>';
+        rh += '</div>';
+        refBox.innerHTML = rh;
+    } else { refBox.innerHTML = ''; }
+    
+    checkCompatibility();
+    calculateMaterial();
+    calculateFormula();
+    // Aggiorna tutor se in modalità tutor
+    if (labMode === 'tutor' && typeof BioLab !== 'undefined' && BioLab.Tutor) {
+        BioLab.Tutor.render();
+    }
+}
+
+function addAllToTavolo() {
+    BioLab.cart.forEach(function(ing) {
+        if (ing && ing.id && !tavolo.includes(ing.id)) tavolo.push(ing.id);
+    });
+    updateTavolo();
+    updateCart();
+    saveLabState();
+}
+
+function addToTavolo(id) {
+    if (!tavolo.includes(id)) {
+        tavolo.push(id);
+        updateTavolo();
+        updateCart();
+        saveLabState();
+    }
+}
+
+function removeFromTavolo(id) {
+    tavolo = tavolo.filter(function(i) { return i !== id; });
+    updateTavolo();
+    updateCart();
+    saveLabState();
+}
+
+function clearTavolo() {
+    if (tavolo.length === 0) return;
+    showConfirmModal('Svuota tavolo', 'Svuotare il tavolo di lavoro?<br><br>Gli ingredienti resteranno nel carrello.', function() {
+        tavolo = []; formulaSelection.clear(); customDosages = {};
+        window._editingFormulaId = null; window._editingFormulaName = null;
+        window._loadedRecipeRef = null;
+        updateTavolo(); updateCart(); saveLabState();
+    });
+}
+
+function clearTavoloSilent() {
+    tavolo = []; formulaSelection.clear(); customDosages = {};
+    window._editingFormulaId = null; window._editingFormulaName = null;
+    window._loadedRecipeRef = null;
+    updateTavolo(); updateCart(); saveLabState();
+}
+
+function toggleFormulaIngredient(id, checked) {
+    if (checked) { formulaSelection.add(id); }
+    else { formulaSelection.delete(id); delete customDosages[id]; }
+    updateTavolo();
+    saveLabState();
+}
+
+// =============================================
+// TECNICA DI LAVORAZIONE
+// =============================================
+function setTecnica(tecnica) {
+    var btn = document.querySelector('.tecnica-btn[data-tecnica="' + tecnica + '"]');
+    if (btn && btn.classList.contains('disabled')) return;
+    currentTecnica = tecnica;
+    document.querySelectorAll('.tecnica-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.tecnica === tecnica);
+    });
+    var hintEl = document.getElementById('tecnicaHint');
+    if (hintEl) {
+        var mod = TECNICA_MODIFIERS[tecnica];
+        if (mod && tecnica !== 'colata') { hintEl.textContent = mod.hint; hintEl.classList.add('visible'); }
+        else { hintEl.classList.remove('visible'); }
+    }
+    calculateMaterial();
+    calculateFormula();
+}
+
+function toggleCoating() {
+    var cb = document.getElementById('coatingCheck');
+    coatingAttivo = cb ? cb.checked : false;
+    var row = document.getElementById('coatingRow');
+    if (row) row.classList.toggle('active', coatingAttivo);
+    var hint = document.getElementById('coatingHint');
+    if (hint) hint.textContent = coatingAttivo ? 'Spalmato/applicato sulla superficie, non miscelato' : 'Spunta se il lipide va applicato sopra, non nel mix';
+    calculateMaterial();
+    calculateFormula();
+}
+
+function updateTecnicaAvailability() {
+    var ings = (typeof INGREDIENTI_DATA !== 'undefined') ? INGREDIENTI_DATA.ingredienti || {} : {};
+    var famiglieAttive = new Set();
+    var idsAttivi = [];
+    formulaSelection.forEach(function(id) {
+        var ing = ings[id];
+        if (ing) { famiglieAttive.add(ing.famiglia); idsAttivi.push(id); }
+    });
+    var hasLipide = famiglieAttive.has('RESINA_LIPIDE');
+    var hasColtura = famiglieAttive.has('COLTURA');
+    
+    // Tecniche ammesse per colture: solo fermentazione (e stratificazione per SCOBY multi-layer)
+    var colturaTecniche = { fermentazione: true, stratificazione: true };
+    
+    document.querySelectorAll('.tecnica-btn').forEach(function(btn) {
+        var tecnica = btn.dataset.tecnica;
+        
+        // COLTURA override: disable techniques that don't apply
+        if (hasColtura) {
+            var colOk = colturaTecniche[tecnica] || false;
+            btn.classList.toggle('disabled', !colOk);
+            btn.title = colOk ? '' : 'Le colture crescono per fermentazione, non per ' + tecnica;
+            if (!colOk && currentTecnica === tecnica) {
+                currentTecnica = 'fermentazione';
+                document.querySelectorAll('.tecnica-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.tecnica === 'fermentazione'); });
+                var hintEl = document.getElementById('tecnicaHint');
+                if (hintEl) {
+                    var mod = typeof TECNICA_MODIFIERS !== 'undefined' ? TECNICA_MODIFIERS['fermentazione'] : null;
+                    if (mod) { hintEl.textContent = mod.hint; hintEl.classList.add('visible'); }
+                }
+            }
+            return;
+        }
+        
+        var req = typeof TECNICA_REQUIRES !== 'undefined' ? TECNICA_REQUIRES[tecnica] : null;
+        if (!req || req.always) { btn.classList.remove('disabled'); btn.title = ''; return; }
+        var enabled = false;
+        if (req.famiglie) req.famiglie.forEach(function(f) { if (famiglieAttive.has(f)) enabled = true; });
+        if (req.ingredienti) req.ingredienti.forEach(function(ingId) { if (idsAttivi.indexOf(ingId) >= 0) enabled = true; });
+        if (req.minIngredienti) { if (idsAttivi.length >= req.minIngredienti) enabled = true; }
+        btn.classList.toggle('disabled', !enabled);
+        btn.title = enabled ? '' : req.reason;
+        if (!enabled && currentTecnica === tecnica) {
+            currentTecnica = 'colata';
+            document.querySelectorAll('.tecnica-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.tecnica === 'colata'); });
+            var hintEl = document.getElementById('tecnicaHint');
+            if (hintEl) hintEl.classList.remove('visible');
+        }
+    });
+    
+    var coatingRow = document.getElementById('coatingRow');
+    if (coatingRow) {
+        coatingRow.classList.toggle('visible', hasLipide);
+        if (!hasLipide && coatingAttivo) {
+            coatingAttivo = false;
+            var cb = document.getElementById('coatingCheck');
+            if (cb) cb.checked = false;
+            coatingRow.classList.remove('active');
+        }
+    }
+}
+
+// =============================================
+// BAR DISPLAY + QUALITATIVE LABELS
+// =============================================
+function getBarQualLabel(id, value) {
+    var labels = BAR_QUAL_LABELS[id];
+    if (!labels) return '';
+    var label = labels[0][1];
+    for (var i = 0; i < labels.length; i++) { if (value >= labels[i][0]) label = labels[i][1]; }
+    return label;
+}
+
+function updateBar(id, value) {
+    var bar = document.getElementById(id);
+    if (!bar) return;
+    var v = Math.min(100, Math.max(0, value));
+    bar.style.width = v + '%';
+    bar.className = 'bar-fill ' + (v > 60 ? 'high' : v > 30 ? 'medium' : 'low');
+    var qualEl = document.getElementById('qual' + id.replace('bar', ''));
+    if (qualEl) qualEl.textContent = v > 0 ? getBarQualLabel(id, v) : '';
+}
+
+// =============================================
+// CHECK COMPATIBILITY
+// =============================================
+function checkCompatibility() {
+    var container = document.getElementById('compatResults');
+    if (!container) return;
+    var ings = (typeof INGREDIENTI_DATA !== 'undefined') ? INGREDIENTI_DATA.ingredienti || {} : {};
+    var compatDB = (typeof INGREDIENTI_DATA !== 'undefined') ? INGREDIENTI_DATA.regole_compatibilita_famiglie || {} : {};
+    
+    if (tavolo.length < 2) { container.innerHTML = '<div class="compat-empty">Aggiungi almeno 2 ingredienti</div>'; return; }
+    
+    var html = '';
+    for (var i = 0; i < tavolo.length; i++) {
+        for (var j = i + 1; j < tavolo.length; j++) {
+            var id1 = tavolo[i], id2 = tavolo[j];
+            var ing1 = ings[id1], ing2 = ings[id2];
+            if (!ing1 || !ing2) continue;
+            var fam1 = ing1.famiglia, fam2 = ing2.famiglia;
+            var compat = null;
+            if (compatDB[fam1] && compatDB[fam1][fam2]) compat = compatDB[fam1][fam2];
+            else if (compatDB[fam2] && compatDB[fam2][fam1]) compat = compatDB[fam2][fam1];
+            var rowClass = 'ok', statusIcon = 'OK', note = 'Compatibili';
+            if (compat && compat.liv) {
+                if (compat.liv === 'eccellente') { rowClass = 'synergy'; statusIcon = '++'; }
+                else if (compat.liv === 'buona') { rowClass = 'ok'; statusIcon = 'OK'; }
+                else if (compat.liv === 'neutra') { rowClass = 'ok'; statusIcon = '~'; note = 'Neutri'; }
+                else if (compat.liv === 'attenzione') { rowClass = 'warning'; statusIcon = '!'; }
+                else if (compat.liv === 'limitata' || compat.liv === 'incompatibile') { rowClass = 'error'; statusIcon = 'X'; }
+                if (compat.note) note = compat.note;
+            }
+            html += '<div class="compat-row ' + rowClass + '"><span class="status">' + statusIcon + '</span>' +
+                '<div class="content"><div class="pair">' + ing1.nome + ' + ' + ing2.nome + '</div>' +
+                '<div class="note">' + note + '</div></div></div>';
+        }
+    }
+    container.innerHTML = html || '<div class="compat-empty">Nessuna incompatibilita rilevata</div>';
+}
+
+// =============================================
+</script>
+
+<!-- Moduli Lab estratti per modularità -->
+<script src="lab-formula.js"></script>
+<script src="lab-description.js"></script>
+<script src="lab-print.js"></script>
+
+<script>
+// =============================================
+// CALLBACKS & INIT
+// =============================================
+
+function onCartChanged() {
+    tavolo = tavolo.filter(function(id) { return BioLab.isInCart(id); });
+    formulaSelection = new Set([...formulaSelection].filter(function(id) { return tavolo.includes(id); }));
+    updateCart();
+    updateTavolo();
+    saveLabState();
+}
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof INGREDIENTI_DATA === 'undefined') {
+        console.error('Database non caricato. Verificare database_biomateriali_v11.js');
+        document.getElementById('tavoloArea').innerHTML = '<div style="padding:1rem;color:#c00;font-size:0.75rem;">Errore: database non trovato.</div>';
+        return;
+    }
+    console.log('Lab init — DB caricato:', {
+        ingredienti: Object.keys(INGREDIENTI_DATA.ingredienti || {}).length,
+        documentati: (MATERIALI_DATA.materiali_documentati || []).length,
+        inProgress: (MATERIALI_DATA.materiali_in_progress || []).length
+    });
+    loadLabState();
+    // Render iniziale tutor (se in modalità tutor o carrello già pieno)
+    if (typeof BioLab !== 'undefined' && BioLab.Tutor) {
+        BioLab.Tutor.render();
+    }
+    // Hash routing: lab.html#tutor apre direttamente il Tutor
+    var hash = window.location.hash.replace('#', '');
+    if (hash === 'tutor') {
+        setLabMode('tutor');
+    } else if (hash === 'sperimenta') {
+        setLabMode('sperimenta');
+    }
+    // Switch via dropdown anche dalla stessa pagina
+    window.addEventListener('hashchange', function() {
+        var h = window.location.hash.replace('#', '');
+        if (h === 'tutor') setLabMode('tutor');
+        else if (h === 'sperimenta') setLabMode('sperimenta');
+    });
+});
+</script>
+</body>
+</html>

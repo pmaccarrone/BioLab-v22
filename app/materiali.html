@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLab - Materiali</title>
+    <link rel="stylesheet" href="biolab.css">
+</head>
+<body>
+
+<!-- ===== HEADER (generato da core.js initNav) ===== -->
+<header class="bl-header" id="blHeader"></header>
+
+<!-- ===== CONTENUTO PAGINA ===== -->
+<div class="bl-page-content">
+    <div class="bl-section-title">
+        <h1>Catalogo Materiali</h1>
+        <p>34 materiali documentati + 35 ricette in progress</p>
+    </div>
+
+    <!-- BARRA FILTRI -->
+    <div class="mat-toolbar">
+        <div class="mat-toolbar-row">
+            <div class="mat-set-toggle">
+                <button class="mat-set-btn active" data-set="tutti" onclick="switchSet('tutti')">Tutti <span class="mat-set-count" id="countAll">0</span></button>
+                <button class="mat-set-btn" data-set="documentati" onclick="switchSet('documentati')">Documentati <span class="mat-set-count" id="countDoc">0</span></button>
+                <button class="mat-set-btn" data-set="in_progress" onclick="switchSet('in_progress')">In Progress <span class="mat-set-count" id="countProg">0</span></button>
+            </div>
+            <input type="text" class="mat-search" id="matSearch" placeholder="Cerca materiale..." oninput="filterMaterials()">
+        </div>
+        <div class="mat-toolbar-row">
+            <div class="ing-filters" id="outputFilters">
+                <span class="ing-filter active" data-output="ALL" onclick="toggleOutputFilter(null)">Tutti i tipi</span>
+                <span class="ing-filter" data-output="film" onclick="toggleOutputFilter('film')">Film</span>
+                <span class="ing-filter" data-output="gel" onclick="toggleOutputFilter('gel')">Gel</span>
+                <span class="ing-filter" data-output="rigido" onclick="toggleOutputFilter('rigido')">Rigido</span>
+                <span class="ing-filter" data-output="coating" onclick="toggleOutputFilter('coating')">Coating</span>
+                <span class="ing-filter" data-output="schiuma" onclick="toggleOutputFilter('schiuma')">Schiuma</span>
+                <span class="ing-filter" data-output="pelle" onclick="toggleOutputFilter('pelle')">Pelle</span>
+                <span class="ing-filter" data-output="composito" onclick="toggleOutputFilter('composito')">Composito</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mat-count-bar" id="matCountBar">0 materiali</div>
+
+    <!-- GRIGLIA CARD -->
+    <div class="mat-grid" id="matGrid"></div>
+</div>
+
+<!-- DETTAGLIO MODALE -->
+<div class="mat-detail-overlay" id="matDetailWrap" style="display:none" onclick="if(event.target===this)closeDetail()">
+    <div class="mat-detail-modal">
+        <button class="mat-detail-close" onclick="closeDetail()">&times;</button>
+        <div id="matDetailContent"></div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bl-footer">
+    <p>Strumento didattico sperimentale · Le formulazioni sono indicative · BioLab v22</p>
+    <p class="bl-footer-credit">Sviluppato con <a href="https://www.anthropic.com" target="_blank" rel="noopener">Claude AI</a> by Anthropic</p>
+</footer>
+
+<!-- ===== DATABASE (esterno) ===== -->
+<script src="database_biomateriali_v11.js"></script>
+
+<!-- ===== CORE ===== -->
+<script src="biolab-core.js"></script>
+
+<!-- ===== JS PAGINA MATERIALI ===== -->
+<script>
+(function() {
+    'use strict';
+
+    var currentSet = 'tutti';
+    var outputFilter = null;
+    var selectedId = null;
+    var selectedType = null;
+
+    // Reverse map: doc material id -> [output type strings]
+    var docOutputMap = {};
+
+    // ---- INIT ----
+    document.addEventListener('DOMContentLoaded', function() {
+        buildDocOutputMap();
+        // Contatori dinamici
+        if (typeof MATERIALI_DATA !== 'undefined') {
+            var nDoc = (MATERIALI_DATA.materiali_documentati || []).length;
+            var nProg = (MATERIALI_DATA.materiali_in_progress || []).length;
+            document.getElementById('countDoc').textContent = nDoc;
+            document.getElementById('countProg').textContent = nProg;
+            document.getElementById('countAll').textContent = nDoc + nProg;
+        }
+        renderGrid();
+    });
+
+    function buildDocOutputMap() {
+        docOutputMap = {};
+        if (typeof CATALOGO_DATA === 'undefined' || typeof MATERIALI_DATA === 'undefined') return;
+        var outputs = CATALOGO_DATA.outputs || {};
+        var docs = MATERIALI_DATA.materiali_documentati || [];
+        Object.keys(outputs).forEach(function(outKey) {
+            var docList = outputs[outKey].documentati || [];
+            docList.forEach(function(d) {
+                var dName = (d.nome || '').toLowerCase().trim();
+                if (!dName) return;
+                docs.forEach(function(m, idx) {
+                    var mName = (m.name || m.nome || '').toLowerCase().trim();
+                    if (!mName) return;
+                    // Match if either contains the other, or they share first 20 chars
+                    if (mName === dName || mName.indexOf(dName) !== -1 || dName.indexOf(mName) !== -1 ||
+                        (mName.length > 15 && dName.length > 15 && mName.substring(0,20) === dName.substring(0,20))) {
+                        var key = 'd' + idx;
+                        if (!docOutputMap[key]) docOutputMap[key] = [];
+                        if (docOutputMap[key].indexOf(outKey) === -1) docOutputMap[key].push(outKey);
+                    }
+                });
+            });
+        });
+    }
+
+    // ---- SET TOGGLE ----
+    window.switchSet = function(set) {
+        currentSet = set;
+        closeDetail();
+        document.querySelectorAll('.mat-set-btn').forEach(function(el) {
+            el.classList.toggle('active', el.dataset.set === set);
+        });
+        renderGrid();
+    };
+
+    // ---- OUTPUT FILTER ----
+    window.toggleOutputFilter = function(filter) {
+        outputFilter = filter;
+        closeDetail();
+        document.querySelectorAll('#outputFilters .ing-filter').forEach(function(el) {
+            el.classList.remove('active');
+            if (filter === null && el.dataset.output === 'ALL') el.classList.add('active');
+            else if (el.dataset.output === filter) el.classList.add('active');
+        });
+        renderGrid();
+    };
+
+    // ---- TEXT FILTER ----
+    window.filterMaterials = function() { closeDetail(); renderGrid(); };
+
+    // ---- CLOSE DETAIL ----
+    window.closeDetail = function() {
+        selectedId = null;
+        selectedType = null;
+        document.getElementById('matDetailWrap').style.display = 'none';
+        document.body.style.overflow = '';
+        document.querySelectorAll('.mat-card.selected').forEach(function(el) { el.classList.remove('selected'); });
+    };
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDetail();
+    });
+
+    // ---- RENDER GRID ----
+    function renderGrid() {
+        var search = (document.getElementById('matSearch').value || '').toLowerCase().trim();
+        var items = [];
+
+        if (currentSet === 'tutti' || currentSet === 'documentati') {
+            items = items.concat(getDocumentati(search));
+        }
+        if (currentSet === 'tutti' || currentSet === 'in_progress') {
+            items = items.concat(getInProgress(search));
+        }
+
+        var grid = document.getElementById('matGrid');
+        if (items.length === 0) {
+            grid.innerHTML = '<div class="mat-empty">Nessun materiale corrisponde ai filtri</div>';
+            document.getElementById('matCountBar').textContent = '0 materiali';
+            return;
+        }
+
+        var html = '';
+        items.forEach(function(item) {
+            var sel = (selectedId === item.id && selectedType === item.type) ? ' selected' : '';
+            html += '<div class="mat-card ' + item.setClass + ' ' + item.typeClass + sel + '" data-id="' + item.id + '" data-type="' + item.type + '" onclick="showDetail(\'' + item.id + '\',\'' + item.type + '\')">';
+            html += '<div class="mat-card-thumb" data-src="' + esc(item.img) + '"></div>';
+            html += '<div class="mat-card-body">';
+            html += '<div class="mat-card-top">';
+            html += '<span class="mat-card-dot ' + item.dotClass + '"></span>';
+            html += '<span class="mat-card-trl ' + item.trlClass + '">' + item.trlLabel + '</span>';
+            html += '</div>';
+            html += '<div class="mat-card-name">' + item.name + '</div>';
+            if (item.sub) html += '<div class="mat-card-sub">' + item.sub + '</div>';
+            if (item.snippet) html += '<div class="mat-card-snippet">' + item.snippet + '</div>';
+            if (item.tags && item.tags.length) {
+                html += '<div class="mat-card-tags">';
+                item.tags.forEach(function(t) { html += '<span class="mat-card-tag">' + t + '</span>'; });
+                html += '</div>';
+            }
+            html += '</div></div>';
+        });
+
+        grid.innerHTML = html;
+
+        // Lazy-load thumbnails: test if image exists, show or hide
+        grid.querySelectorAll('.mat-card-thumb[data-src]').forEach(function(el) {
+            var src = el.getAttribute('data-src');
+            if (!src) { el.style.display = 'none'; el.closest('.mat-card').classList.add('no-img'); return; }
+            var img = new Image();
+            img.onload = function() { el.style.backgroundImage = 'url(' + src + ')'; };
+            img.onerror = function() { el.style.display = 'none'; el.closest('.mat-card').classList.add('no-img'); };
+            img.src = src;
+        });
+        document.getElementById('matCountBar').textContent = items.length + ' materiali';
+    }
+
+    // ---- GET DOCUMENTATI ----
+    function getDocumentati(search) {
+        if (typeof MATERIALI_DATA === 'undefined') return [];
+        var docs = MATERIALI_DATA.materiali_documentati || [];
+        var out = [];
+
+        docs.forEach(function(mat, idx) {
+            var name = mat.name || mat.nome || '';
+            var cat = mat.category || '';
+            var mapKey = 'd' + idx;
+
+            // Output filter
+            if (outputFilter) {
+                var matOutputs = docOutputMap[mapKey] || [];
+                var catLower = cat.toLowerCase();
+                var match = matOutputs.indexOf(outputFilter) !== -1 || catLower.indexOf(outputFilter) !== -1;
+                if (!match) return;
+            }
+
+            // Search
+            if (search) {
+                var hay = (name + ' ' + (mat.subtitle || '') + ' ' + cat + ' ' + (mat.companies || '') + ' ' + (mat.applications || '') + ' ' + (mat.description || '')).toLowerCase();
+                if (hay.indexOf(search) === -1) return;
+            }
+
+            var tags = [];
+            (docOutputMap[mapKey] || []).forEach(function(o) { tags.push(cap(o)); });
+            if (mat.replicabile_lab) tags.push('Lab');
+            var firstType = (docOutputMap[mapKey] || [])[0] || '';
+
+            out.push({
+                id: 'd' + idx, type: 'doc', setClass: 'mat-card-doc',
+                typeClass: firstType ? 'mat-type-' + firstType : '',
+                name: name, sub: cat,
+                snippet: trunc(mat.subtitle || mat.companies || '', 80),
+                dotClass: 'dot-documented',
+                trlClass: 'trl-' + Math.min(mat.trl || 1, 9),
+                trlLabel: 'TRL ' + (mat.trl || '?'),
+                tags: tags,
+                img: mat.img || matImg(name)
+            });
+        });
+        return out;
+    }
+
+    // Map in_progress categoria_menu (lowercase) → output filter type
+    var PROG_TYPE_MAP = {
+        'film opachi/colorati': 'film',
+        'film trasparenti/flessibili': 'film',
+        'gel e forme 3d': 'gel',
+        'materiali opachi rigidi/plastici': 'rigido',
+        'biocompositi con scarti/rinforz': 'composito',
+        'compositi e cariche': 'composito',
+        'ibridi e avanzati': 'composito',
+        'materiali biologici cresciuti': 'pelle'
+    };
+
+    // Fallback for in_progress with empty categoria_menu
+    var PROG_NAME_FALLBACK = {
+        'aquafaba foam rigido': 'schiuma',
+        'bioplastica alginato agar + amido': 'composito'
+    };
+
+    function getProgOutputType(catMenu, name) {
+        if (!catMenu) return PROG_NAME_FALLBACK[(name || '').toLowerCase()] || '';
+        var lower = catMenu.toLowerCase();
+        if (PROG_TYPE_MAP[lower]) return PROG_TYPE_MAP[lower];
+        // Fallback: partial match
+        var types = ['film','gel','rigido','coating','schiuma','pelle','composito'];
+        for (var i = 0; i < types.length; i++) {
+            if (lower.indexOf(types[i]) !== -1) return types[i];
+        }
+        return '';
+    }
+
+    // ---- GET IN_PROGRESS ----
+    function getInProgress(search) {
+        if (typeof MATERIALI_DATA === 'undefined') return [];
+        var progs = MATERIALI_DATA.materiali_in_progress || [];
+        var out = [];
+
+        progs.forEach(function(mat, idx) {
+            var name = mat.nome || mat.name || '';
+            var catMenu = mat.categoria_menu || '';
+            var outType = getProgOutputType(catMenu, name);
+
+            if (outputFilter && outType !== outputFilter) return;
+
+            if (search) {
+                var hay = (name + ' ' + catMenu + ' ' + (mat.ingredienti_descrizione || '') + ' ' + (mat.consistenza || '') + ' ' + (mat.colore || '')).toLowerCase();
+                if (hay.indexOf(search) === -1) return;
+            }
+
+            var vc = mat.colore_validazione || 'rosa';
+            // Determine output type for color tint
+            var typeKey = outType;
+            out.push({
+                id: 'p' + idx, type: 'prog', setClass: 'mat-card-prog',
+                typeClass: typeKey ? 'mat-type-' + typeKey : '',
+                name: name, sub: cap(catMenu),
+                snippet: mat.consistenza || '',
+                dotClass: 'dot-' + vc,
+                trlClass: 'trl-val-' + vc,
+                trlLabel: vc === 'verde' ? 'Validato' : vc === 'bianco' ? 'Parziale' : 'Ipotesi',
+                tags: catMenu ? [cap(catMenu)] : []
+            });
+        });
+        return out;
+    }
+
+    // ---- SHOW DETAIL ----
+    window.showDetail = function(id, type) {
+        document.querySelectorAll('.mat-card.selected').forEach(function(el) { el.classList.remove('selected'); });
+
+        if (selectedId === id && selectedType === type) { closeDetail(); return; }
+
+        selectedId = id;
+        selectedType = type;
+
+        var card = document.querySelector('.mat-card[data-id="' + id + '"][data-type="' + type + '"]');
+        if (card) card.classList.add('selected');
+
+        var wrap = document.getElementById('matDetailWrap');
+        var panel = document.getElementById('matDetailContent');
+
+        if (type === 'doc') renderDocDetail(id, panel);
+        else renderProgDetail(id, panel);
+
+        wrap.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+
+    // ---- DOC DETAIL ----
+    function renderDocDetail(id, panel) {
+        if (typeof MATERIALI_DATA === 'undefined') return;
+        var idx = parseInt(id.replace('d', ''));
+        var mat = (MATERIALI_DATA.materiali_documentati || [])[idx];
+        if (!mat) { panel.innerHTML = '<div class="mat-empty">Materiale non trovato</div>'; return; }
+
+        var h = '';
+
+        h += '<div class="mat-d-header">';
+        var heroSrc = mat.img || matImg(mat.name || '');
+        h += '<div class="mat-d-hero" id="matHero" data-src="' + esc(heroSrc) + '"></div>';
+        h += '<div class="mat-d-header-text">';
+        h += '<h2 class="mat-d-title">' + esc(mat.name || '') + '</h2>';
+        if (mat.subtitle) h += '<div class="mat-d-subtitle">' + esc(fix(mat.subtitle)) + '</div>';
+        h += '<div class="mat-d-badges">';
+        h += '<span class="badge badge-primary">TRL ' + (mat.trl || '?') + '</span>';
+        if (mat.category) h += '<span class="badge badge-outline">' + esc(mat.category) + '</span>';
+        if (mat.replicabile_lab) h += '<span class="badge badge-success">Replicabile in lab</span>';
+        h += '</div>';
+        if (mat.description) h += '<p class="mat-d-header-desc">' + esc(fix(mat.description)) + '</p>';
+        h += '</div></div>';
+
+        h += '<div class="mat-d-body">';
+
+        // Col left
+        h += '<div class="mat-d-col">';
+        if (mat.properties) h += sec('Proprieta', '<p class="mat-d-text">' + esc(fix(mat.properties)) + '</p>');
+        if (mat.applications) h += sec('Applicazioni', '<p class="mat-d-text">' + esc(fix(mat.applications)) + '</p>');
+        if (mat.companies) h += sec('Aziende', '<p class="mat-d-text">' + esc(fix(mat.companies)) + '</p>');
+        if (mat.specs_text) h += sec('Specifiche tecniche', '<p class="mat-d-text mat-d-specs">' + esc(fix(mat.specs_text)) + '</p>');
+        h += '</div>';
+
+        // Col right
+        h += '<div class="mat-d-col">';
+        var s = mat.sensory || {};
+        if (s.tactile || s.visual || s.thermal) {
+            h += sec('Profilo sensoriale', pg([['Tattile',s.tactile],['Visivo',s.visual],['Termico',s.thermal],['Acustico',s.acoustic],['Olfattivo',s.olfactive]]));
+        }
+        var a = mat.aesthetic || {};
+        if (a.appearance || a.finish) {
+            h += sec('Estetica', pg([['Aspetto',a.appearance],['Finitura',a.finish],['Invecchiamento',a.aging],['Trasparenza',a.transparency]]));
+        }
+        var e = mat.ethical || {};
+        if (e.sustainability || e.biodegradability) {
+            h += sec('Sostenibilita', pg([['Sostenibilita',e.sustainability],['Origine',e.origin],['Biodegradabilita',e.biodegradability],['Bio content',e.bio_content],['Economia circolare',e.circular_economy],['Certificazioni',e.certifications]]), 'mat-d-green');
+        }
+        if (mat.ingredienti_correlati && mat.ingredienti_correlati.length) {
+            h += sec('Ingredienti correlati', ingTags(mat.ingredienti_correlati));
+        }
+        if (mat.fonte || mat.url) {
+            var fl = '';
+            if (mat.fonte) fl += '<p class="mat-d-text" style="font-size:0.78rem">' + esc(fix(mat.fonte)) + '</p>';
+            if (mat.url) fl += '<a href="' + mat.url + '" target="_blank" rel="noopener" class="mat-source-link">' + mat.url + '</a>';
+            if (mat.link_risorse) mat.link_risorse.forEach(function(lr) {
+                    if (!lr) return;
+                    if (typeof lr === 'string') { fl += '<a href="' + lr + '" target="_blank" rel="noopener" class="mat-source-link">' + lr + '</a>'; }
+                    else if (lr.url) { fl += '<a href="' + lr.url + '" target="_blank" rel="noopener" class="mat-source-link">' + esc(lr.titolo || lr.nome || lr.url) + '</a>'; }
+                });
+            h += sec('Fonti', fl);
+        }
+        h += '</div></div>';
+
+        panel.innerHTML = h;
+
+        // Lazy-load hero image
+        var hero = panel.querySelector('#matHero');
+        if (hero) {
+            var src = hero.getAttribute('data-src');
+            var img = new Image();
+            img.onload = function() { hero.style.backgroundImage = 'url(' + src + ')'; };
+            img.onerror = function() { hero.style.display = 'none'; };
+            img.src = src;
+        }
+    }
+
+    // ---- PROG DETAIL ----
+    function renderProgDetail(id, panel) {
+        if (typeof MATERIALI_DATA === 'undefined') return;
+        var idx = parseInt(id.replace('p', ''));
+        var mat = (MATERIALI_DATA.materiali_in_progress || [])[idx];
+        if (!mat) { panel.innerHTML = '<div class="mat-empty">Materiale non trovato</div>'; return; }
+
+        var h = '';
+        var vc = mat.colore_validazione || 'rosa';
+        var vl = vc === 'verde' ? 'Validato' : vc === 'bianco' ? 'Parzialmente validato' : 'Ipotesi da verificare';
+
+        h += '<div class="mat-d-header">';
+        h += '<div><h2 class="mat-d-title">' + esc(mat.nome || '') + '</h2></div>';
+        h += '<div class="mat-d-badges">';
+        h += '<span class="badge badge-val-' + vc + '">' + vl + '</span>';
+        if (mat.categoria_menu) h += '<span class="badge badge-outline">' + cap(mat.categoria_menu) + '</span>';
+        if (mat.ricetta_origine) h += '<span class="badge badge-outline">' + mat.ricetta_origine + '</span>';
+        h += '</div></div>';
+
+        h += '<div class="mat-d-body">';
+
+        h += '<div class="mat-d-col">';
+        if (mat.ingredienti_descrizione) h += sec('Formulazione', '<div class="mat-formula">' + esc(fix(mat.ingredienti_descrizione)) + '</div>');
+        h += sec('Aspetto fisico', pg([['Consistenza',mat.consistenza],['Colore',mat.colore],['Trasparenza',mat.trasparenza],['Spessore',mat.spessore]]));
+        if (mat.problemi_realizzazione) h += sec('Problemi riscontrati', '<div class="mat-problems">' + esc(fix(mat.problemi_realizzazione)) + '</div>');
+        h += '</div>';
+
+        h += '<div class="mat-d-col">';
+        var tests = [];
+        if (mat.test_flessione) tests.push(['Flessione', mat.test_flessione]);
+        if (mat.test_flessione_ritorno) tests.push(['Ritorno', mat.test_flessione_ritorno]);
+        if (mat.test_trazione) tests.push(['Trazione', mat.test_trazione]);
+        if (mat.test_acqua) tests.push(['Acqua', mat.test_acqua]);
+        if (mat.test_calore) tests.push(['Calore', mat.test_calore]);
+        if (mat.aging_7giorni) tests.push(['Aging 7gg', mat.aging_7giorni]);
+        if (tests.length) {
+            var tH = '<div class="mat-test-list">';
+            tests.forEach(function(t) { tH += '<div class="mat-test-row"><span class="mat-test-label">' + t[0] + '</span><span class="mat-test-value">' + esc(t[1]) + '</span></div>'; });
+            tH += '</div>';
+            h += sec('Risultati test', tH);
+        }
+
+        var lav = [];
+        if (mat.forabile !== undefined) lav.push(['Forabile', mat.forabile === true ? 'Si' : mat.forabile === false ? 'No' : String(mat.forabile)]);
+        if (mat.cucibile !== undefined) lav.push(['Cucibile', mat.cucibile === true ? 'Si' : mat.cucibile === false ? 'No' : String(mat.cucibile)]);
+        if (mat.incollabile) lav.push(['Incollabile', String(mat.incollabile)]);
+        if (lav.length) h += sec('Lavorabilita', pg(lav));
+
+        if (mat.ingredienti_correlati && mat.ingredienti_correlati.length) {
+            h += sec('Ingredienti', ingTags(mat.ingredienti_correlati));
+        }
+        if (mat.fonte) h += sec('Fonte', '<p class="mat-d-text" style="font-size:0.78rem">' + esc(fix(mat.fonte)) + '</p>');
+        h += '</div></div>';
+
+        panel.innerHTML = h;
+    }
+
+    window.goToIngredient = function(id) { window.location.href = 'ingredienti.html#' + id; };
+
+    // Helpers
+    function sec(t, c, cls) { return '<div class="mat-d-sect' + (cls ? ' ' + cls : '') + '"><h3>' + t + '</h3>' + c + '</div>'; }
+    function pg(pairs) {
+        var h = '<div class="mat-d-props">';
+        pairs.forEach(function(p) { if (p[1]) h += '<div class="mat-d-prop"><div class="mat-d-prop-label">' + p[0] + '</div><div class="mat-d-prop-value">' + esc(String(p[1])) + '</div></div>'; });
+        return h + '</div>';
+    }
+    function ingTags(ids) {
+        var h = '<div class="mat-ing-tags">';
+        ids.forEach(function(id) { h += '<span class="mat-ing-tag" onclick="goToIngredient(\'' + id + '\')">' + getIN(id) + '</span>'; });
+        return h + '</div>';
+    }
+    function getIN(id) {
+        if (typeof INGREDIENTI_DATA !== 'undefined' && INGREDIENTI_DATA.ingredienti && INGREDIENTI_DATA.ingredienti[id]) return INGREDIENTI_DATA.ingredienti[id].nome || id;
+        return id;
+    }
+    function trunc(s, n) { return !s ? '' : s.length > n ? s.substring(0, n) + '...' : s; }
+    function cap(s) { return !s ? '' : s.charAt(0).toUpperCase() + s.slice(1); }
+    function esc(s) { return !s ? '' : String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function matImg(name) {
+        var f = name.toLowerCase()
+            .replace(/[àá]/g,'a').replace(/[èé]/g,'e').replace(/[ìí]/g,'i')
+            .replace(/[òó]/g,'o').replace(/[ùú]/g,'u')
+            .replace(/[\s\/+\-]+/g,'_').replace(/[^a-z0-9_]/g,'')
+            .replace(/_+/g,'_').replace(/^_|_$/g,'');
+        return '../asset/imm_materiali/' + f + '.jpg';
+    }
+    function fix(s) {
+        if (!s) return '';
+        return s.replace(/[\u2019\u0092]\u00a2/g, '\u2022')  // '¢ → •
+                .replace(/â€¢/g, '\u2022')                     // â€¢ → •
+                .replace(/â€"/g, '\u2013')                      // â€" → –
+                .replace(/â€"/g, '\u2014')                      // â€" → —
+                .replace(/â€˜/g, '\u2018')                      // â€˜ → '
+                .replace(/â€™/g, '\u2019')                      // â€™ → '
+                .replace(/â€œ/g, '\u201C')                      // â€œ → "
+                .replace(/â€\u009D/g, '\u201D')                 // â€ → "
+                .replace(/Â°/g, '\u00B0')                       // Â° → °
+                .replace(/Ã¨/g, '\u00E8')                       // Ã¨ → è
+                .replace(/Ã©/g, '\u00E9')                       // Ã© → é
+                .replace(/Ã /g, '\u00E0')                       // Ã  → à
+                .replace(/Ã¹/g, '\u00F9')                       // Ã¹ → ù
+                .replace(/Ã²/g, '\u00F2');                      // Ã² → ò
+    }
+
+})();
+</script>
+
+</body>
+</html>

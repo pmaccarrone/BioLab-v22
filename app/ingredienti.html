@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLab - Ingredienti</title>
+    <link rel="stylesheet" href="biolab.css">
+    <style>
+    /* Confronta button - fixed right in topbar */
+    .ing-topbar { position: relative; }
+    .ing-compare-btn {
+        position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+        background: #1565C0; color: #fff; border: none; border-radius: 6px;
+        padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        white-space: nowrap; transition: background 0.2s, box-shadow 0.2s;
+        z-index: 2;
+    }
+    .ing-compare-btn:hover { background: #0d47a1; box-shadow: 0 2px 8px rgba(21,101,192,0.3); }
+    .ing-compare-btn.active { background: #0d47a1; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+    .ing-filters { padding-right: 90px; } /* spazio per il pulsante fisso a dx */
+
+    /* Compare panel */
+    .ing-compare-panel {
+        background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
+        margin: 0 0 12px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        overflow: hidden; animation: cmpSlide 0.25s ease-out;
+    }
+    @keyframes cmpSlide { from { opacity:0; max-height:0; } to { opacity:1; max-height:600px; } }
+    .ing-compare-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 16px; background: #1565C0; color: #fff; font-weight: 600; font-size: 0.9rem;
+    }
+    .ing-compare-close {
+        background: none; border: none; color: #fff; font-size: 1.4rem;
+        cursor: pointer; line-height: 1; padding: 0 4px; opacity: 0.8;
+    }
+    .ing-compare-close:hover { opacity: 1; }
+    .ing-compare-scroll { overflow-x: auto; padding: 0; }
+    .ing-compare-table {
+        width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 500px;
+    }
+    .ing-compare-table thead th {
+        position: sticky; top: 0; background: #f5f7fa;
+        padding: 8px 10px; font-weight: 600; text-align: center;
+        border-bottom: 2px solid #e0e0e0; font-size: 0.8rem; color: #333;
+    }
+    .ing-compare-table thead th.in-cart { background: #e8f5e9; }
+    .ing-compare-label {
+        padding: 7px 14px; font-weight: 700; color: #37474f; white-space: nowrap;
+        background: #eceff1; text-align: left; font-size: 0.8rem;
+        border-right: 2px solid #cfd8dc; min-width: 110px;
+    }
+    .ing-compare-cell {
+        padding: 6px 10px; text-align: center; border-bottom: 1px solid #f0f0f0;
+        color: #444; transition: background 0.15s;
+    }
+    .ing-compare-table tbody tr:nth-child(even) td:not(.sem-green):not(.sem-red):not(.sem-amber) { background: #f8f9fa; }
+    .ing-compare-table tbody tr:nth-child(even) td.ing-compare-label { background: #e4e8eb; }
+    .ing-compare-table tbody tr:hover td { background: #e8eaf6; }
+    .ing-compare-table tbody tr:hover td.ing-compare-label { background: #d5dbe0; }
+    /* Colori semantici */
+    .sem-green { background: #e8f5e9; color: #2e7d32; font-weight: 500; }
+    .sem-red { background: #ffebee; color: #c62828; font-weight: 500; }
+    .sem-amber { background: #fff8e1; color: #f57f17; font-weight: 500; }
+    .ing-compare-table tbody tr:hover .sem-green { background: #c8e6c9; }
+    .ing-compare-table tbody tr:hover .sem-red { background: #ffcdd2; }
+    .ing-compare-table tbody tr:hover .sem-amber { background: #ffecb3; }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER (generato da core.js initNav) ===== -->
+<header class="bl-header" id="blHeader"></header>
+
+<!-- ===== CONTENUTO PAGINA ===== -->
+<div class="bl-page-content">
+    <div class="bl-page-header">
+        <h1>Ingredienti</h1>
+        <p id="ingSubtitle">Ingredienti in 12 famiglie chimiche — seleziona per esplorare</p>
+    </div>
+
+    <div class="ing-topbar">
+        <input type="text" class="ing-search" id="ingSearch"
+               placeholder="Cerca ingrediente..." oninput="filterIngredients()">
+        <div class="ing-filters">
+            <span class="ing-filter active" data-famiglia="ALL" onclick="toggleIngFilter(null)">Tutti</span>
+            <span class="ing-filter cart-filter" onclick="toggleIngFilter('cart')">Carrello</span>
+            <span class="ing-filter" data-famiglia="PROTEINA" onclick="toggleIngFilter('PROTEINA')">Proteine</span>
+            <span class="ing-filter" data-famiglia="POLISACCARIDE" onclick="toggleIngFilter('POLISACCARIDE')">Polisaccaridi</span>
+            <span class="ing-filter" data-famiglia="POLICATIONE" onclick="toggleIngFilter('POLICATIONE')">Policatione</span>
+            <span class="ing-filter" data-famiglia="PLASTIFICANTE" onclick="toggleIngFilter('PLASTIFICANTE')">Plastificanti</span>
+            <span class="ing-filter" data-famiglia="RESINA_LIPIDE" onclick="toggleIngFilter('RESINA_LIPIDE')">Resine/Lipidi</span>
+            <span class="ing-filter" data-famiglia="SALE_RETICOLANTE" onclick="toggleIngFilter('SALE_RETICOLANTE')">Sali</span>
+            <span class="ing-filter" data-famiglia="CARICA" onclick="toggleIngFilter('CARICA')">Cariche</span>
+            <span class="ing-filter" data-famiglia="COLORANTE" onclick="toggleIngFilter('COLORANTE')">Coloranti</span>
+            <span class="ing-filter" data-famiglia="ADDITIVO" onclick="toggleIngFilter('ADDITIVO')">Additivi</span>
+            <span class="ing-filter" data-famiglia="COLTURA" onclick="toggleIngFilter('COLTURA')">Colture</span>
+        </div>
+        <button class="ing-compare-btn" id="compareBtn" style="display:none" onclick="toggleComparePanel()">Confronta</button>
+    </div>
+
+    <!-- Pannello confronto (collassabile, tra topbar e contenuto) -->
+    <div class="ing-compare-panel" id="comparePanel" style="display:none"></div>
+
+    <div class="study-layout">
+        <!-- Lista sx -->
+        <div class="ing-list-panel">
+            <div class="ing-list" id="ingredientList"></div>
+            <div class="ing-list-count" id="ingListCount">0 ingredienti</div>
+        </div>
+
+        <!-- Dettaglio dx -->
+        <div class="ing-detail-panel" id="ingDetailPanel">
+            <div class="famiglia-info-box" id="famigliaInfoBox" style="display:none;">
+                <div class="famiglia-info-header" onclick="toggleFamigliaBox()">
+                    <span class="famiglia-info-title" id="famigliaInfoTitle">Gruppo Funzionale</span>
+                    <span class="famiglia-info-toggle">[-]</span>
+                </div>
+                <div class="famiglia-info-content" id="famigliaInfoContent">
+                    <div class="famiglia-desc" id="famigliaDesc"></div>
+                    <div class="famiglia-confronto" id="famigliaConfronto"></div>
+                    <div class="famiglia-quando" id="famigliaQuando"></div>
+                    <div class="famiglia-avvisi" id="famigliaAvvisi"></div>
+                </div>
+            </div>
+            <div id="ingDetailContent">
+                <div class="ing-detail-empty">Seleziona un ingrediente dalla lista</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DATABASE (esterno) ===== -->
+<script src="database_biomateriali_v11.js"></script>
+
+<!-- ===== CORE ===== -->
+<script src="biolab-core.js"></script>
+
+<!-- ===== JS PAGINA INGREDIENTI ===== -->
+<script>
+(function() {
+    'use strict';
+
+    let ingFilter = null;
+    let selectedIngredient = null;
+
+    // ---- Callback per aggiornare lista quando carrello cambia ----
+    window.onCartChanged = function() { renderIngredientList(); };
+
+    // ---- RENDER LISTA ----
+    function renderIngredientList() {
+        const list = document.getElementById('ingredientList');
+        if (!list) return;
+        const search = (document.getElementById('ingSearch')?.value || '').toLowerCase();
+        list.innerHTML = '';
+
+        let count = 0;
+        const ings = INGREDIENTI_DATA?.ingredienti || {};
+        const sortedIds = Object.keys(ings).sort((a, b) =>
+            ings[a].nome.localeCompare(ings[b].nome)
+        );
+
+        for (const id of sortedIds) {
+            const ing = ings[id];
+            // Filtro ricerca
+            if (search && !ing.nome.toLowerCase().includes(search)
+                && !(ing.famiglia || '').toLowerCase().includes(search)) continue;
+            // Filtro carrello
+            if (ingFilter === 'cart' && !BioLab.isInCart(id)) continue;
+            // Filtro famiglia
+            if (ingFilter && ingFilter !== 'cart' && !ing.famiglia.includes(ingFilter)) continue;
+
+            count++;
+            const inCart = BioLab.isInCart(id);
+            const dotClass = BioLab.getCategoryClass(ing.famiglia);
+
+            const item = document.createElement('div');
+            item.className = 'ing-list-item' + (selectedIngredient === id ? ' selected' : '');
+            item.dataset.id = id;
+            item.innerHTML =
+                '<span class="dot ' + dotClass + '"></span>'
+                + '<div class="info">'
+                + '<div class="name">' + ing.nome + '</div>'
+                + '<div class="famiglia">' + BioLab.formatFamiglia(ing.famiglia) + '</div>'
+                + '</div>'
+                + (inCart ? '<span class="cart-status">nel carrello</span>' : '');
+            item.onclick = () => showIngredientDetail(id);
+            list.appendChild(item);
+        }
+
+        document.getElementById('ingListCount').textContent = count + ' ingredienti';
+    }
+
+    // ---- FILTRI ----
+    window.toggleIngFilter = function(filter) {
+        ingFilter = filter;
+        // Reset selezione attiva
+        selectedIngredient = null;
+        document.getElementById('ingDetailContent').innerHTML = '<div class="ing-detail-empty">Seleziona un ingrediente dalla lista</div>';
+        // Aggiorna UI filtri
+        document.querySelectorAll('.ing-filter').forEach(el => {
+            el.classList.remove('active');
+            const fam = el.dataset.famiglia;
+            if (filter === null && fam === 'ALL') el.classList.add('active');
+            else if (filter === 'cart' && el.classList.contains('cart-filter')) el.classList.add('active');
+            else if (fam === filter) el.classList.add('active');
+        });
+        renderIngredientList();
+
+        // Mostra info famiglia
+        if (filter && filter !== 'cart' && filter !== 'ALL') {
+            showFamigliaInfo(filter);
+        } else {
+            document.getElementById('famigliaInfoBox').style.display = 'none';
+        }
+
+        // Pulsante Confronta: visibile solo con filtro famiglia attivo e >=2 ingredienti
+        const btn = document.getElementById('compareBtn');
+        const panel = document.getElementById('comparePanel');
+        const isFamiglia = filter && filter !== 'cart' && filter !== 'ALL';
+        let showCompare = false;
+        if (isFamiglia) {
+            const ings = INGREDIENTI_DATA?.ingredienti || {};
+            const famMatch = filter === 'POLISACCARIDE' ? ['POLISACCARIDE_NEUTRO','POLISACCARIDE_ANIONICO'] : [filter];
+            const famCount = Object.values(ings).filter(i => famMatch.includes(i.famiglia)).length;
+            showCompare = famCount >= 2;
+        }
+        btn.style.display = showCompare ? '' : 'none';
+        // Se il pannello era aperto, aggiorna con la nuova famiglia o chiudi
+        const wasOpen = panel.style.display !== 'none' && panel.innerHTML;
+        if (!showCompare) {
+            panel.style.display = 'none'; panel.innerHTML = '';
+            if (btn) { btn.classList.remove('active'); btn.textContent = 'Confronta'; }
+        } else if (wasOpen) {
+            renderCompareTable();
+        }
+        if (!wasOpen && btn) { btn.classList.remove('active'); btn.textContent = 'Confronta'; }
+    };
+
+    window.filterIngredients = function() {
+        selectedIngredient = null;
+        document.getElementById('ingDetailContent').innerHTML = '<div class="ing-detail-empty">Seleziona un ingrediente dalla lista</div>';
+        renderIngredientList();
+    };
+
+    // ---- FAMIGLIA INFO BOX ----
+    function showFamigliaInfo(famiglia) {
+        if (typeof FAMIGLIA_INFO === 'undefined') return;
+        const famMap = { 'POLISACCARIDE': 'POLISACCARIDE_NEUTRO' };
+        const famKey = famMap[famiglia] || famiglia;
+        const info = FAMIGLIA_INFO[famKey];
+
+        const box = document.getElementById('famigliaInfoBox');
+        if (!info) { box.style.display = 'none'; return; }
+        box.style.display = 'block';
+
+        document.getElementById('famigliaInfoTitle').textContent = info.nome_display || BioLab.formatFamiglia(famiglia);
+        document.getElementById('famigliaDesc').textContent = info.descrizione || '';
+
+        // Confronto rapido
+        let confHtml = '';
+        if (info.confronto_rapido) {
+            confHtml = '<div class="famiglia-confronto-title">Confronto rapido</div>';
+            for (const [nome, dati] of Object.entries(info.confronto_rapido)) {
+                const desc = typeof dati === 'string' ? dati : (dati.caratteristica || '');
+                confHtml += '<div class="famiglia-confronto-item">'
+                    + '<span class="famiglia-confronto-nome">' + nome + '</span>'
+                    + '<span class="famiglia-confronto-desc">' + desc + '</span>'
+                    + '</div>';
+            }
+        }
+        document.getElementById('famigliaConfronto').innerHTML = confHtml;
+
+        // Quando usare
+        let quandoHtml = '';
+        if (info.quando_usare) {
+            quandoHtml = '<div class="famiglia-quando-title">Quando usare</div>';
+            for (const [key, val] of Object.entries(info.quando_usare)) {
+                const label = key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
+                quandoHtml += '<div class="famiglia-quando-item"><strong>' + label + ':</strong> ' + val + '</div>';
+            }
+        }
+        document.getElementById('famigliaQuando').innerHTML = quandoHtml;
+
+        // Avvisi
+        let avvHtml = '';
+        if (info.avvisi && info.avvisi.length) {
+            avvHtml = '<div class="famiglia-avvisi-title">Attenzione</div><ul>';
+            info.avvisi.forEach(a => { avvHtml += '<li>' + a + '</li>'; });
+            avvHtml += '</ul>';
+        }
+        document.getElementById('famigliaAvvisi').innerHTML = avvHtml;
+    }
+
+    window.toggleFamigliaBox = function() {
+        const content = document.getElementById('famigliaInfoContent');
+        content.classList.toggle('collapsed');
+        const toggle = document.querySelector('.famiglia-info-toggle');
+        if (toggle) toggle.textContent = content.classList.contains('collapsed') ? '[+]' : '[-]';
+    };
+
+    // ---- MODALITA USO (dati extra per ingredienti specifici) ----
+    const MODALITA_USO = {
+        agar: {
+            titolo: "Agar: due concentrazioni, due materiali",
+            modi: [
+                { nome: "Gel morbido (1-2%)", desc: "Stampi, sculture temporanee, substrato coltura" },
+                { nome: "Film rigido (3-5%)", desc: "Film autoportante, packaging rigido" }
+            ]
+        },
+        gelatina: {
+            titolo: "Gelatina: film vs gel",
+            modi: [
+                { nome: "Film sottile (5-10%)", desc: "Film flessibile trasparente, packaging" },
+                { nome: "Gel denso (15-20%)", desc: "Gel rigido, gommoso, usi strutturali" }
+            ]
+        },
+        alginato: {
+            titolo: "Alginato: due metodi di gelificazione",
+            modi: [
+                { nome: "Gelificazione esterna (bagno CaCl2)", desc: "Film, sfere, forme 3D con guscio" },
+                { nome: "Gelificazione interna (CaCl2 miscelato)", desc: "Gel uniforme, stampi" }
+            ]
+        }
+    };
+
+    function renderModalitaUso(id) {
+        const mod = MODALITA_USO[id];
+        if (!mod) return '';
+        let h = '<div class="ing-detail-section"><h3>Modalita d\'uso</h3>'
+            + '<div class="modalita-uso-section">'
+            + '<h4>' + mod.titolo + '</h4>';
+        mod.modi.forEach(m => {
+            h += '<p class="ing-desc" style="margin-bottom:0.3rem;"><strong>' + m.nome + '</strong> — ' + m.desc + '</p>';
+        });
+        return h + '</div></div>';
+    }
+
+    // ---- DETTAGLIO INGREDIENTE ----
+    window.showIngredientDetail = function(id) {
+        selectedIngredient = id;
+        const ings = INGREDIENTI_DATA?.ingredienti || {};
+        const ing = ings[id];
+        if (!ing) return;
+
+        renderIngredientList();
+
+        const panel = document.getElementById('ingDetailContent');
+        const inCart = BioLab.isInCart(id);
+        const dotClass = BioLab.getCategoryClass(ing.famiglia);
+        const props = ing.proprieta || {};
+        const params = ing.parametri || {};
+        const lav = ing.lavorabilita || {};
+        const dur = ing.durabilita || {};
+        const dos = ing.dosaggio_tipico || {};
+
+        // Helpers
+        function pv(label, value, suffix) {
+            if (value === undefined || value === null || value === '') return '';
+            return '<div class="ing-prop"><div class="label">' + label + '</div><div class="value">' + value + (suffix || '') + '</div></div>';
+        }
+        function boolRow(label, val, note) {
+            if (val === undefined || val === null) return '';
+            const icon = val ? '<span class="check">Si</span>' : '<span class="cross">No</span>';
+            return '<div class="ing-bool-item">' + icon + '<span class="label">' + label + '</span>' + (note ? '<span class="note">' + note + '</span>' : '') + '</div>';
+        }
+        function makeTags(arr) {
+            if (!arr || !arr.length) return '';
+            return '<div class="ing-tags">' + arr.map(x => '<span class="tag info">' + x + '</span>').join('') + '</div>';
+        }
+        function makeList(arr, cls) {
+            if (!arr || !arr.length) return '';
+            return '<ul class="' + (cls || 'ing-process') + '">' + arr.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+        }
+        function makeSection(title, content, extraClass) {
+            if (!content) return '';
+            return '<div class="ing-detail-section' + (extraClass ? ' ' + extraClass : '') + '"><h3>' + title + '</h3>' + content + '</div>';
+        }
+        function gridFromPairs(pairs) {
+            let cells = '';
+            pairs.forEach(p => { cells += pv(p[0], p[1], p[2]); });
+            return cells ? '<div class="ing-props-grid">' + cells + '</div>' : '';
+        }
+        function boolGrid(items) {
+            let cells = '';
+            items.forEach(i => { cells += boolRow(i[0], i[1], i[2]); });
+            return cells ? '<div class="ing-bool-grid">' + cells + '</div>' : '';
+        }
+        function arrOrStr(v) { return Array.isArray(v) ? v.join(', ') : (v || ''); }
+        function sanitize(html) { return (html || '').replace(/null|undefined/g, '').replace(/<div class="ing-prop"><div class="label">[^<]*<\/div><div class="value"><\/div><\/div>/g, ''); }
+
+        // === BUILD HTML ===
+        let h = '';
+
+        // Header
+        h += '<div class="ing-detail-header">';
+        h += '<div class="header-left">';
+        h += '<h2>' + ing.nome;
+        if (ing.nome_scientifico) h += ' <small style="font-weight:normal;color:#888;font-size:0.7em">(' + ing.nome_scientifico + ')</small>';
+        h += '</h2>';
+        h += '<div class="badges">';
+        h += '<span class="famiglia-badge"><span class="dot ' + dotClass + '" style="display:inline-block;margin-right:5px;"></span>' + BioLab.formatFamiglia(ing.famiglia) + '</span>';
+        if (ing.categoria) h += '<span class="tag info">' + ing.categoria + '</span>';
+        if (ing.vegano) h += '<span class="tag ok">Vegano</span>';
+        if (ing.food_safe) h += '<span class="tag ok">Food-safe</span>';
+        if (dur.biodegradabile) h += '<span class="tag ok">Biodegradabile</span>';
+        if (dur.compostabile) h += '<span class="tag ok">Compostabile</span>';
+        h += '</div></div>';
+        h += '<div class="header-right ing-actions">';
+        if (inCart) {
+            h += '<button class="btn btn-secondary" onclick="BioLab.removeFromCart(\'' + id + '\'); showIngredientDetail(\'' + id + '\'); onCartChanged();">Nel carrello (rimuovi)</button>';
+        } else {
+            h += '<button class="btn btn-primary" onclick="BioLab.addToCart(\'' + id + '\'); showIngredientDetail(\'' + id + '\'); onCartChanged();">+ Aggiungi al carrello</button>';
+        }
+        h += '</div></div>';
+
+        h += '<div class="ing-detail-body">';
+
+        // Descrizione
+        let desc = ing.descrizione || ing.funzione || '-';
+        let descExtra = '';
+        if (ing.funzione && ing.descrizione && ing.funzione !== ing.descrizione) descExtra += '<br><strong>Funzione:</strong> ' + ing.funzione;
+        if (ing.ruolo) descExtra += '<br><strong>Ruolo:</strong> ' + ing.ruolo;
+        if (ing.note_uso) descExtra += '<div class="ing-note-box">' + ing.note_uso + '</div>';
+        h += makeSection('Descrizione', '<p class="ing-desc">' + desc + descExtra + '</p>');
+
+        // Proprieta fisiche
+        h += makeSection('Proprieta', gridFromPairs([
+            ['Trasparenza', props.trasparenza],
+            ['Flessibilita', props.flessibilita],
+            ['Barriera H2O', props.barriera_H2O],
+            ['Barriera O2', props.barriera_O2],
+            ['Struttura', props.struttura],
+            ['Colore', props.colore],
+            ['Fonte', ing.fonte],
+            ['Reperibilita', ing.reperibilita]
+        ]));
+
+        // Parametri tecnici
+        let pp = [];
+        if (params.range_percent_min != null) pp.push(['Concentrazione', params.range_percent_min + '-' + params.range_percent_max + '%']);
+        if (params.temp_dissoluzione_min) pp.push(['T dissoluzione', params.temp_dissoluzione_min + '-' + params.temp_dissoluzione_max + '\u00b0C']);
+        if (params.temp_fusione_gel != null) pp.push(['T fusione gel', params.temp_fusione_gel + '\u00b0C']);
+        if (params.temp_gelificazione != null) pp.push(['T gelificazione', params.temp_gelificazione + '\u00b0C']);
+        if (params.pH_min != null) pp.push(['Range pH', params.pH_min + ' - ' + params.pH_max]);
+        if (dos.min != null) pp.push(['Dosaggio tipico', dos.min + ' - ' + dos.max + (dos.unita ? ' ' + dos.unita : '')]);
+        h += makeSection('Parametri tecnici', gridFromPairs(pp));
+
+        // Lavorabilita
+        let lavHtml = '';
+        const forme = lav.forma_tipica || ing.forma_output;
+        if (forme && forme.length) {
+            lavHtml += '<p class="ing-desc" style="margin-bottom:0.3rem;"><strong>Forme ottenibili:</strong></p>' + makeTags(forme);
+        }
+        if (lav.effetto_su_matrice) lavHtml += '<p class="ing-desc" style="margin-top:0.4rem;"><strong>Effetto sulla matrice:</strong> ' + lav.effetto_su_matrice + '</p>';
+        const bools = boolGrid([
+            ['Termosaldabile', lav.termosaldabile, (lav.temp_saldatura_min ? lav.temp_saldatura_min + '-' + lav.temp_saldatura_max + '\u00b0C' : null)],
+            ['Cucibile', lav.cucibile, null],
+            ['Colorabile', lav.colorabile, null],
+            ['Reversibile', lav.reversibile, null],
+            ['Stampabile 3D', lav.stampabile_3D, null]
+        ]);
+        if (bools) lavHtml += '<div style="margin-top:0.5rem;">' + bools + '</div>';
+        if (lav.incollabile_con) lavHtml += '<p class="ing-desc" style="margin-top:0.4rem;"><strong>Incollabile con:</strong> ' + arrOrStr(lav.incollabile_con) + '</p>';
+        if (lav.metodo_colorazione) lavHtml += '<p class="ing-desc" style="margin-top:0.3rem;"><strong>Metodo colorazione:</strong> ' + lav.metodo_colorazione + '</p>';
+        h += makeSection('Lavorabilita', lavHtml);
+
+        // Durabilita
+        let durHtml = '';
+        if (dur.durata_stimata) durHtml += '<p class="ing-desc"><strong>Durata stimata:</strong> ' + dur.durata_stimata + '</p>';
+        const durBools = boolGrid([
+            ['Biodegradabile', dur.biodegradabile],
+            ['Compostabile', dur.compostabile]
+        ]);
+        if (durBools) durHtml += durBools;
+        if (dur.fattori_degradazione) durHtml += '<p class="ing-desc" style="margin-top:0.4rem;"><strong>Fattori degradazione:</strong> ' + arrOrStr(dur.fattori_degradazione) + '</p>';
+        if (dur.condizioni_conservazione) durHtml += '<p class="ing-desc" style="margin-top:0.3rem;"><strong>Conservazione:</strong> ' + dur.condizioni_conservazione + '</p>';
+        h += makeSection('Durabilita', durHtml, 'durabilita');
+
+        // Processo
+        h += makeSection('Processo', makeList(ing.processo));
+
+        // Compatibilita
+        let compHtml = '';
+        if (ing.incompatibilita) compHtml += '<p class="ing-desc" style="margin-bottom:0.3rem;"><strong>Incompatibilita:</strong></p>' + makeList(Array.isArray(ing.incompatibilita) ? ing.incompatibilita : [ing.incompatibilita], 'ing-incompat-list');
+        if (ing.sinergie) compHtml += '<p class="ing-desc" style="margin-top:0.4rem;"><strong>Sinergie:</strong></p>' + makeTags(Array.isArray(ing.sinergie) ? ing.sinergie : [ing.sinergie]);
+        if (ing.alternative) compHtml += '<p class="ing-desc" style="margin-top:0.4rem;"><strong>Alternative:</strong> ' + ing.alternative + '</p>';
+        h += makeSection('Compatibilita e interazioni', compHtml, 'compatibilita');
+
+        // Modalita uso
+        h += renderModalitaUso(id);
+
+        // Dove acquistare
+        let acqHtml = '';
+        if (ing.acquisto) acqHtml += '<p class="ing-desc">' + ing.acquisto + '</p>';
+        h += makeSection('Dove acquistare', acqHtml);
+
+        // Avvertenze
+        let warnItems = [];
+        if (ing.warnings && ing.warnings.length) warnItems = warnItems.concat(ing.warnings);
+        if (ing.avvertenze) warnItems = warnItems.concat(Array.isArray(ing.avvertenze) ? ing.avvertenze : [ing.avvertenze]);
+        h += makeSection('Attenzione', makeList(warnItems, 'ing-warnings-list'), 'ing-warnings');
+
+        // Note
+        let noteHtml = '';
+        if (ing.note) noteHtml += '<p class="ing-desc">' + ing.note + '</p>';
+        if (ing.fonti) noteHtml += '<p class="ing-desc" style="margin-top:0.3rem;"><strong>Fonti:</strong> ' + arrOrStr(ing.fonti) + '</p>';
+        h += makeSection('Note e riferimenti', noteHtml);
+
+        // ★ Note dai laboratori studenti
+        let iedHtml = '';
+        if (ing.note_IED && ing.note_IED.length) {
+            iedHtml += '<ul class="ing-process">' + ing.note_IED.map(n => '<li>' + n.replace(/\s*\[[^\]]*\]\s*$/g, '') + '</li>').join('') + '</ul>';
+        }
+        if (ing.parametri_IED) {
+            iedHtml += '<div class="ing-props-grid">';
+            Object.entries(ing.parametri_IED).forEach(([k, v]) => {
+                iedHtml += pv(k.replace(/_/g, ' '), v);
+            });
+            iedHtml += '</div>';
+        }
+        if (ing.incompatibilita_IED) {
+            iedHtml += '<p class="ing-desc" style="margin-top:0.4rem;"><strong>Incompatibilita osservata:</strong> ' + ing.incompatibilita_IED + '</p>';
+        }
+        h += makeSection('Note dal laboratorio', iedHtml);
+
+        h += '</div>'; // close ing-detail-body
+
+        panel.innerHTML = sanitize(h);
+
+        // Scroll to top del dettaglio
+        document.getElementById('ingDetailPanel').scrollTop = 0;
+    };
+
+    // ---- CONFRONTO INGREDIENTI ----
+    window.toggleComparePanel = function() {
+        const panel = document.getElementById('comparePanel');
+        const btn = document.getElementById('compareBtn');
+        if (panel.style.display === 'none' || !panel.innerHTML) {
+            renderCompareTable();
+            panel.style.display = '';
+            btn.classList.add('active');
+            btn.textContent = 'Chiudi';
+        } else {
+            panel.style.display = 'none';
+            panel.innerHTML = '';
+            btn.classList.remove('active');
+            btn.textContent = 'Confronta';
+        }
+    };
+
+    function renderCompareTable() {
+        const panel = document.getElementById('comparePanel');
+        if (!ingFilter || ingFilter === 'cart') return;
+        const ings = INGREDIENTI_DATA?.ingredienti || {};
+
+        // Raccogli ingredienti della famiglia
+        const famMatch = ingFilter === 'POLISACCARIDE' ? ['POLISACCARIDE_NEUTRO','POLISACCARIDE_ANIONICO'] : [ingFilter];
+        const ids = Object.keys(ings).filter(id => famMatch.includes(ings[id].famiglia)).sort((a,b) => ings[a].nome.localeCompare(ings[b].nome));
+        if (ids.length < 2) { panel.innerHTML = '<div style="padding:16px;color:#888;">Serve almeno 2 ingredienti per confrontare</div>'; return; }
+
+        const isMatrice = ['PROTEINA','POLISACCARIDE_NEUTRO','POLISACCARIDE_ANIONICO','POLICATIONE','COLTURA'].includes(ids.length ? ings[ids[0]].famiglia : '');
+
+        // Definisci righe in base al tipo di famiglia
+        let rows;
+        if (isMatrice) {
+            rows = [
+                { key: 'temp_dis', label: 'T dissoluzione', fn: i => { const p=i.parametri||{}; return p.temp_dissoluzione_min ? p.temp_dissoluzione_min+'-'+p.temp_dissoluzione_max+'\u00b0C' : '-'; }},
+                { key: 'temp_gel', label: 'T gelificazione', fn: i => { const p=i.parametri||{}; return p.temp_gelificazione != null ? p.temp_gelificazione+'\u00b0C' : '-'; }},
+                { key: 'temp_fus', label: 'T fusione gel', fn: i => { const p=i.parametri||{}; return p.temp_fusione_gel != null ? p.temp_fusione_gel+'\u00b0C' : '-'; }},
+                { key: 'conc', label: 'Concentrazione', fn: i => { const p=i.parametri||{}; return p.range_percent_min != null ? p.range_percent_min+'-'+p.range_percent_max+'%' : '-'; }},
+                { key: 'trasp', label: 'Trasparenza', fn: i => (i.proprieta||{}).trasparenza || '-', semantic: v => semColor(v, ['trasparente','alta','buona'], ['opaco','molto opaco','nulla'], ['traslucido','media','parziale']) },
+                { key: 'flex', label: 'Flessibilita', fn: i => (i.proprieta||{}).flessibilita || '-', semantic: v => semColor(v, ['flessibile','alta','molto flessibile','elastico'], ['rigido','fragile','molto rigido','bassa'], ['media','semi']) },
+                { key: 'h2o', label: 'Barriera H2O', fn: i => (i.proprieta||{}).barriera_H2O || '-', semantic: v => semColor(v, ['eccellente','buona','alta'], ['scarsa','nulla','bassa','molto scarsa'], ['media','moderata','neutra','parziale']) },
+                { key: 'vegano', label: 'Vegano', fn: i => i.vegano === true ? 'Si' : i.vegano === false ? 'No' : '-', semantic: v => v === 'Si' ? 'green' : v === 'No' ? 'red' : '' },
+                { key: 'food', label: 'Food-safe', fn: i => i.food_safe === true ? 'Si' : i.food_safe === false ? 'No' : '-', semantic: v => v === 'Si' ? 'green' : v === 'No' ? 'red' : '' },
+                { key: 'rev', label: 'Reversibile', fn: i => { const l=i.lavorabilita||{}; return l.reversibile === true ? 'Si' : l.reversibile === false ? 'No' : '-'; }, semantic: v => v === 'Si' ? 'green' : v === 'No' ? 'amber' : '' },
+                { key: 'forme', label: 'Forme tipiche', fn: i => { const f=(i.lavorabilita||{}).forma_tipica||i.forma_output||[]; return f.length ? f.join(', ') : '-'; }},
+                { key: 'durata', label: 'Durata', fn: i => (i.durabilita||{}).durata_stimata || '-', semantic: v => semColor(v, ['anni','mesi-anni'], ['giorni','ore'], ['settimane','mesi','settimane-mesi']) },
+            ];
+        } else {
+            rows = [
+                { key: 'conc', label: 'Dosaggio', fn: i => { const p=i.parametri||{}; return p.range_percent_min != null ? p.range_percent_min+'-'+p.range_percent_max+'%' : '-'; }},
+                { key: 'funzione', label: 'Funzione', fn: i => i.funzione || i.funzione_primaria || '-' },
+                { key: 'trasp', label: 'Trasparenza', fn: i => (i.proprieta||{}).trasparenza || '-', semantic: v => semColor(v, ['trasparente','alta','buona'], ['opaco','molto opaco','nulla'], ['traslucido','media','parziale']) },
+                { key: 'flex', label: 'Effetto flex', fn: i => (i.proprieta||{}).flessibilita || '-', semantic: v => semColor(v, ['aumenta','flessibile','alta'], ['diminuisce','rigido','fragile'], ['neutra','media']) },
+                { key: 'h2o', label: 'Barriera H2O', fn: i => (i.proprieta||{}).barriera_H2O || '-', semantic: v => semColor(v, ['eccellente','buona','alta'], ['scarsa','nulla','bassa'], ['media','moderata','neutra']) },
+                { key: 'vegano', label: 'Vegano', fn: i => i.vegano === true ? 'Si' : i.vegano === false ? 'No' : '-', semantic: v => v === 'Si' ? 'green' : v === 'No' ? 'red' : '' },
+                { key: 'food', label: 'Food-safe', fn: i => i.food_safe === true ? 'Si' : i.food_safe === false ? 'No' : '-', semantic: v => v === 'Si' ? 'green' : v === 'No' ? 'red' : '' },
+                { key: 'rep', label: 'Reperibilita', fn: i => i.reperibilita || '-' },
+                { key: 'durata', label: 'Durata', fn: i => (i.durabilita||{}).durata_stimata || '-', semantic: v => semColor(v, ['anni','mesi-anni'], ['giorni','ore'], ['settimane','mesi','settimane-mesi']) },
+            ];
+        }
+
+        // Helper colori semantici
+        function semColor(val, goodWords, badWords, neutralWords) {
+            if (!val || val === '-') return '';
+            const v = val.toLowerCase();
+            if (goodWords.some(w => v.includes(w))) return 'green';
+            if (badWords.some(w => v.includes(w))) return 'red';
+            if (neutralWords && neutralWords.some(w => v.includes(w))) return 'amber';
+            return '';
+        }
+
+        // Abbrevia nome
+        function shortName(ing) {
+            return (ing.nome || '').replace(/\s*\([^)]*\)\s*/g, '').replace('Alimentare','').replace('di Sodio','').replace('di Potassio','').trim();
+        }
+
+        // Costruisci tabella
+        let h = '<div class="ing-compare-header"><span>Confronto ' + (ids.length) + ' ingredienti</span><button class="ing-compare-close" onclick="toggleComparePanel()">&times;</button></div>';
+        h += '<div class="ing-compare-scroll"><table class="ing-compare-table">';
+
+        // Intestazione
+        h += '<thead><tr><th class="ing-compare-label"></th>';
+        for (const id of ids) {
+            const inCart = BioLab.isInCart(id);
+            h += '<th class="ing-compare-col' + (inCart ? ' in-cart' : '') + '">' + shortName(ings[id]) + '</th>';
+        }
+        h += '</tr></thead><tbody>';
+
+        // Righe dati
+        for (const row of rows) {
+            h += '<tr><td class="ing-compare-label">' + row.label + '</td>';
+            for (const id of ids) {
+                const val = row.fn(ings[id]);
+                const sem = row.semantic ? row.semantic(val) : '';
+                h += '<td class="ing-compare-cell' + (sem ? ' sem-' + sem : '') + '">' + val + '</td>';
+            }
+            h += '</tr>';
+        }
+
+        h += '</tbody></table></div>';
+        panel.innerHTML = h;
+    }
+
+    // ---- INIT ----
+    document.addEventListener('DOMContentLoaded', () => {
+        // Contatori dinamici
+        if (typeof INGREDIENTI_DATA !== 'undefined') {
+            const n = Object.keys(INGREDIENTI_DATA.ingredienti || {}).length;
+            const nFam = new Set(Object.values(INGREDIENTI_DATA.ingredienti || {}).map(i => i.famiglia)).size;
+            const sub = document.getElementById('ingSubtitle');
+            if (sub) sub.textContent = n + ' ingredienti in ' + nFam + ' famiglie chimiche — seleziona per esplorare';
+            const nav = document.getElementById('navIngCount');
+            if (nav) nav.textContent = n + ' schede';
+        }
+        renderIngredientList();
+
+        // Se URL ha #ingrediente, aprilo
+        const hash = window.location.hash.replace('#', '');
+        if (hash && INGREDIENTI_DATA?.ingredienti?.[hash]) {
+            showIngredientDetail(hash);
+        }
+    });
+
+})();
+</script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bl-footer">
+    Strumento didattico sperimentale · Le formulazioni sono indicative · BioLab v22<br>
+    Sviluppato con <a href="https://www.anthropic.com" target="_blank">Claude AI by Anthropic</a>
+</footer>
+
+</body>
+</html>

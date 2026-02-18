@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioLab — Criticità</title>
+<link rel="stylesheet" href="biolab.css">
+<style>
+/* === CRITICITA PAGE STYLES === */
+/* Body flex column: header at top, wrapper fills rest */
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column}
+.bl-header{flex-shrink:0}
+.crit-wrapper{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.crit-layout{display:flex;flex:1;min-height:0;overflow:hidden}
+@media(max-width:680px){.crit-layout{flex-direction:column}}
+
+/* Map side */
+.crit-map{flex:1;display:flex;align-items:center;justify-content:center;padding:8px;min-width:0;background:#f8f7f4;position:relative}
+.crit-map svg{width:100%;height:100%;max-width:700px}
+
+/* Sidebar overlay (left side of map) */
+.crit-sidebar{position:absolute;left:12px;top:12px;bottom:12px;width:185px;display:flex;flex-direction:column;gap:8px;z-index:5;overflow-y:auto;scrollbar-width:thin;pointer-events:none}
+.crit-sidebar>*{pointer-events:auto}
+.crit-sidebar:empty{display:none}
+@media(max-width:960px){.crit-sidebar{width:160px;left:8px;top:8px}}
+@media(max-width:680px){.crit-sidebar{position:relative;left:0;top:0;bottom:auto;width:100%;flex-direction:row;overflow-x:auto;overflow-y:hidden}}
+
+/* Recipe card */
+.sb-card{background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid #e2dfd8;border-radius:10px;padding:10px 11px;font-size:10.5px}
+.sb-title{font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:#aaa;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.sb-title svg{opacity:.4}
+.sb-row{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.sb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sb-name{color:#444;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-fam{font-size:8px;color:#aaa;white-space:nowrap}
+.sb-empty{color:#ccc;font-style:italic;font-size:10px}
+
+/* Properties mini-bars */
+.sb-props{margin-top:8px;padding-top:7px;border-top:1px solid #eee}
+.sb-prow{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.sb-plbl{font-size:8.5px;color:#999;width:52px;flex-shrink:0;text-align:right}
+.sb-pbar{flex:1;height:4px;background:#eee;border-radius:2px;overflow:hidden}
+.sb-pfill{height:100%;border-radius:2px;transition:width .3s}
+.sb-pval{font-size:8px;color:#bbb;width:22px}
+
+/* Quick tips */
+.sb-tip{background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border:1px solid #e2dfd8;border-radius:10px;padding:9px 10px}
+.sb-tip-hd{font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.sb-tip-item{font-size:10px;line-height:1.5;color:#555;margin-bottom:5px;padding-left:10px;text-indent:-10px}
+.sb-tip-item:last-child{margin-bottom:0}
+.sb-tip-item::before{content:"→ ";color:#b8a088;font-weight:700}
+
+/* Panel side */
+.crit-pan{width:370px;flex-shrink:0;background:#fff;border-left:1px solid #e2dfd8;display:flex;flex-direction:column;overflow:hidden}
+@media(max-width:860px){.crit-pan{width:310px}}
+@media(max-width:680px){.crit-map{flex:none;height:52vh}.crit-pan{width:100%;flex:1;border-left:none;border-top:1px solid #e2dfd8}}
+
+/* Context bar — single line, horizontal scroll */
+.crit-ctx{padding:5px 16px;background:#fff;border-bottom:1px solid #e2dfd8;display:flex;align-items:center;gap:6px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;flex-shrink:0;min-height:32px;scrollbar-width:thin}
+.crit-ctx::-webkit-scrollbar{height:3px}
+.crit-ctx::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+.crit-ctx-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.06em;font-weight:600;flex-shrink:0}
+.crit-ctx-chip{font-size:10px;padding:2px 8px;border-radius:12px;background:#e8f0eb;color:#2d5a3d;font-weight:500;flex-shrink:0}
+.crit-chip-tav{background:#eee;color:#777;cursor:pointer;transition:all .15s}
+.crit-chip-tav:hover{background:#d5e8d0;color:#2d5a3d}
+.crit-chip-cart{background:#f0ece6;color:#8a7a5a;cursor:pointer;transition:all .15s}
+.crit-chip-cart:hover{background:#e8e0d4;color:#6a5a3a}
+.crit-chip-act{font-size:9px;font-weight:700;margin-left:2px;opacity:.6}
+.crit-ctx-sep{width:1px;height:16px;background:#e0dcd6;flex-shrink:0}
+.crit-ctx-hint{font-size:9px;color:#bbb;font-style:italic;flex-shrink:0;margin-left:auto}
+.crit-ctx-empty{font-size:11px;color:#bbb}
+
+/* Panel empty */
+.pan-empty{display:flex;align-items:center;justify-content:center;flex:1;text-align:center;padding:32px}
+.pan-empty-ico{width:48px;height:48px;margin:0 auto 14px;opacity:.12}
+.pan-empty-txt{font-size:13px;color:#bbb;line-height:1.6;max-width:220px;margin:0 auto}
+
+/* Panel header */
+.pan-hd{padding:12px 15px;display:flex;align-items:flex-start;gap:9px;flex-shrink:0}
+.pan-badge{width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:800;flex-shrink:0}
+.pan-t{font-size:14px;font-weight:700}
+.pan-s{font-size:11.5px;color:#999;margin-top:1px}
+.pan-body{flex:1;overflow-y:auto;padding:12px 15px}
+
+/* Diagnosis cards */
+.dx{border-radius:9px;padding:11px 12px;margin-bottom:7px}
+.dx:first-of-type{background:#f7faf8;border:1px solid #c8dcc8}
+.dx:not(:first-of-type){background:#fff;border:1px solid #ebe8e4}
+.dx-b{font-size:10px;font-weight:700;padding:2px 7px;border-radius:9px;display:inline-block}
+.dx-b.a{color:#2d5a3d;background:rgba(45,90,61,.08)}
+.dx-b.m{color:#d4860b;background:rgba(212,134,11,.08)}
+.dx-h{font-size:9px;color:#aaa;margin-left:5px}
+.dx-t{font-size:12px;line-height:1.55;margin:5px 0 7px}
+.dx-bx{border-radius:6px;padding:7px 9px;margin-bottom:5px}
+.dx-bx.az{background:#f0f7f2;border-left:3px solid #2d5a3d}
+.dx-bx.to{background:#fef9f0;border-left:3px solid #d4860b}
+.dx-bx.np{background:#f4f0f7;border-left:3px solid #6a3d8a}
+.dx-bl{font-size:9px;font-weight:700;margin-bottom:2px;letter-spacing:.04em;text-transform:uppercase}
+.dx-bx.az .dx-bl{color:#2d5a3d}
+.dx-bx.to .dx-bl{color:#d4860b}
+.dx-bx.np .dx-bl{color:#6a3d8a}
+.dx-bt{font-size:11.5px;line-height:1.5}
+
+/* Guided question */
+.gq{background:#fafaf8;border-radius:9px;padding:12px;margin-bottom:12px;border:1px solid #e8e4e0}
+.gq-t{font-size:12px;font-weight:600;margin-bottom:7px}
+.gq-bs{display:flex;gap:5px;flex-wrap:wrap}
+.gq-b{font-size:11px;padding:4px 11px;border-radius:16px;border:1px solid #ccc;background:#fff;cursor:pointer;color:#444;font-family:inherit;transition:all .15s}
+.gq-b:hover{border-color:#2d5a3d;color:#2d5a3d}
+
+/* Context indicator in panel */
+.ci{background:#f7faf8;border-radius:7px;padding:7px 11px;margin-bottom:12px;font-size:11.5px;color:#2d5a3d;border:1px solid #d0e0d0}
+.ci .cs{margin-top:3px;display:flex;gap:3px;flex-wrap:wrap}
+.ci .cm{font-size:10px;background:#e8f0eb;padding:2px 6px;border-radius:9px;color:#2d5a3d}
+
+/* Correlations */
+.corr-section{margin-top:14px;padding-top:12px;border-top:1px solid #eee}
+.corr-title{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:8px}
+.corr-item{display:flex;align-items:flex-start;gap:7px;padding:7px 9px;border-radius:7px;border:1px solid #eee;margin-bottom:5px;cursor:pointer;transition:all .15s;background:#fafaf8}
+.corr-item:hover{border-color:#ccc;background:#f4f4f0}
+.corr-ico{flex-shrink:0;margin-top:1px}
+.corr-body{flex:1;min-width:0}
+.corr-name{font-size:11.5px;font-weight:600}
+.corr-note{font-size:10.5px;color:#888;line-height:1.4;margin-top:2px}
+.corr-tag{font-size:9px;padding:1px 6px;border-radius:8px;font-weight:600;white-space:nowrap}
+.corr-tag.eff{color:#c44;background:rgba(204,68,68,.08)}
+.corr-tag.cau{color:#1565c0;background:rgba(21,101,192,.08)}
+
+/* Legend */
+.crit-leg{display:flex;gap:11px;justify-content:center;padding:3px 0 4px;flex-wrap:wrap;flex-shrink:0;background:#fff;border-top:1px solid #eee}
+.leg-i{display:flex;align-items:center;gap:3px}
+.leg-d{width:8px;height:8px;border-radius:50%;opacity:.55}
+.leg-t{font-size:10px;color:#aaa}
+
+/* Sidebar action elements */
+.sb-row-tav{cursor:pointer;opacity:.55;transition:all .15s;position:relative}
+.sb-row-tav:hover{opacity:1;background:rgba(45,90,61,.06);border-radius:4px}
+.sb-act{font-size:9px;font-weight:700;color:#2d5a3d;opacity:0;margin-left:auto;transition:opacity .15s}
+.sb-row-tav:hover .sb-act{opacity:.7}
+.sb-tip-btn{display:inline-block;font-size:8.5px;padding:1px 6px;margin-left:4px;border-radius:8px;background:#e8f0eb;color:#2d5a3d;cursor:pointer;font-weight:600;transition:all .15s;border:1px solid #d0ddd4}
+.sb-tip-btn:hover{background:#2d5a3d;color:#fff}
+
+/* Promote dialog */
+.prom-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.prom-box{background:#fff;border-radius:12px;padding:24px 28px;max-width:380px;width:90%;box-shadow:0 12px 40px rgba(0,0,0,.2);animation:promIn .2s ease;border:2px solid #c0392b}
+@keyframes promIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.prom-title{font-size:16px;font-weight:700;color:#c0392b;margin-bottom:12px}
+.prom-body{font-size:13px;color:#555;line-height:1.6}
+.prom-note{font-size:11.5px;color:#8a7a5a;font-style:italic}
+.prom-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.prom-btn{padding:8px 18px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.prom-cancel{background:#f0f0f0;color:#666}
+.prom-cancel:hover{background:#e0e0e0}
+.prom-ok{background:#2d5a3d;color:#fff}
+.prom-ok:hover{background:#1e4a2d}
+.prom-soft{border:2px solid #ddd}
+.prom-title-soft{color:#555}
+.prom-ok-soft{background:#607d8b;color:#fff;padding:8px 20px;border-radius:8px;font-weight:600;cursor:pointer;border:none;font-size:13px}
+.prom-ok-soft:hover{background:#4e6a75}
+
+/* SVG interactivity */
+.g-nd{cursor:pointer} .g-nd:hover .g-hov{opacity:.15 !important}
+.ch-nd{cursor:pointer} .ch-nd:hover circle.chc{filter:brightness(.92)}
+
+/* Tooltip */
+.crit-tip{position:fixed;z-index:1000;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 11px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-width:220px;opacity:0;transition:opacity .15s}
+.crit-tip.show{opacity:1}
+.crit-tip-t{font-size:12px;font-weight:700;margin-bottom:2px}
+.crit-tip-s{font-size:10.5px;color:#888;line-height:1.4}
+.crit-tip-g{display:inline-flex;align-items:center;gap:3px;margin-top:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px}
+
+/* Cross-analysis */
+.cross-box{border-radius:10px;padding:12px 13px;margin-bottom:14px;border:2px solid #c9b8a8;background:linear-gradient(135deg,#faf8f4,#f5f0ea)}
+.cross-hd{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.cross-ico{width:22px;height:22px;border-radius:50%;background:#e8ddd0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cross-t{font-size:12px;font-weight:700;color:#6a5a4a}
+.cross-body{font-size:11.5px;line-height:1.6;color:#5a4a3a}
+.cross-body strong{color:#4a3a2a}
+.cross-act{margin-top:8px;padding:7px 9px;border-radius:6px;background:#f0ece6;border-left:3px solid #b8a088;font-size:11px;line-height:1.5;color:#6a5a4a}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER (generato da core.js initNav) ===== -->
+<header class="bl-header" id="blHeader"></header>
+
+<!-- ===== CONTENT WRAPPER ===== -->
+<div class="crit-tip" id="tip"></div>
+<div class="crit-wrapper">
+<div class="crit-ctx" id="ctxBar"></div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="crit-layout">
+    <div class="crit-map">
+        <div class="crit-sidebar" id="sidebar"></div>
+        <svg id="svg" viewBox="0 0 1300 700" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <div class="crit-pan" id="pan">
+        <div class="pan-empty" id="pe">
+            <div>
+                <div class="pan-empty-ico">
+                    <svg viewBox="0 0 48 48" fill="none" stroke="#999" stroke-width="1.5">
+                        <circle cx="24" cy="24" r="18"/><path d="M18 18c0-3.3 2.7-6 6-6s6 2.7 6 6c0 3-2 4-3.5 5-1 .7-2.5 1.5-2.5 3.5"/><circle cx="24" cy="34" r="1.5" fill="#999" stroke="none"/>
+                    </svg>
+                </div>
+                <div class="pan-empty-txt">Apri un gruppo e seleziona un problema per vedere la diagnosi</div>
+            </div>
+        </div>
+        <div id="pc" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+            <div class="pan-hd" id="ph"></div>
+            <div class="pan-body" id="pb"></div>
+        </div>
+    </div>
+</div>
+<div class="crit-leg" id="leg"></div>
+</div><!-- /crit-wrapper -->
+
+<!-- ===== SCRIPTS ===== -->
+<script src="biolab-core.js"></script>
+<script src="database_biomateriali_v11.js"></script>
+<script src="diagnosi_condizionali.js"></script>
+
+<script>
+/* ============================================================
+   BioLab — Criticità (Problem Solver)
+   Reads: DIAGNOSI_CONDIZIONALI, DOMANDE_GUIDATE, NOMI_OPZIONI,
+          CORRELAZIONI_PROBLEMI from diagnosi_condizionali.js
+   Context: BioLab.cart from biolab-core.js
+   ============================================================ */
+
+// ---- Cart/tavolo change callback ----
+function onCartChanged() { refreshAll(); }
+function refreshAll() { renderCtxBar(); renderSidebar(); renderMap(); renderPanel(); }
+
+// Listen for tavolo/formula changes from Lab (cross-tab via localStorage)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'biolab_tavolo' || e.key === 'biolab_cart' || e.key === 'biomaterialiSelection') {
+        if (e.key === 'biolab_cart' && typeof BioLab !== 'undefined') BioLab.loadCart();
+        refreshAll();
+    }
+});
+
+// ===================== PROMOZIONE INGREDIENTI =====================
+
+// Carrello → Tavolo (avviso soft)
+function promoteToTavolo(id) {
+    var nome = displayName(id);
+    showSoftDialog(nome, function() {
+        var tav = [];
+        try { tav = JSON.parse(localStorage.getItem('biolab_tavolo') || '[]'); } catch(e) {}
+        tav = tav.map(function(t) { return typeof t === 'object' ? (t.id || '') : String(t); });
+        if (tav.indexOf(id) >= 0) return;
+        tav.push(id);
+        localStorage.setItem('biolab_tavolo', JSON.stringify(tav));
+        BioLab.showToast(nome + ' spostato sul tavolo', 'success');
+        refreshAll();
+    });
+}
+
+function showSoftDialog(nome, onConfirm) {
+    var old = document.getElementById('promoteDialog');
+    if (old) old.remove();
+    var overlay = document.createElement('div');
+    overlay.id = 'promoteDialog';
+    overlay.className = 'prom-overlay';
+    overlay.innerHTML =
+        '<div class="prom-box prom-soft">' +
+            '<div class="prom-title prom-title-soft">Spostare sul tavolo?</div>' +
+            '<div class="prom-body">' +
+                'Sposti <strong>' + nome + '</strong> sul tavolo di lavoro.<br>' +
+                'Potrai attivarlo nella formula in un secondo momento.' +
+            '</div>' +
+            '<div class="prom-actions">' +
+                '<button class="prom-btn prom-cancel" id="promCancel">Annulla</button>' +
+                '<button class="prom-btn prom-ok-soft" id="promOk">Sposta</button>' +
+            '</div>' +
+        '</div>';
+    document.body.appendChild(overlay);
+    setTimeout(function() { document.getElementById('promOk').focus(); }, 50);
+    document.getElementById('promOk').addEventListener('click', function() { overlay.remove(); onConfirm(); });
+    document.getElementById('promCancel').addEventListener('click', function() { overlay.remove(); });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+}
+
+// Tavolo → Formula attiva (dialog custom serio)
+function promoteToFormula(id) {
+    var nome = displayName(id);
+    showPromoteDialog(nome, function() {
+        var sel = [];
+        try { sel = JSON.parse(localStorage.getItem('biomaterialiSelection') || '[]'); } catch(e) {}
+        sel = sel.map(function(t) { return typeof t === 'object' ? (t.id || '') : String(t); });
+        if (sel.indexOf(id) >= 0) return;
+        sel.push(id);
+        localStorage.setItem('biomaterialiSelection', JSON.stringify(sel));
+        // Assicura che sia anche sul tavolo
+        var tav = [];
+        try { tav = JSON.parse(localStorage.getItem('biolab_tavolo') || '[]'); } catch(e) {}
+        tav = tav.map(function(t) { return typeof t === 'object' ? (t.id || '') : String(t); });
+        if (tav.indexOf(id) < 0) {
+            tav.push(id);
+            localStorage.setItem('biolab_tavolo', JSON.stringify(tav));
+        }
+        BioLab.showToast(nome + ' aggiunto alla formula attiva', 'success');
+        refreshAll();
+    });
+}
+
+// Dialog modale custom
+function showPromoteDialog(nome, onConfirm) {
+    // Rimuovi dialog precedente se esiste
+    var old = document.getElementById('promoteDialog');
+    if (old) old.remove();
+
+    var overlay = document.createElement('div');
+    overlay.id = 'promoteDialog';
+    overlay.className = 'prom-overlay';
+    overlay.innerHTML =
+        '<div class="prom-box">' +
+            '<div class="prom-title">Attivare nella formula?</div>' +
+            '<div class="prom-body">' +
+                'Sei sicuro di attivare <strong>' + nome + '</strong>?<br>' +
+                'Entrerà nella formula e le diagnosi si aggiorneranno.<br><br>' +
+                '<span class="prom-note">Sarà opportuno un passaggio dal Laboratorio per regolare le dosi.</span>' +
+            '</div>' +
+            '<div class="prom-actions">' +
+                '<button class="prom-btn prom-cancel" id="promCancel">Annulla</button>' +
+                '<button class="prom-btn prom-ok" id="promOk">Attiva</button>' +
+            '</div>' +
+        '</div>';
+
+    document.body.appendChild(overlay);
+    // Focus trap
+    setTimeout(function() { document.getElementById('promOk').focus(); }, 50);
+
+    document.getElementById('promOk').addEventListener('click', function() {
+        overlay.remove();
+        onConfirm();
+    });
+    document.getElementById('promCancel').addEventListener('click', function() {
+        overlay.remove();
+    });
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+// Cerca nel carrello ingredienti di una famiglia specifica, non già in formula
+function findInCart(famiglia) {
+    var ricetta = getRicetta();
+    var inFormula = ricetta ? ricetta.ids : [];
+    var cart = getCarrello();
+    return cart.filter(function(id) {
+        if (inFormula.indexOf(id) >= 0) return false;
+        return getFamiglia(id) === famiglia;
+    });
+}
+
+// ===================== PROBLEM DEFINITIONS =====================
+var PROBLEMI = [
+  {id:"crepe",g:"essiccazione",t:"Crepe",s:"Fessure nel materiale",gr:4},
+  {id:"sineresi",g:"essiccazione",t:"Sineresi",s:"Acqua espulsa dal gel",gr:3},
+  {id:"ritiro",g:"essiccazione",t:"Ritiro",s:"Il campione si restringe",gr:3},
+  {id:"fragile",g:"meccanica",t:"Fragilità",s:"Si rompe facilmente",gr:4},
+  {id:"troppo_rigido",g:"meccanica",t:"Troppo rigido",s:"Non si piega",gr:3},
+  {id:"appiccicoso",g:"meccanica",t:"Appiccicoso",s:"Superficie tacky",gr:2},
+  {id:"muffe",g:"biologici",t:"Muffe",s:"Contaminazione fungina",gr:5},
+  {id:"odore",g:"biologici",t:"Odore",s:"Sgradevole",gr:2},
+  {id:"bolle",g:"processo",t:"Bolle",s:"Aria intrappolata nel gel",gr:2},
+  {id:"grumi",g:"processo",t:"Grumi",s:"Ingrediente non sciolto",gr:2},
+  {id:"non_gelifica",g:"processo",t:"Non gelifica",s:"Resta liquido",gr:5},
+  {id:"schiuma_collassa",g:"processo",t:"Schiuma collassa",s:"Non tiene la forma",gr:3},
+  {id:"calore",g:"stabilita",t:"Deforma al calore",s:"Fonde o si deforma",gr:4},
+  {id:"retrogradazione",g:"stabilita",t:"Retrogradazione",s:"Rigido nel tempo",gr:3},
+  {id:"delaminazione",g:"stabilita",t:"Delaminazione",s:"Strati si separano",gr:3},
+  {id:"micelio_no_crescita",g:"colture",t:"Micelio non cresce",s:"Nessuna colonia",gr:4},
+  {id:"scoby_no_forma",g:"colture",t:"SCOBY non forma",s:"Nessuna pellicola",gr:4},
+  {id:"contaminazione",g:"colture",t:"Contaminazione",s:"Macchie colorate",gr:5},
+  {id:"colore",g:"ambiente",t:"Colore instabile",s:"Sbiadisce o cambia",gr:2},
+  {id:"dissolve_acqua",g:"ambiente",t:"Si dissolve",s:"Non resiste all'acqua",gr:4},
+];
+
+// ===================== GROUP CONFIG =====================
+var GRUPPI = {
+  essiccazione:{l:"Essiccazione",c:"#d84315",bg:"#fbe9e7",bs:"#fff3f0",img:"Essiccazione.jpg"},
+  meccanica:   {l:"Meccanica",   c:"#ad1457",bg:"#fce4ec",bs:"#fff0f3",img:"Meccanica.jpg"},
+  biologici:   {l:"Biologici",   c:"#2e7d32",bg:"#e8f5e9",bs:"#f1f8f2",img:"Biologici.jpg"},
+  processo:    {l:"Processo",    c:"#1565c0",bg:"#e3f2fd",bs:"#eef6fd",img:"Processo.jpg"},
+  stabilita:   {l:"Stabilità",   c:"#6a1b9a",bg:"#f3e5f5",bs:"#f8f0fa",img:"Stabilit_nel_tempo.jpg"},
+  colture:     {l:"Colture",     c:"#00695c",bg:"#e0f2f1",bs:"#edf7f6",img:"Colture.jpg"},
+  ambiente:    {l:"Ambiente",    c:"#e65100",bg:"#fff3e0",bs:"#fff8f0",img:"Ambiente.jpg"},
+};
+var IMG_CRIT_BASE = "../asset/criticita/";
+
+var POSIZIONI = {
+  processo:    {x:726,y:102},
+  essiccazione:{x:390,y:240},
+  meccanica:   {x:1062,y:240},
+  stabilita:   {x:558,y:408},
+  ambiente:    {x:894,y:408},
+  biologici:   {x:390,y:528},
+  colture:     {x:1062,y:528},
+};
+
+var AFFINITA = [
+  ["crepe","fragile"],["muffe","contaminazione"],
+  ["calore","dissolve_acqua"],["sineresi","retrogradazione"]
+];
+
+var ICO_ARROW = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h8m0 0L8 5m3 3L8 11" stroke="#c44" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var ICO_LINK = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="5.5" cy="8" r="2.5" stroke="#1565c0" stroke-width="1.3"/><circle cx="10.5" cy="8" r="2.5" stroke="#1565c0" stroke-width="1.3"/></svg>';
+
+// ===================== STATE =====================
+var openG = {};   // open groups (object-as-set)
+var selP = [];    // selected problem ids (max 3)
+var MAX_SEL = 3;
+var manIng = null; // manual ingredient (no-context mode)
+
+// ===================== TOOLTIP =====================
+var tipEl = null;
+function showTip(c, evt) {
+    tipEl = document.getElementById('tip');
+    var gm = GRUPPI[c.pg];
+    tipEl.innerHTML = '<div class="crit-tip-t" style="color:' + gm.c + '">' + c.t + '</div>'
+        + '<div class="crit-tip-s">' + c.s + '</div>'
+        + '<div class="crit-tip-g" style="background:' + gm.bg + ';color:' + gm.c + '">Gravità ' + c.gr + '/5</div>';
+    tipEl.classList.add('show');
+    moveTip(evt);
+}
+function moveTip(evt) {
+    if (!tipEl) return;
+    var x = evt.clientX + 14, y = evt.clientY - 10;
+    if (x + 230 > window.innerWidth) x = evt.clientX - 230;
+    if (y + 80 > window.innerHeight) y = evt.clientY - 80;
+    tipEl.style.left = x + 'px';
+    tipEl.style.top = y + 'px';
+}
+function hideTip() {
+    if (tipEl) tipEl.classList.remove('show');
+}
+
+// ===================== CROSS-ANALYSIS PATTERNS =====================
+// Combinazioni note di 2-3 problemi con diagnosi sintetica ad hoc
+var CROSS_PATTERNS = [
+  {
+    ids: ["crepe", "fragile"],
+    title: "Sindrome da sotto-plastificazione",
+    analisi: "Crepe e fragilità insieme indicano quasi certamente una <strong>carenza di plastificante</strong>. La matrice si è formata ma non ha abbastanza mobilità molecolare per sopportare lo stress dell'essiccazione.",
+    azione: "Aumenta il plastificante al 25-35% del peso secco. Se già presente, verifica che l'essiccazione sia lenta (copri il campione, ambiente umido)."
+  },
+  {
+    ids: ["crepe", "ritiro"],
+    title: "Essiccazione troppo rapida",
+    analisi: "Il ritiro eccessivo genera tensioni interne che si scaricano come crepe. Il problema è quasi sempre nella <strong>velocità di evaporazione</strong>, non nella formula.",
+    azione: "Essicca lentamente: copri con pellicola forata, evita correnti d'aria e calore diretto. Ambiente a 40-60% umidità ideale."
+  },
+  {
+    ids: ["fragile", "troppo_rigido"],
+    title: "Matrice sovra-reticolata o senza plastificante",
+    analisi: "Il materiale ha struttura ma <strong>zero flessibilità</strong>. O manca il plastificante, o c'è troppo reticolante che ha irrigidito la rete.",
+    azione: "Aggiungi o aumenta plastificante. Se c'è reticolante >5%, riducilo. Per caseina/gelatina reticolata, glicerina 25-30% è il minimo."
+  },
+  {
+    ids: ["muffe", "odore"],
+    title: "Degradazione biologica attiva",
+    analisi: "Muffe e odore insieme indicano <strong>contaminazione in corso</strong>. Il materiale ha troppa umidità residua o è conservato male.",
+    azione: "Essicca completamente (peso stabile per 24h). Conserva in ambiente secco. Per prevenire: aggiungi conservante naturale (acido citrico 1-2%, oli essenziali) o riduci il contenuto proteico."
+  },
+  {
+    ids: ["muffe", "contaminazione"],
+    title: "Ambiente non sterile",
+    analisi: "Muffe nel biomateriale e contaminazione nella coltura hanno la stessa radice: <strong>igiene insufficiente</strong>. Spore nell'aria colonizzano sia il materiale umido che il medium di crescita.",
+    azione: "Sterilizza strumenti e contenitori. Lavora in ambiente pulito, lontano da piante e terra. Per colture: sterilizza il substrato (121°C 90min o pastorizza 71°C 2h)."
+  },
+  {
+    ids: ["bolle", "grumi"],
+    title: "Dissoluzione incompleta",
+    analisi: "Bolle e grumi indicano che l'ingrediente <strong>non si è sciolto bene</strong>. I grumi intrappolano aria e creano bolle. Spesso il problema è la temperatura o la velocità di aggiunta.",
+    azione: "Aggiungi la polvere lentamente nell'acqua calda (non viceversa), mescolando costantemente. Per agar: porta a ebollizione. Per gelatina: idrata prima in acqua fredda 5-10 min."
+  },
+  {
+    ids: ["non_gelifica", "dissolve_acqua"],
+    title: "Reticolazione assente",
+    analisi: "Il materiale non gelifica e si dissolve perché <strong>non si è formata una rete</strong>. Manca il meccanismo di gelificazione: sale per alginato, temperatura per agar/gelatina, o reticolante per proteine.",
+    azione: "Verifica che il meccanismo di gelificazione sia attivo. Alginato: serve CaCl₂. Gelatina: raffredda sotto 30°C. Agar: verifica che abbia raggiunto l'ebollizione."
+  },
+  {
+    ids: ["calore", "dissolve_acqua"],
+    title: "Materiale non stabilizzato",
+    analisi: "Sensibilità al calore e all'acqua insieme indicano un materiale a <strong>legami deboli</strong> (solo legami idrogeno, nessuna reticolazione chimica). Tipico di gelatina e amido senza reticolante.",
+    azione: "Aggiungi reticolante: tannini o tè nero per proteine, CaCl₂ per alginato. Coating idrorepellente (cera, gommalacca) per la superficie."
+  },
+  {
+    ids: ["sineresi", "retrogradazione"],
+    title: "Invecchiamento del gel",
+    analisi: "La sineresi (espulsione acqua) e la retrogradazione (irrigidimento) sono <strong>lo stesso fenomeno</strong> visto in due modi: le catene polimeriche si riorganizzano espellendo acqua. Tipico di amido e agar.",
+    azione: "Per amido: aggiungi sorbitolo o glicerina che rallentano la retrogradazione. Per agar: aumenta il plastificante. L'invecchiamento è inevitabile ma rallentabile."
+  },
+  {
+    ids: ["crepe", "fragile", "ritiro"],
+    title: "Essiccazione critica senza plastificante",
+    analisi: "La triade crepe + fragilità + ritiro è il segnale classico di un <strong>film che si è essiccato troppo in fretta senza abbastanza plastificante</strong>. Ogni problema amplifica gli altri.",
+    azione: "Intervento doppio: (1) aumenta plastificante al 30%+ del peso secco, (2) rallenta l'essiccazione con copertura parziale. Testa prima su campione piccolo."
+  },
+  {
+    ids: ["micelio_no_crescita", "contaminazione"],
+    title: "Substrato contaminato prima dell'inoculo",
+    analisi: "Se il micelio non cresce ma appaiono muffe colorate, il substrato era <strong>già contaminato</strong> al momento dell'inoculo. I contaminanti, più aggressivi, hanno colonizzato per primi.",
+    azione: "Sterilizza il substrato in autoclave (121°C, 90 min) o pastorizza (71°C, 2h). Lavora con guanti e in ambiente pulito. Inocula con quantità generosa di micelio."
+  },
+  {
+    ids: ["scoby_no_forma", "contaminazione"],
+    title: "Medium SCOBY contaminato",
+    analisi: "Se la pellicola non si forma e ci sono macchie, il tè zuccherato è stato <strong>contaminato</strong> prima che la coltura potesse stabilirsi. Spesso da contenitore non sterile o copertura inadeguata.",
+    azione: "Sterilizza il contenitore con acqua bollente. Copri con tessuto a trama fitta (non pellicola). Usa uno starter liquido abbondante (20% del volume). Temperatura 22-28°C."
+  },
+  {
+    ids: ["appiccicoso", "dissolve_acqua"],
+    title: "Eccesso di plastificante igroscopico",
+    analisi: "Superficie appiccicosa e sensibilità all'acqua indicano <strong>troppo plastificante</strong> (glicerina o sorbitolo) che assorbe umidità dall'aria e la trattiene.",
+    azione: "Riduci il plastificante al 20-25%. In alternativa, applica un coating idrorepellente (cera, gommalacca) per sigillare la superficie."
+  },
+  {
+    ids: ["delaminazione", "calore"],
+    title: "Strati con dilatazione termica diversa",
+    analisi: "La delaminazione al calore indica che gli strati hanno <strong>coefficienti di espansione diversi</strong>. Quando uno si dilata più dell'altro, si separano.",
+    azione: "Usa matrici compatibili tra gli strati. Aggiungi uno strato intermedio (primer) o pressa a caldo per migliorare l'adesione. Evita sbalzi termici."
+  },
+];
+
+function findCrossPattern(selectedIds) {
+    if (selectedIds.length < 2) return null;
+    var sorted = selectedIds.slice().sort();
+    for (var i = 0; i < CROSS_PATTERNS.length; i++) {
+        var pat = CROSS_PATTERNS[i];
+        var patSorted = pat.ids.slice().sort();
+        // Exact match
+        if (patSorted.length === sorted.length && patSorted.every(function(id, j) { return id === sorted[j]; })) {
+            return pat;
+        }
+    }
+    // Partial match: if 3 selected and a 2-pattern matches a subset
+    if (sorted.length === 3) {
+        for (var j = 0; j < CROSS_PATTERNS.length; j++) {
+            var p2 = CROSS_PATTERNS[j];
+            if (p2.ids.length === 2 && p2.ids.every(function(id) { return sorted.indexOf(id) >= 0; })) {
+                return { title: p2.title + ' (parziale)', analisi: p2.analisi, azione: p2.azione, partial: true };
+            }
+        }
+    }
+    return null;
+}
+
+function crossAnalysisHtml(pattern) {
+    var h = '<div class="cross-box">';
+    h += '<div class="cross-hd"><div class="cross-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v6m0 0l3-3m-3 3L4 4" stroke="#8a7a5a" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="11" r="1.5" fill="#8a7a5a"/></svg></div><span class="cross-t">' + pattern.title + '</span></div>';
+    h += '<div class="cross-body">' + pattern.analisi + '</div>';
+    h += '<div class="cross-act"><strong>Azione combinata:</strong> ' + pattern.azione + '</div>';
+    h += '</div>';
+    return h;
+}
+
+// ===================== CONTEXT: RICETTA (tavolo) + CARRELLO =====================
+// Ricetta = tavolo di lavoro (ingredienti attivi in lab)
+// Carrello = magazzino (ingredienti disponibili ma non nella ricetta)
+function getRicetta() {
+    try {
+        // Formula attiva = ingredienti selezionati (non grigi) sul tavolo
+        var selRaw = localStorage.getItem('biomaterialiSelection');
+        var sel = selRaw ? JSON.parse(selRaw) : [];
+        sel = sel.map(function(t) { return typeof t === 'object' ? (t.id || '') : String(t); })
+                 .filter(function(id) { return id && isIngredient(id); });
+
+        // Tavolo completo = tutti gli ingredienti sul banco (attivi + inattivi)
+        var tavRaw = localStorage.getItem('biolab_tavolo');
+        var tav = tavRaw ? JSON.parse(tavRaw) : [];
+        tav = tav.map(function(t) { return typeof t === 'object' ? (t.id || '') : String(t); })
+                 .filter(function(id) { return id && isIngredient(id); });
+
+        if (sel.length > 0) {
+            var inattivi = tav.filter(function(id) { return sel.indexOf(id) < 0; });
+            return { ids: sel, inattivi: inattivi, src: 'formula' };
+        }
+        if (tav.length > 0) {
+            return { ids: tav, inattivi: [], src: 'tavolo' };
+        }
+    } catch(e) {}
+    return null;
+}
+
+function isIngredient(id) {
+    if (typeof INGREDIENTI_DATA !== 'undefined' && INGREDIENTI_DATA.ingredienti[id]) return true;
+    var nonIng = ['film','gel','rigido','coating','schiuma','pelle','composito'];
+    if (nonIng.indexOf(id) >= 0) return false;
+    return true;
+}
+
+function getCarrello() {
+    if (typeof BioLab === 'undefined' || !BioLab.cart || BioLab.cart.length === 0) return [];
+    return BioLab.cart.map(function(item) { return item && item.id ? item.id : null; }).filter(Boolean);
+}
+
+function buildContext(ids) {
+    var fams = [], famSet = {};
+    ids.forEach(function(id) {
+        var fam = getFamiglia(id);
+        if (fam && !famSet[fam]) { famSet[fam] = true; fams.push(fam); }
+    });
+    return { ingredienti: ids, famiglie: fams };
+}
+
+function getFamiglia(id) {
+    if (typeof INGREDIENTI_DATA !== 'undefined') {
+        var ing = INGREDIENTI_DATA.ingredienti[id];
+        if (ing && ing.famiglia) return ing.famiglia;
+    }
+    // Fallback
+    var FM = {
+        gelatina:"PROTEINA",caseina:"PROTEINA",albumina:"PROTEINA",cheratina:"PROTEINA",zeina:"PROTEINA",
+        agar:"POLISACCARIDE_NEUTRO",amido_mais:"POLISACCARIDE_NEUTRO",amido_patata:"POLISACCARIDE_NEUTRO",amido_tapioca:"POLISACCARIDE_NEUTRO",
+        alginato:"POLISACCARIDE_ANIONICO",carragenina:"POLISACCARIDE_ANIONICO",pectina:"POLISACCARIDE_ANIONICO",
+        chitosano:"POLICATIONE",
+        glicerina:"PLASTIFICANTE",sorbitolo:"PLASTIFICANTE",
+        fondi_caffe:"CARICA",segatura:"CARICA",paglia:"CARICA",canapa_hurd:"CARICA",bucce_agrumi:"CARICA",pula_riso:"CARICA",sansa_oliva:"CARICA",
+        curcuma:"COLORANTE",spirulina:"COLORANTE",paprika:"COLORANTE",carbone_vegetale:"COLORANTE",ossido_ferro:"COLORANTE",
+        bicarbonato:"ADDITIVO",aceto:"ADDITIVO",acido_citrico:"ADDITIVO",aquafaba:"ADDITIVO",lecitina:"ADDITIVO",
+        micelio:"COLTURA",scoby:"COLTURA",
+        cacl2:"SALE_RETICOLANTE",tannini:"SALE_RETICOLANTE",borace:"SALE_RETICOLANTE",allume:"SALE_RETICOLANTE",
+        lattato_calcio:"SALE_RETICOLANTE",kcl:"SALE_RETICOLANTE",te_nero_forte:"SALE_RETICOLANTE",
+        cera_api:"RESINA_LIPIDE",cera_carnauba:"RESINA_LIPIDE",gommalacca:"RESINA_LIPIDE",colofonia:"RESINA_LIPIDE"
+    };
+    return FM[id] || null;
+}
+
+// Context for diagnosis — ricetta first, then null (manual mode)
+function getContext() {
+    var ric = getRicetta();
+    if (ric) {
+        var ctx = buildContext(ric.ids);
+        ctx.src = ric.src + ' (' + ric.ids.length + ' ingredienti)';
+        ctx.srcType = 'tavolo';
+        return ctx;
+    }
+    return null;
+}
+
+// ===================== DISPLAY NAME =====================
+function displayName(id) {
+    if (typeof id !== 'string') return String(id || '');
+    if (typeof NOMI_OPZIONI !== 'undefined' && NOMI_OPZIONI[id]) return NOMI_OPZIONI[id];
+    if (typeof INGREDIENTI_DATA !== 'undefined') {
+        var ing = INGREDIENTI_DATA.ingredienti[id];
+        if (ing) return ing.nome;
+    }
+    return id.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+}
+
+// ===================== MATCHING ENGINE =====================
+function matchDiagnoses(problemId, ctx) {
+    if (typeof DIAGNOSI_CONDIZIONALI === 'undefined') return [];
+    var diagnoses = DIAGNOSI_CONDIZIONALI[problemId];
+    if (!diagnoses || !ctx || ctx.ingredienti.length === 0) return [];
+
+    return diagnoses.filter(function(d) {
+        if (!d.condizione) return true;
+        var c = d.condizione;
+
+        if (c.famiglie_presenti && !c.famiglie_presenti.every(function(f) { return ctx.famiglie.indexOf(f) >= 0; })) return false;
+        if (c.famiglie_assenti && c.famiglie_assenti.some(function(f) { return ctx.famiglie.indexOf(f) >= 0; })) return false;
+        if (c.famiglie_presenti_any && !c.famiglie_presenti_any.some(function(f) { return ctx.famiglie.indexOf(f) >= 0; })) return false;
+        if (c.ingredienti_presenti && !c.ingredienti_presenti.every(function(i) { return ctx.ingredienti.indexOf(i) >= 0; })) return false;
+        if (c.ingredienti_presenti_any && !c.ingredienti_presenti_any.some(function(i) { return ctx.ingredienti.indexOf(i) >= 0; })) return false;
+        if (c.ingredienti_assenti && c.ingredienti_assenti.some(function(i) { return ctx.ingredienti.indexOf(i) >= 0; })) return false;
+
+        return true;
+    }).sort(function(a, b) { return a.priorita - b.priorita; });
+}
+
+// Only count CONDITIONAL diagnoses for relevance (pulse/highlight).
+// Generic (no condizione) diagnoses are always shown in panel but don't trigger pulse.
+function matchConditionalDiagnoses(problemId, ctx) {
+    if (typeof DIAGNOSI_CONDIZIONALI === 'undefined') return [];
+    var diagnoses = DIAGNOSI_CONDIZIONALI[problemId];
+    if (!diagnoses || !ctx || ctx.ingredienti.length === 0) return [];
+
+    return diagnoses.filter(function(d) {
+        if (!d.condizione) return false;  // skip generics
+        var c = d.condizione;
+
+        // Skip dose-dependent diagnoses — we don't have dosage data here
+        if (c.dosaggio_sotto || c.dosaggio_sopra) return false;
+
+        if (c.famiglie_presenti && !c.famiglie_presenti.every(function(f) { return ctx.famiglie.indexOf(f) >= 0; })) return false;
+        if (c.famiglie_assenti && c.famiglie_assenti.some(function(f) { return ctx.famiglie.indexOf(f) >= 0; })) return false;
+        if (c.famiglie_presenti_any && !c.famiglie_presenti_any.some(function(f) { return ctx.famiglie.indexOf(f) >= 0; })) return false;
+        if (c.ingredienti_presenti && !c.ingredienti_presenti.every(function(i) { return ctx.ingredienti.indexOf(i) >= 0; })) return false;
+        if (c.ingredienti_presenti_any && !c.ingredienti_presenti_any.some(function(i) { return ctx.ingredienti.indexOf(i) >= 0; })) return false;
+        if (c.ingredienti_assenti && c.ingredienti_assenti.some(function(i) { return ctx.ingredienti.indexOf(i) >= 0; })) return false;
+
+        return true;
+    });
+}
+
+function relevantProblemIds(ctx) {
+    if (!ctx || ctx.ingredienti.length === 0) return {};
+    var s = {};
+    PROBLEMI.forEach(function(p) {
+        if (matchConditionalDiagnoses(p.id, ctx).length > 0) s[p.id] = true;
+    });
+    return s;
+}
+
+function relevantGroupIds(relIds) {
+    var s = {};
+    PROBLEMI.forEach(function(p) {
+        if (relIds[p.id]) s[p.g] = true;
+    });
+    return s;
+}
+
+// Build minimal context from a single ingredient
+function ctxFromIngredient(ingId) {
+    var fams = [];
+    if (typeof INGREDIENTI_DATA !== 'undefined') {
+        var ing = INGREDIENTI_DATA.ingredienti[ingId];
+        if (ing && ing.famiglia) fams.push(ing.famiglia);
+    }
+    if (fams.length === 0) {
+        var FM = {
+            gelatina:"PROTEINA",caseina:"PROTEINA",albumina:"PROTEINA",cheratina:"PROTEINA",zeina:"PROTEINA",
+            agar:"POLISACCARIDE_NEUTRO",amido_mais:"POLISACCARIDE_NEUTRO",amido_patata:"POLISACCARIDE_NEUTRO",amido_tapioca:"POLISACCARIDE_NEUTRO",
+            alginato:"POLISACCARIDE_ANIONICO",carragenina:"POLISACCARIDE_ANIONICO",pectina:"POLISACCARIDE_ANIONICO",
+            chitosano:"POLICATIONE",
+            glicerina:"PLASTIFICANTE",sorbitolo:"PLASTIFICANTE",
+            fondi_caffe:"CARICA",segatura:"CARICA",paglia:"CARICA",canapa_hurd:"CARICA",bucce_agrumi:"CARICA",pula_riso:"CARICA",sansa_oliva:"CARICA",
+            curcuma:"COLORANTE",spirulina:"COLORANTE",paprika:"COLORANTE",carbone_vegetale:"COLORANTE",ossido_ferro:"COLORANTE",
+            bicarbonato:"ADDITIVO",aceto:"ADDITIVO",acido_citrico:"ADDITIVO",aquafaba:"ADDITIVO",lecitina:"ADDITIVO",
+            micelio:"COLTURA",scoby:"COLTURA",
+            cacl2:"SALE_RETICOLANTE",tannini:"SALE_RETICOLANTE",borace:"SALE_RETICOLANTE",allume:"SALE_RETICOLANTE",
+            lattato_calcio:"SALE_RETICOLANTE",kcl:"SALE_RETICOLANTE",te_nero_forte:"SALE_RETICOLANTE",
+            cera_api:"RESINA_LIPIDE",cera_carnauba:"RESINA_LIPIDE",gommalacca:"RESINA_LIPIDE",colofonia:"RESINA_LIPIDE"
+        };
+        if (FM[ingId]) fams.push(FM[ingId]);
+    }
+    return { ingredienti: [ingId], famiglie: fams, src: "selezione manuale" };
+}
+
+// ===================== SVG HELPERS =====================
+var NS = "http://www.w3.org/2000/svg";
+function el(tag, a, par) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in a) if (a.hasOwnProperty(k)) e.setAttribute(k, a[k]);
+    if (par) par.appendChild(e);
+    return e;
+}
+
+function childPos(gk) {
+    var gp = POSIZIONI[gk], ch = PROBLEMI.filter(function(p) { return p.g === gk; });
+    var n = ch.length, pR = 55;
+    // Expansion direction: away from canvas center
+    var cx = 630, cy = 320; // approximate center of layout
+    var dx = gp.x - cx, dy = gp.y - cy;
+    var baseA = Math.atan2(dy, dx); // angle from center to group
+    var spread = n<=2?.6*Math.PI:n<=3?.8*Math.PI:1.0*Math.PI;
+    var off = baseA - spread/2;
+    return ch.map(function(c, i) {
+        var ang = off + (n===1?spread/2:(i/(n-1))*spread);
+        var r = 30 + c.gr*7, dist = pR + r + 22;
+        return {id:c.id,g:c.g,t:c.t,s:c.s,gr:c.gr,pg:gk,cx:gp.x+Math.cos(ang)*dist,cy:gp.y+Math.sin(ang)*dist,r:r};
+    });
+}
+
+// ===================== RENDER MAP =====================
+function renderMap() {
+    var svg = document.getElementById("svg");
+    svg.innerHTML = "";
+    var ctx = getContext();
+    var hasC = ctx !== null;
+    var rIds = relevantProblemIds(ctx);
+    var rGrps = relevantGroupIds(rIds);
+
+    var allCh = [];
+    Object.keys(openG).forEach(function(g) {
+        childPos(g).forEach(function(c) { allCh.push(c); });
+    });
+    var chMap = {};
+    allCh.forEach(function(c) { chMap[c.id] = c; });
+
+    // Connectors
+    allCh.forEach(function(c) {
+        var gp = POSIZIONI[c.pg], gm = GRUPPI[c.pg];
+        el("line",{x1:gp.x,y1:gp.y,x2:c.cx,y2:c.cy,stroke:gm.c,"stroke-width":1.5,"stroke-opacity":.2,"stroke-dasharray":selP.indexOf(c.id)>=0?"none":"4 3"},svg);
+    });
+
+    // Affinity lines
+    AFFINITA.forEach(function(pair) {
+        if (chMap[pair[0]] && chMap[pair[1]]) {
+            el("line",{x1:chMap[pair[0]].cx,y1:chMap[pair[0]].cy,x2:chMap[pair[1]].cx,y2:chMap[pair[1]].cy,stroke:"#888","stroke-width":.8,"stroke-opacity":.1,"stroke-dasharray":"2 4"},svg);
+        }
+    });
+
+    // Group bubbles
+    Object.keys(POSIZIONI).forEach(function(gk) {
+        var pos = POSIZIONI[gk], gm = GRUPPI[gk];
+        var isO = !!openG[gk], isR = hasC && !!rGrps[gk], isD = hasC && !isR;
+        var nP = PROBLEMI.filter(function(p) { return p.g === gk; }).length;
+        var r = isO ? 45 : 78;
+        var g = el("g",{"class":"g-nd"},svg);
+
+        // Hover ring
+        el("circle",{cx:pos.x,cy:pos.y,r:r+6,fill:"none",stroke:gm.c,"stroke-width":1.5,opacity:0,"class":"g-hov"},g);
+
+        // Pulse for relevant groups — yellow highlighter, double ring
+        if (isR && !isO) {
+            // Outer glow ring (slow, wide)
+            var pu1 = el("circle",{cx:pos.x,cy:pos.y,r:r,fill:"none",stroke:"#FFD600","stroke-width":5,opacity:.6},g);
+            el("animate",{attributeName:"r",from:r+2,to:r+26,dur:"2.5s",repeatCount:"indefinite"},pu1);
+            el("animate",{attributeName:"opacity",from:".6",to:"0",dur:"2.5s",repeatCount:"indefinite"},pu1);
+            // Inner pulse ring (faster, tighter)
+            var pu2 = el("circle",{cx:pos.x,cy:pos.y,r:r,fill:"none",stroke:"#FFD600","stroke-width":3,opacity:.8},g);
+            el("animate",{attributeName:"r",from:r+1,to:r+14,dur:"1.8s",repeatCount:"indefinite"},pu2);
+            el("animate",{attributeName:"opacity",from:".8",to:"0",dur:"1.8s",repeatCount:"indefinite"},pu2);
+            // Static yellow border highlight
+            el("circle",{cx:pos.x,cy:pos.y,r:r+1,fill:"none",stroke:"#FFD600","stroke-width":2.5,opacity:.45},g);
+        }
+
+        // Image bubble (closed) or solid (open)
+        if (!isO && gm.img) {
+            var clipId = "clip-" + gk;
+            var defs = svg.querySelector("defs");
+            if (!defs) { defs = document.createElementNS("http://www.w3.org/2000/svg","defs"); svg.insertBefore(defs, svg.firstChild); }
+            // Clip path
+            var cp = document.createElementNS("http://www.w3.org/2000/svg","clipPath");
+            cp.setAttribute("id", clipId);
+            var cc = document.createElementNS("http://www.w3.org/2000/svg","circle");
+            cc.setAttribute("cx", pos.x); cc.setAttribute("cy", pos.y); cc.setAttribute("r", r);
+            cp.appendChild(cc); defs.appendChild(cp);
+
+            // Circular text path for label
+            var textR = r + 18;
+            var pathId = "tpath-" + gk;
+            var pathD = "M " + (pos.x - textR) + "," + pos.y + " a " + textR + "," + textR + " 0 1,1 " + (textR*2) + ",0 a " + textR + "," + textR + " 0 1,1 -" + (textR*2) + ",0";
+            var pathEl = document.createElementNS("http://www.w3.org/2000/svg","path");
+            pathEl.setAttribute("id", pathId);
+            pathEl.setAttribute("d", pathD);
+            pathEl.setAttribute("fill", "none");
+            defs.appendChild(pathEl);
+
+            // Image — clean, no overlay
+            var img = document.createElementNS("http://www.w3.org/2000/svg","image");
+            img.setAttribute("href", IMG_CRIT_BASE + gm.img);
+            img.setAttribute("x", pos.x - r); img.setAttribute("y", pos.y - r);
+            img.setAttribute("width", r*2); img.setAttribute("height", r*2);
+            img.setAttribute("clip-path", "url(#" + clipId + ")");
+            img.setAttribute("preserveAspectRatio", "xMidYMid slice");
+            if (isD) img.setAttribute("opacity", ".3");
+            g.appendChild(img);
+
+            // Colored border ring
+            el("circle",{cx:pos.x,cy:pos.y,r:r,fill:"none",stroke:isD?"#ccc":gm.c,"stroke-width":isD?1.5:3,opacity:isD?.4:1},g);
+
+            // Label on circular path (top arc)
+            var txt = document.createElementNS("http://www.w3.org/2000/svg","text");
+            txt.setAttribute("fill", isD?"#bbb":gm.c);
+            txt.setAttribute("font-size", "16");
+            txt.setAttribute("font-weight", "700");
+            txt.setAttribute("letter-spacing", "2");
+            txt.style.pointerEvents = "none";
+            var tp = document.createElementNS("http://www.w3.org/2000/svg","textPath");
+            tp.setAttribute("href", "#" + pathId);
+            tp.setAttribute("startOffset", "25%");
+            tp.setAttribute("text-anchor", "middle");
+            tp.textContent = gm.l.toUpperCase();
+            txt.appendChild(tp);
+            g.appendChild(txt);
+
+            // Count badge for relevant closed groups
+            if (isR && !isO) {
+                var nAct = PROBLEMI.filter(function(p) { return p.g === gk && rIds[p.id]; }).length;
+                if (nAct > 0) {
+                    var bx = pos.x + r * 0.6, by = pos.y - r * 0.6;
+                    el("circle",{cx:bx,cy:by,r:12,fill:"#FFD600",stroke:"#F9A825","stroke-width":1.5},g);
+                    var bt = el("text",{x:bx,y:by+4.5,"text-anchor":"middle",fill:"#333","font-size":13,"font-weight":700,style:"pointer-events:none"},g);
+                    bt.textContent = nAct;
+                }
+            }
+        } else {
+            // Open state: solid color
+            el("circle",{cx:pos.x,cy:pos.y,r:r,fill:isO?gm.c:isD?"#e8e8e8":gm.bg,stroke:isO?gm.c:isD?"#ccc":gm.c,"stroke-width":isO?0:isD?1:2,opacity:isD?.35:1},g);
+
+            if (isO) {
+                var t1 = el("text",{x:pos.x,y:pos.y-3,"text-anchor":"middle",fill:"#fff","font-size":15,"font-weight":700,style:"pointer-events:none"},g);
+                t1.textContent = gm.l;
+                var t2 = el("text",{x:pos.x,y:pos.y+14,"text-anchor":"middle",fill:"rgba(255,255,255,.7)","font-size":11,style:"pointer-events:none"},g);
+                t2.textContent = "\u25b2 chiudi";
+            } else if (isR) {
+                // Count badge for solid bubbles
+                var nAct2 = PROBLEMI.filter(function(p) { return p.g === gk && rIds[p.id]; }).length;
+                if (nAct2 > 0) {
+                    var lbl2 = el("text",{x:pos.x,y:pos.y+5,"text-anchor":"middle",fill:gm.c,"font-size":16,"font-weight":700,style:"pointer-events:none"},g);
+                    lbl2.textContent = gm.l;
+                    var bx2 = pos.x + r * 0.55, by2 = pos.y - r * 0.55;
+                    el("circle",{cx:bx2,cy:by2,r:12,fill:"#FFD600",stroke:"#F9A825","stroke-width":1.5},g);
+                    var bt2 = el("text",{x:bx2,y:by2+4.5,"text-anchor":"middle",fill:"#333","font-size":13,"font-weight":700,style:"pointer-events:none"},g);
+                    bt2.textContent = nAct2;
+                }
+            }
+        }
+
+        g.addEventListener("click", function() {
+            if (openG[gk]) {
+                delete openG[gk];
+                selP = selP.filter(function(id) {
+                    var pp = findP(id);
+                    return pp && pp.g !== gk;
+                });
+            } else {
+                openG[gk] = true;
+            }
+            renderMap(); renderPanel();
+        });
+    });
+
+    // Child bubbles
+    allCh.forEach(function(c) {
+        var gm = GRUPPI[c.pg], isR = hasC && !!rIds[c.id], isD = hasC && !isR, isSel = selP.indexOf(c.id) >= 0;
+        var g = el("g",{"class":"ch-nd"},svg);
+
+        if (isSel) el("circle",{cx:c.cx,cy:c.cy,r:c.r+5,fill:"none",stroke:gm.c,"stroke-width":2.5,opacity:.5},g);
+        if (isR && !isSel) {
+            // Yellow highlighter pulse for relevant children
+            var pu = el("circle",{cx:c.cx,cy:c.cy,r:c.r,fill:"none",stroke:"#FFD600","stroke-width":3,opacity:.7},g);
+            el("animate",{attributeName:"r",from:c.r,to:c.r+16,dur:"2.2s",repeatCount:"indefinite"},pu);
+            el("animate",{attributeName:"opacity",from:".7",to:"0",dur:"2.2s",repeatCount:"indefinite"},pu);
+            // Static yellow ring
+            el("circle",{cx:c.cx,cy:c.cy,r:c.r+1,fill:"none",stroke:"#FFD600","stroke-width":2,opacity:.4},g);
+        }
+
+        el("circle",{cx:c.cx,cy:c.cy,r:c.r,"class":"chc",fill:isD?"#f0f0f0":(gm.bs||gm.bg),stroke:isSel?gm.c:isD?"#ddd":gm.c,"stroke-width":isSel?2.5:isD?.8:1.5,opacity:isD?.35:1},g);
+
+        var lbl = c.t.length > 16 ? c.t.slice(0,14) + "\u2026" : c.t;
+        var lt = el("text",{x:c.cx,y:c.r>40?c.cy-4:c.cy+2,"text-anchor":"middle",fill:isD?"#aaa":gm.c,"font-size":c.r>40?13:11,"font-weight":700,style:"pointer-events:none"},g);
+        lt.textContent = lbl;
+        if (c.r > 36) {
+            var st = el("text",{x:c.cx,y:c.cy+12,"text-anchor":"middle",fill:isD?"#bbb":"#999","font-size":9.5,style:"pointer-events:none"},g);
+            st.textContent = c.s.length > 18 ? c.s.slice(0,16) + "\u2026" : c.s;
+        }
+
+        g.addEventListener("click", function(e) {
+            e.stopPropagation();
+            hideTip();
+            var idx = selP.indexOf(c.id);
+            if (idx >= 0) { selP.splice(idx, 1); }
+            else if (selP.length < MAX_SEL) { selP.push(c.id); }
+            else { BioLab.showToast('Max ' + MAX_SEL + ' problemi selezionabili', 'info'); return; }
+            manIng = null;
+            renderMap(); renderPanel();
+        });
+        g.addEventListener("mouseenter", function(e) { showTip(c, e); });
+        g.addEventListener("mousemove", function(e) { moveTip(e); });
+        g.addEventListener("mouseleave", function() { hideTip(); });
+    });
+}
+
+// ===================== RENDER PANEL =====================
+function renderPanel() {
+    var pe = document.getElementById("pe"), pc = document.getElementById("pc");
+    var ph = document.getElementById("ph"), pb = document.getElementById("pb");
+
+    if (selP.length === 0) { pe.style.display = "flex"; pc.style.display = "none"; return; }
+    pe.style.display = "none"; pc.style.display = "flex";
+
+    var ctx = getContext();
+    var hasC = ctx !== null;
+
+    // Header: show selected count
+    if (selP.length === 1) {
+        var p0 = findP(selP[0]), gm0 = GRUPPI[p0.g];
+        ph.innerHTML = '<div class="pan-badge" style="background:'+gm0.bg+';border:2px solid '+gm0.c+';color:'+gm0.c+'">'+p0.gr+'/5</div><div style="flex:1"><div class="pan-t">'+p0.t+'</div><div class="pan-s">'+p0.s+'</div></div>';
+        ph.style.borderBottom = "3px solid " + gm0.c;
+    } else {
+        var names = selP.map(function(id) { var p = findP(id); return p ? p.t : id; });
+        ph.innerHTML = '<div class="pan-badge" style="background:#f0ece6;border:2px solid #8a7a5a;color:#8a7a5a">' + selP.length + '/' + MAX_SEL + '</div><div style="flex:1"><div class="pan-t">' + names.join(' + ') + '</div><div class="pan-s">Diagnosi combinata</div></div>';
+        ph.style.borderBottom = "3px solid #8a7a5a";
+    }
+
+    var h = "";
+
+    // Cross-analysis for 2-3 selected problems
+    if (selP.length >= 2) {
+        var crossPat = findCrossPattern(selP);
+        if (crossPat) {
+            h += crossAnalysisHtml(crossPat);
+        }
+    }
+
+    // Render each selected problem
+    selP.forEach(function(pid, pidx) {
+        var p = findP(pid);
+        if (!p) return;
+        var gm = GRUPPI[p.g];
+
+        // Section divider for 2nd+ problem
+        if (pidx > 0) h += '<div style="border-top:2px solid ' + gm.c + ';margin:16px 0 10px;padding-top:10px"></div>';
+
+        // Problem sub-header (if multi)
+        if (selP.length > 1) {
+            h += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:' + gm.c + '"></div><span style="font-size:13px;font-weight:700;color:' + gm.c + '">' + p.t + '</span><span style="font-size:11px;color:#aaa">' + p.s + '</span></div>';
+        }
+
+        // MODE 1: Context from ricetta
+        if (hasC) {
+            var dxL = matchDiagnoses(p.id, ctx);
+            if (selP.length === 1) {
+                h += '<div class="ci"><span style="font-weight:600">Diagnosi per la tua ricetta</span><span style="color:#aaa;margin-left:6px;font-size:11px">(' + ctx.ingredienti.length + ' ingredienti sul tavolo)</span></div>';
+            }
+            h += dxL.map(function(d, i) { return dxCard(d, i); }).join("");
+            if (!dxL.length) {
+                h += '<div style="font-size:12px;color:#999;margin-bottom:8px">Nessuna diagnosi specifica per questa ricetta.</div>';
+                var generics = (DIAGNOSI_CONDIZIONALI[p.id] || []).filter(function(d) { return !d.condizione; });
+                h += generics.map(function(d, i) { return dxCard(d, i); }).join("");
+            }
+        }
+        // MODE 2: Manual ingredient
+        else if (manIng) {
+            var mc = ctxFromIngredient(manIng);
+            var dxM = matchDiagnoses(p.id, mc);
+            var generics2 = (DIAGNOSI_CONDIZIONALI[p.id] || []).filter(function(d) { return !d.condizione; });
+            var show = dxM.length ? dxM : generics2;
+            if (pidx === 0) {
+                h += '<div class="ci" style="display:flex;align-items:center;gap:6px"><span style="font-weight:600">Diagnosi per: ' + displayName(manIng) + '</span><button onclick="manIng=null;renderPanel();" style="background:none;border:1px solid #aaa;border-radius:10px;font-size:9px;padding:1px 7px;cursor:pointer;color:#666;margin-left:auto;font-family:inherit">Cambia</button></div>';
+            }
+            h += show.map(function(d, i) { return dxCard(d, i); }).join("");
+        }
+        // MODE 3: No context
+        else {
+            if (pidx === 0) {
+                var dg = (typeof DOMANDE_GUIDATE !== 'undefined') ? DOMANDE_GUIDATE[p.id] : null;
+                if (dg) {
+                    h += '<div class="gq"><div class="gq-t">' + dg.testo + '</div><div class="gq-bs">';
+                    dg.opzioni.forEach(function(o) {
+                        h += '<button class="gq-b" onclick="manIng=\'' + o + '\';renderPanel();">' + displayName(o) + '</button>';
+                    });
+                    h += '</div></div>';
+                }
+            }
+            var generics3 = (typeof DIAGNOSI_CONDIZIONALI !== 'undefined' && DIAGNOSI_CONDIZIONALI[p.id])
+                ? DIAGNOSI_CONDIZIONALI[p.id].filter(function(d) { return !d.condizione; }) : [];
+            if (generics3.length) {
+                h += '<div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin:8px 0 6px">Cause generali</div>';
+                h += generics3.map(function(d, i) { return dxCard(d, i); }).join("");
+            }
+        }
+
+        // Correlations
+        var corrs = (typeof CORRELAZIONI_PROBLEMI !== 'undefined') ? CORRELAZIONI_PROBLEMI[p.id] : null;
+        if (corrs && corrs.length) {
+            h += '<div class="corr-section"><div class="corr-title">Problemi correlati</div>';
+            corrs.forEach(function(cr) {
+                var tp = findP(cr.verso);
+                if (!tp) return;
+                var tgm = GRUPPI[tp.g];
+                var isEff = cr.tipo === "effetto_collaterale";
+                var ico = isEff ? ICO_ARROW : ICO_LINK;
+                var tag = isEff
+                    ? '<span class="corr-tag eff">Effetto collaterale</span>'
+                    : '<span class="corr-tag cau">Causa comune</span>';
+                h += '<div class="corr-item" onclick="navigateTo(\'' + cr.verso + '\')"><div class="corr-ico">' + ico + '</div><div class="corr-body"><div style="display:flex;align-items:center;gap:6px"><span class="corr-name" style="color:' + tgm.c + '">' + tp.t + '</span>' + tag + '</div><div class="corr-note">' + cr.nota + '</div></div></div>';
+            });
+            h += '</div>';
+        }
+    });
+
+    pb.innerHTML = h;
+}
+
+function findP(id) {
+    for (var i = 0; i < PROBLEMI.length; i++) { if (PROBLEMI[i].id === id) return PROBLEMI[i]; }
+    return null;
+}
+
+// ---- Diagnosis card ----
+function dxCard(d, idx) {
+    var isAlta = d.probabilita === "alta";
+    var pl = isAlta ? "Probabilità alta" : "Probabilità media";
+    var cl = isAlta ? "a" : "m";
+    var s = '<div class="dx"><div style="display:flex;align-items:center;gap:5px;margin-bottom:5px"><span class="dx-b ' + cl + '">' + pl + '</span>';
+    if (idx === 0) s += '<span class="dx-h">causa più probabile</span>';
+    s += '</div><div class="dx-t">' + d.diagnosi + '</div>';
+    s += '<div class="dx-bx az"><div class="dx-bl">Cosa fare</div><div class="dx-bt">' + d.azione + '</div></div>';
+    if (d.nota_processo) s += '<div class="dx-bx np"><div class="dx-bl">Nota processo</div><div class="dx-bt">' + d.nota_processo + '</div></div>';
+    s += '<div class="dx-bx to"><div class="dx-bl">Trade-off</div><div class="dx-bt">' + d.tradeoff + '</div></div>';
+    s += '</div>';
+    return s;
+}
+
+// ---- Navigate to correlated problem (add to selection) ----
+function navigateTo(pid) {
+    var p = findP(pid);
+    if (!p) return;
+    if (!openG[p.g]) openG[p.g] = true;
+    if (selP.indexOf(pid) < 0) {
+        if (selP.length >= MAX_SEL) selP.shift(); // drop oldest
+        selP.push(pid);
+    }
+    manIng = null;
+    renderMap(); renderPanel();
+    document.getElementById("pb").scrollTop = 0;
+}
+
+// ===================== CONTEXT BAR =====================
+function renderCtxBar() {
+    var bar = document.getElementById("ctxBar");
+    var ctx = getContext();
+    var cartIds = getCarrello().filter(function(id) { return isIngredient(id); });
+    var ricetta = getRicetta();
+
+    if (ctx && ricetta) {
+        // Formula attiva — chip verdi, non cliccabili
+        var chips = ricetta.ids.map(function(id) {
+            return '<span class="crit-ctx-chip">' + displayName(id) + '</span>';
+        }).join("");
+        var rIds = relevantProblemIds(ctx);
+        var count = Object.keys(rIds).length;
+
+        var h = '<span class="crit-ctx-lbl">Formula</span>' + chips;
+
+        // Inattivi sul tavolo — chip grigi, cliccabili → promuovi a formula
+        if (ricetta.inattivi && ricetta.inattivi.length) {
+            h += '<span class="crit-ctx-sep"></span><span class="crit-ctx-lbl">Tavolo</span>';
+            h += ricetta.inattivi.map(function(id) {
+                return '<span class="crit-ctx-chip crit-chip-tav" onclick="promoteToFormula(\'' + id + '\')" title="Aggiungi alla formula">' + displayName(id) + ' <span class="crit-chip-act">+</span></span>';
+            }).join("");
+        }
+
+        // Carrello extra — chip beige, cliccabili → promuovi a tavolo
+        var allTavolo = ricetta.ids.concat(ricetta.inattivi || []);
+        var extra = cartIds.filter(function(id) { return allTavolo.indexOf(id) < 0; });
+        if (extra.length) {
+            h += '<span class="crit-ctx-sep"></span><span class="crit-ctx-lbl">Carrello (' + extra.length + ')</span>';
+            // Mostra max 8 chip, poi conteggio
+            var show = extra.slice(0, 8);
+            h += show.map(function(id) {
+                return '<span class="crit-ctx-chip crit-chip-cart" onclick="promoteToTavolo(\'' + id + '\')" title="Sposta sul tavolo">' + displayName(id) + ' <span class="crit-chip-act">&uarr;</span></span>';
+            }).join("");
+            if (extra.length > 8) {
+                h += '<span class="crit-ctx-chip" style="background:#f0ece6;color:#8a7a5a;cursor:default">+' + (extra.length - 8) + ' altri</span>';
+            }
+        }
+
+        if (count) h += '<span class="crit-ctx-hint">' + count + ' criticità</span>';
+        bar.innerHTML = h;
+    } else if (cartIds.length > 0) {
+        var chips2 = cartIds.slice(0, 10).map(function(id) {
+            return '<span class="crit-ctx-chip crit-chip-cart" onclick="promoteToTavolo(\'' + id + '\')" title="Sposta sul tavolo">' + displayName(id) + ' <span class="crit-chip-act">&uarr;</span></span>';
+        }).join("");
+        var more = cartIds.length > 10 ? '<span class="crit-ctx-chip" style="background:#f0ece6;color:#8a7a5a;cursor:default">+' + (cartIds.length - 10) + '</span>' : '';
+        bar.innerHTML = '<span class="crit-ctx-lbl">Carrello</span>' + chips2 + more
+            + '<span class="crit-ctx-hint">Apri il <a href="lab.html#sperimenta" style="color:#2d5a3d;font-weight:600">Lab</a> per comporre la ricetta</span>';
+    } else {
+        bar.innerHTML = '<span class="crit-ctx-empty">Nessuna ricetta in corso. Seleziona un problema dalla mappa.</span>';
+    }
+}
+
+// ===================== SIDEBAR (recipe + tips) =====================
+function renderSidebar() {
+    var sb = document.getElementById("sidebar");
+    if (!sb) return;
+    var ricetta = getRicetta();
+    var ctx = getContext();
+    var h = "";
+
+    // ---- Recipe card ----
+    h += '<div class="sb-card">';
+    h += '<div class="sb-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Ricetta attiva</div>';
+    if (!ricetta || ricetta.ids.length === 0) {
+        sb.innerHTML = "";
+        return;
+    }
+        ricetta.ids.forEach(function(id) {
+            var fam = getFamiglia(id);
+            var col = (typeof BioLab !== 'undefined' && fam) ? BioLab.getCategoryColor(fam) : '#888';
+            var famLabel = fam ? fam.replace(/_/g,' ').toLowerCase() : '';
+            h += '<div class="sb-row"><div class="sb-dot" style="background:' + col + '"></div><span class="sb-name">' + displayName(id) + '</span><span class="sb-fam">' + famLabel + '</span></div>';
+        });
+        if (ricetta.inattivi && ricetta.inattivi.length > 0) {
+            h += '<div style="font-size:8px;color:#bbb;margin-top:4px;margin-bottom:2px">Sul tavolo (click per attivare):</div>';
+            ricetta.inattivi.forEach(function(id) {
+                h += '<div class="sb-row sb-row-tav" onclick="promoteToFormula(\'' + id + '\')" title="Aggiungi alla formula"><div class="sb-dot" style="background:#ccc"></div><span class="sb-name">' + displayName(id) + '</span><span class="sb-act">+</span></div>';
+            });
+        }
+
+        // Mini property bars
+        h += renderMiniProps(ricetta.ids);
+    h += '</div>';
+
+    // ---- Quick tips (or onboarding if no recipe) ----
+    var tips = generateTips(ricetta, ctx);
+    if (tips.length > 0) {
+        h += '<div class="sb-tip">';
+        h += '<div class="sb-tip-hd" style="color:#8a7a5a"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a7 7 0 017 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 017-7z"/><path d="M10 21h4"/></svg>Suggerimenti</div>';
+        tips.forEach(function(t) { h += '<div class="sb-tip-item">' + t + '</div>'; });
+        h += '</div>';
+    }
+
+    sb.innerHTML = h;
+}
+
+function renderMiniProps(ids) {
+    // Estimate basic properties from families present
+    var fams = {};
+    ids.forEach(function(id) { var f = getFamiglia(id); if (f) fams[f] = true; });
+
+    var flex = 20, trasp = 60, h2o = 20, dur = 30;
+
+    if (fams.PLASTIFICANTE) { flex += 40; dur -= 5; }
+    if (fams.SALE_RETICOLANTE) { h2o += 30; flex -= 10; dur += 20; }
+    if (fams.RESINA_LIPIDE) { h2o += 35; trasp -= 30; }
+    if (fams.CARICA) { trasp -= 35; dur += 10; }
+    if (fams.COLORANTE) { trasp -= 15; }
+    if (fams.PROTEINA) { flex += 15; trasp += 10; }
+    if (fams.POLISACCARIDE_NEUTRO) { flex -= 5; }
+    if (fams.POLISACCARIDE_ANIONICO) { trasp += 5; }
+
+    flex = Math.max(5, Math.min(95, flex));
+    trasp = Math.max(5, Math.min(95, trasp));
+    h2o = Math.max(5, Math.min(95, h2o));
+    dur = Math.max(5, Math.min(95, dur));
+
+    var bars = [
+        {l:'Flessibilità', v:flex, c:'#f39c12'},
+        {l:'Trasparenza', v:trasp, c:'#3498db'},
+        {l:'Resist. H₂O', v:h2o, c:'#27ae60'},
+        {l:'Durabilità', v:dur, c:'#8e44ad'},
+    ];
+
+    var h = '<div class="sb-props">';
+    bars.forEach(function(b) {
+        h += '<div class="sb-prow"><span class="sb-plbl">' + b.l + '</span><div class="sb-pbar"><div class="sb-pfill" style="width:' + b.v + '%;background:' + b.c + '"></div></div><span class="sb-pval">' + b.v + '%</span></div>';
+    });
+    h += '</div>';
+    return h;
+}
+
+function generateTips(ricetta, ctx) {
+    var tips = [];
+    if (!ricetta || ricetta.ids.length === 0) return tips;
+
+    var fams = {};
+    ricetta.ids.forEach(function(id) { var f = getFamiglia(id); if (f) fams[f] = true; });
+    var hasMatrice = fams.PROTEINA || fams.POLISACCARIDE_NEUTRO || fams.POLISACCARIDE_ANIONICO || fams.POLICATIONE;
+
+    // Helper: genera bottone azione se ingrediente disponibile nel carrello o tavolo
+    function actionBtn(famiglia, testo) {
+        var ricetta2 = getRicetta();
+        var inattivi = ricetta2 ? (ricetta2.inattivi || []) : [];
+        // Prima cerca sul tavolo inattivo
+        var tavMatch = inattivi.filter(function(id) { return getFamiglia(id) === famiglia; });
+        if (tavMatch.length > 0) {
+            return ' <span class="sb-tip-btn" onclick="promoteToFormula(\'' + tavMatch[0] + '\')" title="Attiva nella formula">' + displayName(tavMatch[0]) + ' &rarr; formula</span>';
+        }
+        // Poi cerca nel carrello
+        var cartMatch = findInCart(famiglia);
+        if (cartMatch.length > 0) {
+            return ' <span class="sb-tip-btn" onclick="promoteToTavolo(\'' + cartMatch[0] + '\')" title="Sposta sul tavolo">' + displayName(cartMatch[0]) + ' &rarr; tavolo</span>';
+        }
+        return '';
+    }
+
+    // Missing plastificante
+    if (hasMatrice && !fams.PLASTIFICANTE) {
+        tips.push('&rarr; Senza plastificante il materiale sarà <strong>fragile</strong>' + actionBtn('PLASTIFICANTE'));
+    }
+
+    // Alginato without reticulating salt
+    var hasAlginato = ricetta.ids.indexOf('alginato') >= 0;
+    if (hasAlginato && !fams.SALE_RETICOLANTE) {
+        tips.push('&rarr; L\'alginato <strong>richiede CaCl₂</strong> per gelificare' + actionBtn('SALE_RETICOLANTE'));
+    }
+
+    // Protein without crosslinker = heat sensitive
+    if (fams.PROTEINA && !fams.SALE_RETICOLANTE && !fams.RESINA_LIPIDE) {
+        tips.push('&rarr; Proteine senza reticolante: <strong>termolabili</strong> (fondono &gt;30°C)' + actionBtn('SALE_RETICOLANTE'));
+    }
+
+    // No matrice
+    if (!hasMatrice && !fams.COLTURA) {
+        tips.push('&rarr; Manca una <strong>matrice</strong> strutturante' + actionBtn('PROTEINA') + actionBtn('POLISACCARIDE_NEUTRO'));
+    }
+
+    // Water resistance
+    if (hasMatrice && !fams.RESINA_LIPIDE && !fams.SALE_RETICOLANTE) {
+        tips.push('&rarr; Senza lipide/reticolante <strong>si dissolve in acqua</strong>' + actionBtn('RESINA_LIPIDE') + actionBtn('SALE_RETICOLANTE'));
+    }
+
+    // Too many ingredients
+    if (ricetta.ids.length > 6) {
+        tips.push('&rarr; Formula complessa (' + ricetta.ids.length + ' ingredienti) — testa prima combinazioni base');
+    }
+
+    // Culture mode
+    if (fams.COLTURA) {
+        tips.push('&rarr; Le colture richiedono <strong>7-21 giorni</strong> — pianifica i tempi');
+    }
+
+    // Excess plastificante (more than one)
+    var nPlast = ricetta.ids.filter(function(id) { return getFamiglia(id) === 'PLASTIFICANTE'; }).length;
+    if (nPlast > 1) {
+        tips.push('&rarr; Hai ' + nPlast + ' plastificanti — di solito ne basta <strong>uno</strong>');
+    }
+
+    return tips.slice(0, 4); // max 4 tips
+}
+
+// ===================== LEGEND =====================
+function renderLeg() {
+    var lg = document.getElementById("leg");
+    var h = "";
+    Object.keys(GRUPPI).forEach(function(k) {
+        var gm = GRUPPI[k];
+        var n = PROBLEMI.filter(function(p) { return p.g === k; }).length;
+        h += '<div class="leg-i"><div class="leg-d" style="background:' + gm.c + '"></div><span class="leg-t">' + gm.l + ' (' + n + ')</span></div>';
+    });
+    lg.innerHTML = h;
+}
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', function() {
+    renderLeg();
+    renderCtxBar();
+    renderSidebar();
+    renderMap();
+    renderPanel();
+    // Ensure cart badge is visible after header generation
+    setTimeout(function() { BioLab.updateCartBadge(); }, 50);
+});
+</script>
+</body>
+</html>
