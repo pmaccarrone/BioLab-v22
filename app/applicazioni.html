@@ -15,6 +15,11 @@
     .app-card-body{flex:1;min-width:0}
     /* Modal image */
     .app-modal-img{width:100%;max-height:400px;object-fit:cover;border-radius:8px}
+    @media(max-width:480px){
+        .app-modal-img{max-height:200px}
+        .app-modal{max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+        .app-modal-layout{flex-direction:column}
+    }
     </style>
 </head>
 <body>
