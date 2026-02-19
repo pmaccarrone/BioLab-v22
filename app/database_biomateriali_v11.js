@@ -2,7 +2,7 @@
 // DATABASE BIOMATERIALI v11 - File esterno
 // ============================================
 // VERSIONE: 11 - Colture (te_nero_forte, canapa_hurd, acido_stearico), ruolo_coltura, materiali SCOBY+Mycocomposite
-// DATA: 2026-02-19 (v11e: 14 materiali, 35 link aggiornati)
+// DATA: 2026-02-19 (v11f: arricchimento 18/18 materiali completato — tutti con properties/sensory/aesthetic/ethical/specs_text)
 // BASE: v10.1 (Merge v9.3+v10, ripristino 145 valori persi)
 // 
 // MODIFICHE v6.0:
@@ -988,7 +988,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Film rigido, packaging",
  "companies": "DIY",
- "description": "Film base di agar puro. 400ml acqua, 12g agar, 18ml glicerolo. Cuocere a 95°C, versare in stampo, essiccare. Produce film rigido, traslucido.",
+ "description": "Film base di agar-agar, il biopolimero più semplice da lavorare in laboratorio. Ricetta: 400ml acqua, 12g agar (3% p/v), 18ml glicerolo. Portare a ebollizione mescolando, mantenere 2-3 minuti sopra 85°C per sciogliere completamente l'agar, versare su superficie antiaderente (silicone, acrilico). Gelifica rapidamente a 35-40°C, poi asciugare 24-48h.\n\nIl film risultante è rigido-semiflessibile, traslucido con leggera tinta ambrata, e si stacca facilmente dallo stampo. L'agar (estratto da alghe rosse Gracilaria/Gelidium) forma gel per isteresi termica: gelifica a ~38°C ma rifonde solo a ~85°C, conferendo stabilità termica superiore alla gelatina. Il glicerolo è essenziale: senza di esso il film si crepa dopo poche ore. Con più glicerolo (>20%) diventa più flessibile ma più appiccicoso. Il film è biodegradabile, compostabile e vegano.",
+ "properties": "Rigido-semiflessibile, traslucido, vegano. Termostabile fino a 85°C. Si crepa senza plastificante. Biodegradabile. Barriera O₂ moderata.",
+ "sensory": {
+  "tactile": "Liscio, leggermente ceroso. Rigido ma piegabile con cura. Diventa fragile se troppo secco",
+  "visual": "Traslucido ambrato, aspetto simile a foglio di vetro organico o carta oleata spessa",
+  "thermal": "Stabile a temperatura ambiente, non fonde sotto 85°C",
+  "acoustic": "Leggero crepitio se piegato, suono secco",
+  "olfactive": "Quasi inodore (lieve odore marino che svanisce)"
+ },
+ "aesthetic": {
+  "appearance": "Naturale pulito, aspetto industriale-organico",
+  "finish": "Liscio lucido lato stampo, leggermente opaco lato aria",
+  "aging": "Ingiallisce leggermente, diventa più rigido e fragile col tempo. Biodegrada con umidità",
+  "transparency": "Traslucido (ambrato)"
+ },
+ "ethical": {
+  "sustainability": "Alto — agar da alghe marine, risorsa rinnovabile",
+  "origin": "Rinnovabile — alghe rosse (Gracilaria, Gelidium), coltivabili",
+  "biodegradability": "Completamente biodegradabile e compostabile",
+  "bio_content": "100%, vegano",
+  "circular_economy": "Buona — ingredienti comuni, nessun rifiuto tossico",
+  "certifications": "Agar: E406 (food additive EU approvato)"
+ },
+ "specs_text": "• Agar: 3% p/v (12g in 400ml)\n• Glicerolo: ~4.5% v/v\n• Temp dissoluzione: >85°C (ebollizione)\n• Gelificazione: ~38°C\n• Fusione gel: ~85°C (isteresi)\n• Spessore tipico: 0.5-2 mm\n• Essiccazione: 24-48h\n• Shelf life: settimane-mesi (asciutto)",
  "ingredienti_correlati": [
  "agar",
  "glicerina",
@@ -1025,7 +1048,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Film flessibile traslucido",
  "companies": "DIY",
- "description": "Film da amido di tapioca. Tapioca, acqua, glicerina, aceto. Cuocere mescolando, versare, essiccare. Film più trasparente dell'amido di mais.",
+ "description": "Bioplastica da amido di tapioca (manioca), una delle ricette più accessibili. Ricetta tipica: 10-15g amido tapioca, 150ml acqua, 10-15ml glicerina, 10ml aceto bianco. Mescolare a freddo, poi scaldare a fuoco medio mescolando costantemente fino a gelatinizzazione (60-70°C) — la miscela diventa traslucida e densa. Versare su superficie antiaderente, essiccare 24-48h.\n\nL'amido di tapioca produce film più trasparenti e flessibili dell'amido di mais, grazie al minor contenuto di amilosio (17% vs 25%). L'aceto abbassa il pH favorendo l'idrolisi parziale dell'amido e migliorando la trasparenza. Il film risultante è simile a plastica sottile, flessibile, biodegradabile e compostabile. Limitazioni: sensibile all'umidità (si ammorbidisce), resistenza meccanica modesta, tende a diventare opaco con il tempo (retrogradazione amido).",
+ "properties": "Flessibile, traslucido-trasparente, vegano. Sensibile a umidità. Biodegradabile. Meno rigido dell'agar, più trasparente dell'amido di mais.",
+ "sensory": {
+  "tactile": "Liscio, simile a plastica sottile. Leggermente appiccicoso se umido. Flessibile",
+  "visual": "Traslucido-trasparente, incolore o leggermente opalescente. Più chiaro dell'amido di mais",
+  "thermal": "Neutro. Si ammorbidisce con il calore umido",
+  "acoustic": "Fruscia come plastica sottile",
+  "olfactive": "Leggero odore di amido durante cottura, quasi inodore da secco"
+ },
+ "aesthetic": {
+  "appearance": "Artificiale-pulito, aspetto simile a pellicola plastica",
+  "finish": "Liscio, lucido su lato stampo",
+  "aging": "Può opacizzarsi (retrogradazione amido). Diventa fragile se perde umidità. Biodegrada rapidamente",
+  "transparency": "Trasparente (sottile) a traslucido (spesso)"
+ },
+ "ethical": {
+  "sustainability": "Alto — amido da coltivazione rinnovabile",
+  "origin": "Rinnovabile — radice di manioca (Manihot esculenta), coltivazione tropicale",
+  "biodegradability": "Completamente biodegradabile e compostabile in settimane",
+  "bio_content": "100%, vegano",
+  "circular_economy": "Buona — materia prima abbondante e a basso costo",
+  "certifications": "Amido tapioca: food-grade"
+ },
+ "specs_text": "• Amido tapioca: 7-10% p/v\n• Glicerina: 7-10% v/v\n• Aceto: ~7% v/v (abbassa pH, migliora trasparenza)\n• Gelatinizzazione: 60-70°C\n• Amilosio tapioca: ~17% (vs mais ~25%)\n• Spessore: 0.3-1.5 mm\n• Essiccazione: 24-48h\n• Sensibilità acqua: alta",
  "ingredienti_correlati": [
  "amido_tapioca",
  "glicerina",
@@ -1061,7 +1107,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Film molto flessibile, simil-plastica",
  "companies": "DIY",
- "description": "Film gelatina con rapporto 1:1 gelatina:glicerina. Produce materiale molto flessibile, quasi gommoso. Meno resistente all'acqua.",
+ "description": "Film di gelatina con alta concentrazione di glicerina (rapporto 1:1 gelatina:glicerina in peso), che produce un materiale estremamente flessibile, quasi gommoso. Ricetta: 10g gelatina, 10g glicerina, 100ml acqua. Sciogliere gelatina in acqua tiepida (50-60°C, mai bollire), aggiungere glicerina, mescolare, versare su stampo antiaderente. Essiccare 24-48h.\n\nIl risultato è un film trasparente e molto elastico, che ricorda la plastica morbida o la gomma. Si può piegare, arrotolare, deformare e torna in posizione. La flessibilità estrema deriva dall'elevata concentrazione di glicerina che interrompe i legami idrogeno tra le catene proteiche. Di contro: il materiale è più igroscopico (assorbe umidità dall'aria), più appiccicoso al tatto, e fonde a temperature più basse (~25°C vs ~30°C della gelatina standard). Utile per prototipi di packaging flessibile, modelli di design, sperimentazione tattile.",
+ "properties": "Molto flessibile, elastico, trasparente. Termoreversibile (~25°C). Igroscopico. Appiccicoso. Non resistente all'acqua.",
+ "sensory": {
+  "tactile": "Gommoso, elastico, leggermente appiccicoso. Si deforma e ritorna. Simile a gomma morbida",
+  "visual": "Trasparente, leggermente giallastro. Aspetto simile a plastica morbida o caramella gommosa",
+  "thermal": "Fonde al calore corporeo prolungato. Si ammorbidisce già a 25°C",
+  "acoustic": "Silenzioso, nessun crepitio",
+  "olfactive": "Leggero odore di gelatina, più percepibile che nel film standard per la maggiore idratazione"
+ },
+ "aesthetic": {
+  "appearance": "Artificiale morbido, aspetto plastico-organico",
+  "finish": "Liscio lucido, superficie leggermente appiccicosa",
+  "aging": "Assorbe umidità, può diventare appiccicoso. Biodegrada rapidamente. Fonde in estate",
+  "transparency": "Trasparente"
+ },
+ "ethical": {
+  "sustainability": "Medio — gelatina da sottoprodotto animale",
+  "origin": "Rinnovabile — gelatina (collagene animale), glicerina vegetale",
+  "biodegradability": "Completamente biodegradabile",
+  "bio_content": "100%",
+  "circular_economy": "Buona — gelatina da scarti industria alimentare",
+  "certifications": "Gelatina: food-grade (E441)"
+ },
+ "specs_text": "• Gelatina:glicerina = 1:1 (in peso)\n• Concentrazione totale: ~10% ciascuno in acqua\n• Dissoluzione: 50-60°C (non bollire)\n• Fusione film: ~25°C (abbassata dalla glicerina)\n• Spessore: 0.5-2 mm\n• Elasticità: molto alta\n• Resistenza acqua: molto scarsa\n• Shelf life: settimane (ambiente secco)",
  "ingredienti_correlati": [
  "gelatina",
  "glicerina",
@@ -1096,7 +1165,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Film semi-flessibile",
  "companies": "DIY",
- "description": "500ml acqua, 3g agar, 20g gelatina, 15ml glicerina. Cuocere 45min a 80°C. Combina rigidità agar con flessibilità gelatina.",
+ "description": "Film ibrido che combina due matrici biopolimeriche per bilanciare rigidità (agar) e flessibilità (gelatina). Ricetta: 500ml acqua, 3g agar, 20g gelatina, 15ml glicerina. PROCEDURA CRITICA: bollire l'agar in acqua (>85°C) finché sciolto, poi raffreddare a 60°C, solo allora aggiungere gelatina e glicerina (la gelatina NON deve bollire, si denatura). Mantenere a 60-80°C per 45 minuti mescolando. Versare in stampo.\n\nIl risultato combina i vantaggi di entrambe le matrici: il film è più stabile termicamente della sola gelatina (non fonde a temperatura ambiente grazie all'agar) ma più flessibile del solo agar (grazie alla gelatina). Aspetto traslucido, leggermente ambrato. La procedura a due temperature è il passaggio più critico e didatticamente interessante: insegna che i biopolimeri hanno esigenze diverse che vanno rispettate nella stessa formulazione.",
+ "properties": "Semi-flessibile, traslucido. Stabilità termica intermedia (sopra gelatina, sotto agar). Biodegradabile. Buon compromesso rigidità/flessibilità.",
+ "sensory": {
+  "tactile": "Liscio, flessibile ma con più corpo del film di sola gelatina. Non gommoso, non fragile",
+  "visual": "Traslucido ambrato, aspetto simile a foglio di corno o ambra sottile",
+  "thermal": "Più stabile della gelatina pura. Si ammorbidisce ~40-50°C",
+  "acoustic": "Leggero crepitio, intermedio tra agar (secco) e gelatina (silenzioso)",
+  "olfactive": "Leggero odore di gelatina durante preparazione, inodore da secco"
+ },
+ "aesthetic": {
+  "appearance": "Naturale caldo, aspetto ambrato organico",
+  "finish": "Liscio, leggermente lucido",
+  "aging": "Più stabile della gelatina pura grazie alla componente agar. Ingiallisce nel tempo",
+  "transparency": "Traslucido (ambrato)"
+ },
+ "ethical": {
+  "sustainability": "Medio-Alto — agar vegano + gelatina da sottoprodotto animale",
+  "origin": "Misto — agar da alghe (rinnovabile), gelatina da collagene animale",
+  "biodegradability": "Completamente biodegradabile",
+  "bio_content": "100%",
+  "circular_economy": "Buona",
+  "certifications": "Entrambi food-grade (E406 + E441)"
+ },
+ "specs_text": "• Agar: 0.6% p/v (3g/500ml)\n• Gelatina: 4% p/v (20g/500ml)\n• Glicerina: 3% v/v\n• Procedura: agar a >85°C, poi gelatina a <60°C\n• Stabilità termica: ~40-50°C\n• Spessore: 0.5-2 mm\n• Tempo cottura: 45 min\n• Vantaggio: compromesso proprietà agar+gelatina",
  "ingredienti_correlati": [
  "agar",
  "gelatina",
@@ -1132,7 +1224,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Imballaggio, isolamento",
  "companies": "DIY",
- "description": "150ml acqua, gelatina, glicerina, sapone. Cuocere gelatina, aggiungere sapone, sbattere con frusta. Versare in stampo, essiccare. Schiuma tipo polistirolo.",
+ "description": "Schiuma biodegradabile ottenuta aerando una soluzione di gelatina con tensioattivo (sapone). Ricetta: 150ml acqua, 12g gelatina, 5ml glicerina, 3-5ml sapone liquido. Sciogliere gelatina in acqua calda (50-60°C), aggiungere glicerina, poi sapone e sbattere energicamente con frusta (o frullatore a immersione) per 5-10 minuti fino a ottenere schiuma stabile. Versare rapidamente in stampo, refrigerare 1h per stabilizzare, poi essiccare 48-72h.\n\nIl sapone agisce da agente schiumogeno: le molecole anfifiliche stabilizzano le bolle d'aria nella matrice di gelatina. Dopo essiccazione la struttura cellulare si consolida, producendo un materiale leggero simile a polistirolo espanso ma biodegradabile. La dimensione delle celle dipende dalla velocità di sbattimento e dal rapporto sapone/gelatina. Il materiale è leggero, isolante termico, comprimibile, ma fragile e sensibile all'acqua. Applicazioni: packaging protettivo, isolamento, prototipi di imballaggio sostenibile.",
+ "properties": "Leggero, poroso, isolante termico. Fragile, sensibile a umidità. Biodegradabile. Aspetto simile a polistirolo bianco.",
+ "sensory": {
+  "tactile": "Leggero, morbido-comprimibile. Struttura porosa percepibile. Fragile sotto pressione eccessiva",
+  "visual": "Bianco-crema, struttura cellulare visibile. Aspetto simile a polistirolo o meringa essiccata",
+  "thermal": "Isolante (aria intrappolata nelle celle). Neutro al tatto",
+  "acoustic": "Assorbente, suono sordo-ovattato",
+  "olfactive": "Leggero odore di sapone che si attenua con l'essiccazione"
+ },
+ "aesthetic": {
+  "appearance": "Naturale leggero, aspetto simile a schiuma industriale ma organico",
+  "finish": "Superficie porosa, irregolare, opaca",
+  "aging": "Si sgretola col tempo. Assorbe umidità e collassa. Biodegrada facilmente",
+  "transparency": "Opaco (bianco-crema)"
+ },
+ "ethical": {
+  "sustainability": "Medio — gelatina da sottoprodotto animale, sapone da grassi vegetali",
+  "origin": "Rinnovabile — gelatina (collagene), glicerina e sapone da fonti vegetali",
+  "biodegradability": "Completamente biodegradabile e compostabile",
+  "bio_content": "100%",
+  "circular_economy": "Buona — alternativa al polistirolo da fonti rinnovabili",
+  "certifications": "Nessuna specifica"
+ },
+ "specs_text": "• Gelatina: 8% p/v\n• Glicerina: ~3% v/v\n• Sapone: 2-3% v/v (agente schiumogeno)\n• Densità: molto bassa (alta porosità)\n• Essiccazione: 48-72h (più lenta del film pieno)\n• Isolamento termico: buono (celle d'aria)\n• Resistenza compressione: bassa\n• Resistenza acqua: molto scarsa",
  "ingredienti_correlati": [
  "gelatina",
  "glicerina",
@@ -1171,7 +1286,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Imballaggio rigido",
  "companies": "DIY",
- "description": "Agar, acqua, glicerina, sapone. Cuocere agar, aggiungere sapone, sbattere energicamente. Schiuma più rigida della gelatina.",
+ "description": "Schiuma rigida biodegradabile da agar-agar aerato con sapone. Processo simile alla biofoam di gelatina ma con risultato più rigido e termostabile. Ricetta: 400ml acqua, 8g agar, 10ml glicerina, 5ml sapone liquido. Portare a ebollizione per sciogliere l'agar, raffreddare a ~50°C, aggiungere sapone e sbattere vigorosamente per incorporare aria. Versare in stampo e lasciar gelificare (l'agar gelifica a ~38°C intrappolando le bolle). Essiccare 48-72h.\n\nRispetto alla biofoam di gelatina: più rigida, più stabile al calore (resiste fino a 85°C vs 25-30°C), ma più fragile e incline a crepare. La struttura cellulare è tipicamente più grossolana perché la gelificazione rapida dell'agar congela le bolle prima che il sapone le stabilizzi completamente. Il materiale è leggero, vegano, completamente biodegradabile. Può essere colorato aggiungendo pigmenti (spirulina, curcuma) prima dell'aerazione.",
+ "properties": "Rigido, leggero, poroso, vegano. Termostabile fino a 85°C. Più fragile della biofoam gelatina. Biodegradabile.",
+ "sensory": {
+  "tactile": "Rigido, leggero, secco. Non comprimibile come la versione gelatina — si rompe sotto pressione",
+  "visual": "Bianco-crema, struttura cellulare grossolana visibile. Aspetto simile a pietra pomice leggera",
+  "thermal": "Isolante. Stabile al calore fino a 85°C",
+  "acoustic": "Suono secco, quasi ceramico. Meno assorbente della foam gelatina",
+  "olfactive": "Quasi inodore (lieve odore di sapone)"
+ },
+ "aesthetic": {
+  "appearance": "Naturale minerale, aspetto simile a pietra porosa o meringue indurita",
+  "finish": "Superficie porosa, irregolare, opaca",
+  "aging": "Diventa fragile, si sgretola. Più stabile della foam gelatina ma meno durevole del film pieno",
+  "transparency": "Opaco"
+ },
+ "ethical": {
+  "sustainability": "Alto — completamente vegano, ingredienti rinnovabili",
+  "origin": "Rinnovabile — agar da alghe, glicerina vegetale, sapone da grassi vegetali",
+  "biodegradability": "Completamente biodegradabile e compostabile",
+  "bio_content": "100%, vegano",
+  "circular_economy": "Buona — alternativa vegana al polistirolo",
+  "certifications": "Agar: E406"
+ },
+ "specs_text": "• Agar: 2% p/v\n• Glicerina: ~2.5% v/v\n• Sapone: ~1.2% v/v\n• Gelificazione: ~38°C (congela le bolle)\n• Termostabilità: fino a 85°C\n• Densità: bassa (alta porosità)\n• Più rigida e termostabile della foam gelatina\n• Più fragile della foam gelatina",
  "ingredienti_correlati": [
  "agar",
  "glicerina",
@@ -1209,7 +1347,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Pelle vegetale, accessori",
  "companies": "DIY",
- "description": "2g alginato, 33g acqua, 5g glicerina, 2g fondi caffè, 2g olio oliva. Mescolare, versare, spray CaCl2. Pelle marrone profumata.",
+ "description": "La coffee leather è un composito bio-based che utilizza fondi di caffè esausti come filler in matrice di alginato di sodio, reticolata con CaCl₂. La ricetta base prevede 8g alginato, 8g fondi caffè essiccati e macinati, 8g olio d'oliva, 20g glicerina e 132g acqua. Si mescolano prima i secchi, poi si aggiungono olio e glicerina, si frulla con l'acqua fino a ottenere una pasta densa. Si stende su telaio serigrafico DIY, si spruzza soluzione CaCl₂ al 7% e si lascia riposare 5 minuti prima di risciacquare. Asciugatura 5-7 giorni.\n\nIl risultato è un foglio flessibile marrone scuro con texture granulosa visibile, profumo persistente di caffè e aspetto naturale simile a cuoio invecchiato. Lo spessore dipende dalla quantità versata (tipicamente 1-3mm). Il materiale è cucibile, tagliabile, forabile. Non è resistente all'acqua prolungata. I fondi di caffè agiscono sia come filler strutturale che come pigmento naturale, e contengono composti antiossidanti residui.",
+ "properties": "Flessibile, opaco, marrone scuro, profumato caffè. Non impermeabile, cucibile, tagliabile. Tensile strength moderata grazie alle fibre di cellulosa nei fondi.",
+ "sensory": {
+  "tactile": "Ruvido-granuloso al tatto, simile a cuoio grezzo. Leggermente oleoso se con olio in formula",
+  "visual": "Marrone scuro con grani visibili, aspetto naturale-artigianale. Variazioni cromatiche da marrone chiaro a quasi nero",
+  "thermal": "Neutro a temperatura ambiente",
+  "acoustic": "Sordo, non crepita",
+  "olfactive": "Profumo persistente di caffè, si attenua nel tempo ma resta percepibile per settimane"
+ },
+ "aesthetic": {
+  "appearance": "Naturale rustico, aspetto cuoio invecchiato con grana visibile dei fondi",
+  "finish": "Opaco, superficie irregolare con microtexture data dai grani di caffè",
+  "aging": "Scurisce leggermente, diventa più rigido con la perdita di umidità. Si degrada con umidità prolungata",
+  "transparency": "Completamente opaco"
+ },
+ "ethical": {
+  "sustainability": "Alto — valorizza uno scarto alimentare abbondante (20M ton/anno globali)",
+  "origin": "Rinnovabile — scarti di caffè + alginato da alghe + glicerina vegetale",
+  "biodegradability": "Completamente biodegradabile e compostabile",
+  "bio_content": "100%",
+  "circular_economy": "Ottima — upcycling di rifiuti organici da bar e torrefazioni",
+  "certifications": "Nessuna specifica, ingredienti food-grade disponibili"
+ },
+ "specs_text": "• Composizione: alginato 5-8%, fondi caffè 5-8%, glicerina 12-15%, olio 5-8%, acqua\n• Spessore tipico: 1-3 mm\n• Tempo asciugatura: 5-7 giorni a temperatura ambiente\n• Reticolazione: CaCl₂ spray 5-10%\n• Resistenza acqua: scarsa (si ammorbidisce)\n• Shelf life: mesi se conservato asciutto",
  "ingredienti_correlati": [
  "alginato",
  "fondi_caffe",
@@ -1247,7 +1408,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Pelle vegetale aromatica",
  "companies": "DIY",
- "description": "Base pectina o gelatina con bucce di arancia essiccate e macinate. Profumo agrumato naturale, colore arancio.",
+ "description": "La orange peel leather è un biomateriale composito ottenuto da bucce di agrumi essiccate e macinate, legate da una matrice biopolimerica (tipicamente pectina, gelatina o chitosano). Le bucce contengono naturalmente pectina (20-30% del peso secco dell'albedo), fibre di cellulosa e oli essenziali che conferiscono profumo e proprietà antimicrobiche. Processo: essiccare le bucce (60°C, 24h o al sole), macinare finemente, mescolare con soluzione di biopolimero e plastificante, stendere su superficie piana, essiccare 3-5 giorni.\n\nDesigner come Youyang Song (Peelsphere, Berlino) hanno sviluppato versioni avanzate con aggiunta di alghe come bio-binder, ottenendo materiali impermeabili, cucibili e colorabili con tinture naturali. Orange Fiber (azienda italiana, Catania) estrae filati tessili dalla cellulosa degli agrumi. A livello lab, il risultato è un foglio semi-rigido arancione, profumato, con texture fibrose visibili. La pectina estratta naturalmente durante il processo agisce sia come legante che come plastificante parziale.",
+ "properties": "Semi-flessibile, opaco, arancione naturale, profumato agrumi. Parzialmente idrorepellente con coating ceroso. Ricco di fibre e pectina.",
+ "sensory": {
+  "tactile": "Leggermente ruvido, texture fibrosa delle bucce percepibile. Più morbido se con alta percentuale di glicerina",
+  "visual": "Arancione naturale con sfumature dal giallo al bruno, grana visibile delle bucce. Colore si intensifica con l'essiccazione",
+  "thermal": "Neutro",
+  "acoustic": "Leggero crepitio se piegato (materiale fibroso)",
+  "olfactive": "Profumo agrumato intenso, dato dagli oli essenziali delle bucce. Persiste per settimane-mesi"
+ },
+ "aesthetic": {
+  "appearance": "Naturale-organico, aspetto simile a carta artigianale o cuoio vegetale leggero",
+  "finish": "Opaco, superficie irregolare con fibre visibili",
+  "aging": "Scurisce verso il bruno, si irrigidisce. Profumo si attenua gradualmente",
+  "transparency": "Opaco"
+ },
+ "ethical": {
+  "sustainability": "Molto alto — valorizza scarti dell'industria agrumicola",
+  "origin": "Rinnovabile — bucce di agrumi (scarto), biopolimero naturale",
+  "biodegradability": "Completamente biodegradabile e compostabile",
+  "bio_content": "100%",
+  "circular_economy": "Eccellente — upcycling scarti agrumicoli (Italia: 60% agrumi EU)",
+  "certifications": "Orange Fiber: OEKO-TEX, GOTS per filati industriali"
+ },
+ "specs_text": "• Base: bucce agrumi essiccate e macinate 40-60%\n• Legante: pectina, gelatina o chitosano 5-15%\n• Plastificante: glicerina 10-20%\n• Spessore: 1-4 mm\n• Tempo essiccazione: 3-5 giorni\n• Pectina naturale nell'albedo: 20-30% del peso secco\n• Tensile strength (industriale, Peelsphere): fino a ~250 N",
  "ingredienti_correlati": [
  "pectina",
  "bucce_agrumi",
@@ -1289,7 +1473,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Materiale rigido decorativo",
  "companies": "DIY",
- "description": "Alginato con gusci d'uovo in polvere e aceto. Materiale rigido con texture speckled. Il calcio dei gusci aiuta la reticolazione.",
+ "description": "Composito rigido ottenuto incorporando gusci d'uovo macinati in matrice di alginato di sodio. I gusci d'uovo sono costituiti per il 95% da carbonato di calcio (CaCO₃) e agiscono sia come filler minerale (conferendo rigidità, opacità e texture speckled) sia come fonte di ioni calcio per l'auto-reticolazione dell'alginato quando si aggiunge aceto (l'acido dissolve parte del CaCO₃ liberando Ca²⁺). Ricetta: 2-4g alginato, 200ml acqua, 10-15g gusci d'uovo in polvere fine, 10ml aceto. Mescolare, versare in stampo, essiccare 48-72h.\n\nIl risultato è un materiale rigido, opaco, bianco-crema con puntinature visibili dei frammenti di guscio. Più duro e meno flessibile dei biofilm standard. La reazione aceto+CaCO₃ produce anche effervescenza (CO₂) che può creare microporosità interna. Per massima rigidità si può anche spruzzare CaCl₂ aggiuntivo. Interessante didatticamente: dimostra auto-reticolazione, reazione acido-base, e uso di scarti alimentari come filler funzionale (non solo decorativo).",
+ "properties": "Rigido, opaco, bianco-crema speckled. Auto-reticolante (Ca²⁺ dai gusci). Texture minerale. Biodegradabile.",
+ "sensory": {
+  "tactile": "Duro, granuloso, superficie ruvida con particelle di guscio percepibili. Simile a ceramica grezza",
+  "visual": "Bianco-crema con puntinature e frammenti visibili. Aspetto simile a terrazzo o granito chiaro",
+  "thermal": "Neutro. Stabile al calore (il CaCO₃ è termostabile)",
+  "acoustic": "Suono secco-rigido, quasi ceramico quando bussato",
+  "olfactive": "Leggero odore di aceto durante preparazione (effervescenza), inodore da secco"
+ },
+ "aesthetic": {
+  "appearance": "Naturale minerale, aspetto simile a terrazzo, pietra artificiale o ceramica grezza",
+  "finish": "Opaco, superficie irregolare granulosa. Levigabile per finitura più liscia",
+  "aging": "Stabile — il CaCO₃ non degrada. La matrice alginato biodegrada lentamente",
+  "transparency": "Completamente opaco"
+ },
+ "ethical": {
+  "sustainability": "Alto — valorizza uno scarto alimentare abbondante (gusci d'uovo: 250.000 ton/anno EU)",
+  "origin": "Rinnovabile — gusci d'uovo (scarto), alginato da alghe, aceto da fermentazione",
+  "biodegradability": "Parzialmente biodegradabile (matrice sì, CaCO₃ minerale inerte)",
+  "bio_content": "100%",
+  "circular_economy": "Ottima — upcycling scarto alimentare in filler funzionale",
+  "certifications": "CaCO₃: E170 (food additive). Alginato: E401"
+ },
+ "specs_text": "• Alginato: 1-2% p/v\n• Gusci d'uovo: 5-8% p/v (macinati fini)\n• Aceto: ~5% v/v (libera Ca²⁺ per auto-reticolazione)\n• Composizione gusci: 95% CaCO₃ + 5% matrice proteica\n• Reazione: CaCO₃ + 2CH₃COOH → Ca²⁺ + CO₂↑ + H₂O\n• Essiccazione: 48-72h\n• Rigidità: alta (filler minerale + reticolazione)\n• Levigabile e forabile",
  "ingredienti_correlati": [
  "alginato",
  "gusci_uovo",
@@ -1326,7 +1533,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Pannelli rigidi, tessuti strutturali",
  "companies": "DIY",
- "description": "Gelatina calda impregnata su tessuto di juta. Pressare e essiccare. Tessuto rigido strutturale.",
+ "description": "Composito ottenuto impregnando tessuto di juta con soluzione calda di gelatina (10-15% p/v a 50-60°C). La gelatina penetra tra le fibre, solidifica per raffreddamento e forma una matrice rigida che blocca la trama del tessuto. Processo: sciogliere gelatina in acqua calda con 5-10% glicerina, immergere il tessuto di juta, saturare bene, pressare tra due superfici piane, essiccare sotto peso per 24-48h.\n\nIl risultato è un pannello rigido ma non fragile, con la texture del tessuto visibile in superficie. La juta fornisce resistenza a trazione (tensile strength 393-773 MPa per singola fibra), mentre la gelatina agisce da matrice adesiva. Con poca glicerina il composito è molto rigido (tipo cartone duro); con più glicerina resta semi-flessibile. Termoreversibile: si può riscaldare e riformare. Sensibile all'umidità prolungata. Adatto a pannelli, supporti, strutture temporanee, prototipi di design.",
+ "properties": "Rigido-semiflessibile, opaco, texture juta visibile. Termoreversibile. Buona resistenza a trazione grazie alle fibre di juta. Sensibile a umidità.",
+ "sensory": {
+  "tactile": "Superficie ruvida con trama del tessuto percepibile. Rigido ma non tagliente. Peso medio",
+  "visual": "Beige-dorato, trama a vista della juta. Aspetto naturale, artigianale",
+  "thermal": "Neutro, si ammorbidisce sopra 50°C (gelatina)",
+  "acoustic": "Suono rigido quando bussato, simile a cartone duro",
+  "olfactive": "Leggero odore di gelatina che svanisce dopo essiccazione completa"
+ },
+ "aesthetic": {
+  "appearance": "Naturale strutturato, aspetto tessile-industriale con trama a vista",
+  "finish": "Opaco, texture tessile, superficie irregolare",
+  "aging": "Ingiallisce leggermente, può diventare fragile se troppo secco. Biodegrada con umidità",
+  "transparency": "Opaco"
+ },
+ "ethical": {
+  "sustainability": "Alto — fibre naturali + proteina animale biodegradabile",
+  "origin": "Rinnovabile — juta (fibra di rafia, coltivazione annuale), gelatina (sottoprodotto industria alimentare)",
+  "biodegradability": "Completamente biodegradabile",
+  "bio_content": "100%",
+  "circular_economy": "Buona — materiali comuni e a basso costo",
+  "certifications": "Nessuna specifica"
+ },
+ "specs_text": "• Gelatina: 10-15% p/v in acqua a 50-60°C\n• Glicerina: 5-10% (regola rigidità)\n• Juta: tessuto 300-400 g/m²\n• Spessore composito: 2-5 mm\n• Essiccazione: 24-48h sotto peso\n• Termoreversibile: riscaldabile a 50°C per riformare\n• Juta tensile strength: 393-773 MPa (fibra singola)",
  "ingredienti_correlati": [
  "gelatina",
  "fibre_juta",
@@ -1364,7 +1594,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Compositi fibrosi leggeri",
  "companies": "DIY",
- "description": "Gelatina calda con fibre di canapa. Impregnare, pressare, essiccare. Composito leggero e resistente.",
+ "description": "Composito biobasato ottenuto combinando fibre di canapa con matrice di gelatina. Le fibre di canapa (Cannabis sativa) sono tra le più resistenti fibre naturali (tensile strength 550-900 MPa), superando la juta per resistenza meccanica. Processo: sciogliere gelatina (10-15% p/v) in acqua a 50-60°C con 5-10% glicerina. Per fibre lunghe: impregnare il tessuto di canapa, pressare ed essiccare. Per fibre corte: mescolare fibre tritate nella soluzione, versare in stampo.\n\nIl composito con fibre lunghe produce pannelli leggeri ad alta resistenza; con fibre corte produce lastre con aspetto simile a cartone pressato. La canapa è naturalmente resistente a muffe e insetti. Il materiale è più leggero della versione con juta a parità di spessore, e ha migliore resistenza a trazione. Termoreversibile come tutti i compositi a base gelatina. Colorabile in massa aggiungendo pigmenti alla soluzione.",
+ "properties": "Rigido-semiflessibile, leggero, opaco. Ottima resistenza a trazione. Termoreversibile. Naturalmente antimuffa. Sensibile a umidità.",
+ "sensory": {
+  "tactile": "Superficie fibrosa, meno ruvida della juta. Leggero per le dimensioni. Rigido",
+  "visual": "Verde-beige naturale, fibre visibili. Con fibre corte aspetto più omogeneo",
+  "thermal": "Neutro, si ammorbidisce sopra 50°C",
+  "acoustic": "Suono rigido, leggermente più sordo della versione juta",
+  "olfactive": "Leggero odore erbaceo della canapa, svanisce con l'essiccazione"
+ },
+ "aesthetic": {
+  "appearance": "Naturale-industriale, aspetto ecologico con fibre a vista",
+  "finish": "Opaco, texture fibrosa, superficie variabile (liscia con fibre corte, ruvida con tessuto)",
+  "aging": "Stabile se asciutto, biodegrada con umidità prolungata",
+  "transparency": "Opaco"
+ },
+ "ethical": {
+  "sustainability": "Molto alto — canapa cresce senza pesticidi, sequestra CO₂, gelatina da sottoprodotto",
+  "origin": "Rinnovabile — canapa industriale (coltivazione europea in crescita), gelatina animale",
+  "biodegradability": "Completamente biodegradabile e compostabile",
+  "bio_content": "100%",
+  "circular_economy": "Ottima — canapa è coltura rigenerativa, migliora i suoli",
+  "certifications": "Canapa industriale: normativa EU <0.3% THC"
+ },
+ "specs_text": "• Gelatina: 10-15% p/v\n• Glicerina: 5-10%\n• Canapa: fibre lunghe (tessuto) o corte (3-10mm)\n• Spessore: 2-5 mm\n• Canapa tensile strength: 550-900 MPa (fibra singola)\n• Densità canapa: 1.48 g/cm³ (più leggera del vetro)\n• Biodegradazione: settimane-mesi in compost",
  "ingredienti_correlati": [
  "gelatina",
  "fibre_canapa",
@@ -1403,7 +1656,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Tessuti semi-rigidi",
  "companies": "DIY",
- "description": "Agar caldo impregnato su tessuto di juta. Più rigido della versione gelatina. Pressare e essiccare.",
+ "description": "Composito ottenuto impregnando tessuto di juta con soluzione calda di agar-agar. L'agar richiede bollitura (>85°C) per dissolversi, poi gelifica intorno a 35-40°C formando una matrice più rigida della gelatina. Processo: sciogliere 3-5% agar in acqua portata a ebollizione, aggiungere 10-15% glicerina, immergere tessuto di juta nella soluzione calda, pressare tra superfici piane, essiccare 24-48h.\n\nIl risultato è un pannello più rigido rispetto alla versione con gelatina, perché l'agar forma gel che non si rifonde sotto 85°C (isteresi termica). Questo è il vantaggio principale: il composito agar+juta è termostabile fino a 85°C, mentre gelatina+juta fonde già a 25-30°C. Di contro, l'agar è intrinsecamente più fragile e il composito può crepare se piegato troppo (la glicerina mitiga ma non elimina il problema). Adatto a pannelli strutturali, supporti rigidi, elementi architettonici temporanei dove serve stabilità termica.",
+ "properties": "Rigido, opaco, termostabile fino a 85°C. Più fragile della versione gelatina. Non termoreversibile in pratica. Texture juta a vista.",
+ "sensory": {
+  "tactile": "Superficie rigida con trama tessile. Più duro al tatto della versione gelatina. Può crepare se piegato",
+  "visual": "Beige-dorato, trama juta a vista. Leggermente più traslucido dove l'agar è più spesso",
+  "thermal": "Stabile a temperatura ambiente e al calore moderato. Si degrada sopra 85°C",
+  "acoustic": "Suono rigido-secco, quasi ceramico quando bussato",
+  "olfactive": "Quasi inodore — agar non ha odore significativo, leggero odore di juta"
+ },
+ "aesthetic": {
+  "appearance": "Naturale strutturato, aspetto più pulito della versione gelatina",
+  "finish": "Opaco, superficie tessile rigida",
+  "aging": "Diventa fragile col tempo se troppo secco. Stabile al calore. Biodegrada con umidità",
+  "transparency": "Opaco (fibre visibili attraverso matrice traslucida)"
+ },
+ "ethical": {
+  "sustainability": "Molto alto — agar da alghe marine (risorsa rinnovabile), juta biodegradabile",
+  "origin": "Rinnovabile — agar (alghe rosse, Gracilaria/Gelidium), juta (fibra di rafia)",
+  "biodegradability": "Completamente biodegradabile",
+  "bio_content": "100%, vegano (a differenza della versione gelatina)",
+  "circular_economy": "Buona — materiali comuni, vegano",
+  "certifications": "Nessuna specifica. Agar: food-grade (E406)"
+ },
+ "specs_text": "• Agar: 3-5% p/v, bollitura necessaria (>85°C)\n• Glicerina: 10-15% (essenziale per evitare crepe)\n• Gelificazione agar: ~35-40°C\n• Fusione gel agar: ~85°C (isteresi termica)\n• Juta: tessuto 300-400 g/m²\n• Spessore: 2-5 mm\n• Vantaggio vs gelatina: termostabile\n• Svantaggio vs gelatina: più fragile, non termoreversibile",
  "ingredienti_correlati": [
  "agar",
  "fibre_juta",
@@ -1441,7 +1717,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Sensori, elettronica morbida",
  "companies": "DIY",
- "description": "Agar con 5-10% sale (NaCl). Conduce elettricità! Usato per sensori touch, elettrodi morbidi, e-textiles.",
+ "description": "Bioplastica conduttiva ottenuta aggiungendo sale da cucina (NaCl, 5-10% in peso) a una matrice di agar-agar. Gli ioni Na⁺ e Cl⁻ disciolti nel gel idratato permettono conduzione ionica — il materiale conduce elettricità quando contiene acqua. Ricetta: 400ml acqua, 4g agar, 5g sale (NaCl), 2ml glicerina. Portare a ebollizione, versare in stampo, lasciar gelificare e asciugare parzialmente (il materiale deve restare umido per condurre).\n\nLa conducibilità dipende dal contenuto d'acqua: il gel idratato conduce bene, il film completamente secco perde conduttività ma la recupera se reidratato con poche gocce d'acqua. Questo comportamento reversibile è didatticamente molto interessante e può essere verificato con un semplice multimetro o LED. Alternative al sale: grafite dispersa (conduzione elettronica, funziona anche da secco) o carbone vegetale.\n\nApplicazioni: sensori touch, elettrodi morbidi per e-textiles, circuiti temporanei, prototipi di interfacce capacitive. Il materiale è fragile, sensibile all'umidità e ha vita limitata — ma perfetto per dimostrazioni e prototipi rapidi nel contesto del design interattivo.",
+ "properties": "Conduttivo (ionico, quando idratato). Rigido-semiflessibile, traslucido, vegano. Conducibilità reversibile. Fragile da secco.",
+ "sensory": {
+  "tactile": "Umido e gelificato (conduttivo) o secco e rigido (non conduttivo). Fragile, superficie liscia",
+  "visual": "Traslucido-opaco, leggermente torbido per i cristalli di sale dispersi. Aspetto simile a gel tecnico",
+  "thermal": "Stabile fino a 85°C (agar). Neutro al tatto",
+  "acoustic": "Sordo-secco se asciutto, silenzioso se umido",
+  "olfactive": "Quasi inodore (possibile lieve odore salino)"
+ },
+ "aesthetic": {
+  "appearance": "Tecnico-sperimentale, aspetto da laboratorio più che decorativo",
+  "finish": "Liscio, leggermente torbido, superficie umida o secca secondo lo stato",
+  "aging": "Perde acqua e conduttività, diventa fragile. Reidratabile. Biodegrada con umidità prolungata",
+  "transparency": "Traslucido (torbido per il sale)"
+ },
+ "ethical": {
+  "sustainability": "Alto — ingredienti comuni, economici, vegano",
+  "origin": "Rinnovabile — agar da alghe, sale minerale, glicerina vegetale",
+  "biodegradability": "Completamente biodegradabile",
+  "bio_content": "100%, vegano",
+  "circular_economy": "Buona — materiali a bassissimo costo, nessun rifiuto tossico",
+  "certifications": "Tutti food-grade (E406, sale alimentare)"
+ },
+ "specs_text": "• Agar: 1% p/v\n• Sale (NaCl): 1.25% p/v (5-10% su peso secco)\n• Glicerina: <1% v/v\n• Tipo conduzione: ionica (richiede acqua)\n• Conducibilità: verificabile con multimetro/LED\n• Reversibile: secco = non conduce, reidratato = conduce\n• Alternativa: grafite/carbone per conduzione elettronica\n• Applicazioni: sensori touch, e-textiles, prototipi",
  "ingredienti_correlati": [
  "agar",
  "sale",
@@ -1478,7 +1777,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Film edibile, packaging alimentare",
  "companies": "DIY",
- "description": "Gelatina con spirulina in polvere. Film verde intenso, ricco di proteine. Potenzialmente edibile.",
+ "description": "Film di gelatina colorato con spirulina (Arthrospira platensis), una microalga verde-blu ricca di proteine (60-70%) e ficocianina (pigmento). Ricetta: 10g gelatina, 100ml acqua, 8ml glicerina, 1-3g spirulina in polvere. Sciogliere gelatina in acqua calda (50-60°C), aggiungere glicerina e spirulina, mescolare bene, versare in stampo. Essiccare 24-48h.\n\nIl film risultante è verde intenso (la ficocianina è uno dei pigmenti naturali più vivaci), opaco, flessibile e potenzialmente edibile se si usano ingredienti food-grade. La spirulina agisce sia da colorante che da carica proteica, aumentando leggermente la resistenza meccanica. Il colore verde è stabile alla luce ma sensibile a pH estremi (decolora sotto pH 3). Applicazioni: packaging edibile colorato, prototipi di design con colore naturale, materiale didattico su pigmenti biologici.",
+ "properties": "Flessibile, opaco, verde intenso. Potenzialmente edibile. Colore naturale stabile (ficocianina). Biodegradabile. Ricco di proteine.",
+ "sensory": {
+  "tactile": "Liscio, flessibile come film di gelatina standard. Leggermente più granuloso per le particelle di spirulina",
+  "visual": "Verde intenso brillante, opaco. Uno dei colori naturali più vivaci ottenibili con biomateriali",
+  "thermal": "Termolabile come gelatina (~30°C)",
+  "acoustic": "Silenzioso, flessibile",
+  "olfactive": "Leggero odore algale-erbaceo della spirulina, non sgradevole"
+ },
+ "aesthetic": {
+  "appearance": "Naturale vivace, aspetto organico con colore sorprendentemente intenso",
+  "finish": "Liscio, leggermente opaco per la dispersione delle particelle",
+  "aging": "Colore stabile alla luce. Si degrada come gelatina (umidità, calore)",
+  "transparency": "Opaco (verde intenso)"
+ },
+ "ethical": {
+  "sustainability": "Alto — spirulina coltivabile con poche risorse (acqua, sole, CO₂)",
+  "origin": "Rinnovabile — gelatina (sottoprodotto), spirulina (microalga coltivabile, non richiede terra arabile)",
+  "biodegradability": "Completamente biodegradabile, potenzialmente commestibile",
+  "bio_content": "100%",
+  "circular_economy": "Buona — spirulina è superfood coltivabile ovunque",
+  "certifications": "Spirulina: food-grade, Novel Food EU"
+ },
+ "specs_text": "• Gelatina: 10% p/v\n• Glicerina: 8% v/v\n• Spirulina: 1-3% p/v (colorante + carica)\n• Pigmento: ficocianina (blu-verde, stabile a luce)\n• Proteine spirulina: 60-70%\n• Sensibilità pH: decolora sotto pH 3\n• Spessore: 0.5-2 mm\n• Potenzialmente edibile",
  "ingredienti_correlati": [
  "gelatina",
  "spirulina",
@@ -1518,7 +1840,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Finitura lucida, sigillante",
  "companies": "DIY",
- "description": "Gommalacca in fiocchi sciolta in alcool etilico (rapporto 1:4). Coating lucido, resistente, food-safe dopo essiccazione.",
+ "description": "Coating tradizionale ottenuto sciogliendo fiocchi di gommalacca (shellac) in alcool etilico denaturato. Rapporto tipico: 1 parte gommalacca in 4-5 parti alcool (in volume). La gommalacca è l'unica resina naturale di origine animale — secrezione dell'insetto Kerria lacca, raccolta in India e Thailandia da 3000 anni. Processo: sciogliere fiocchi in alcool agitando periodicamente per 24-48h, filtrare, applicare a pennello in strati sottili multipli (3-5 mani con leggera carteggiatura tra le mani).\n\nDopo evaporazione dell'alcool il coating è duro, lucido, trasparente-ambrato, e approvato FDA per contatto alimentare (riveste pillole, caramelle, frutta). È un eccellente sigillante, crea barriera all'umidità e agli odori, e accetta pigmenti. Limitazione: non resiste all'alcool (si riscioglie) e si ammorbidisce con il calore. Usato da secoli per finitura mobili (french polish), isolante elettrico, e come base per lacche e vernici naturali.",
+ "properties": "Duro, lucido, trasparente-ambrato. Food-safe (FDA). Eccellente sigillante. Si scioglie in alcool. Sensibile al calore.",
+ "sensory": {
+  "tactile": "Liscio, duro, superficie lucida. Leggermente caldo al tatto (bassa conducibilità)",
+  "visual": "Trasparente ambrato-dorato, molto lucido. Esalta le venature del legno sottostante",
+  "thermal": "Si ammorbidisce sopra 65°C. Bassa conducibilità termica",
+  "acoustic": "Risonante — amplifica il suono del materiale sottostante (usata su strumenti musicali)",
+  "olfactive": "Leggero odore di alcool durante applicazione, inodore da secco"
+ },
+ "aesthetic": {
+  "appearance": "Classico raffinato, aspetto simile a lacca tradizionale",
+  "finish": "Molto lucido (french polish) o satinato (meno mani)",
+  "aging": "Scurisce leggermente verso ambrato più intenso. Può creparsi con cicli termici estremi",
+  "transparency": "Trasparente ambrato"
+ },
+ "ethical": {
+  "sustainability": "Medio — risorsa rinnovabile ma da insetto (non vegano), raccolta sostenibile",
+  "origin": "Rinnovabile — secrezione insetto Kerria lacca (India, Thailandia). Raccolta senza uccidere l'insetto",
+  "biodegradability": "Biodegradabile (resina naturale)",
+  "bio_content": "100% (resina + alcool)",
+  "circular_economy": "Buona — tradizione millenaria, produzione artigianale",
+  "certifications": "FDA approved per contatto alimentare (confetti, pillole, frutta)"
+ },
+ "specs_text": "• Rapporto: 1:4-5 gommalacca:alcool (v/v)\n• Dissoluzione: 24-48h a temperatura ambiente\n• Applicazione: 3-5 mani a pennello\n• Rammollimento: ~65°C\n• Food-safe: sì (FDA, E904)\n• Uso storico: 3000+ anni\n• Non resiste: alcool, calore forte\n• French polish: tecnica a tampone per finitura lucida",
  "ingredienti_correlati": [
  "gommalacca",
  "alcool"
@@ -1550,7 +1895,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Food wrap, conservazione alimenti",
  "companies": "DIY",
- "description": "Cera d'api + colofonia + olio di lino. Fondere, impregnare tessuto cotone. Wrap alimentare riutilizzabile, modellabile col calore delle mani.",
+ "description": "Pellicola alimentare riutilizzabile ottenuta impregnando tessuto di cotone con miscela di cera d'api, colofonia e olio di lino. Ricetta tipica: 50g cera d'api, 5g colofonia (pece greca), 5ml olio di lino o jojoba. Fondere insieme a bagnomaria (~65°C), immergere tessuto di cotone organico, stendere su carta forno, passare con ferro da stiro per distribuire uniformemente. Lasciare asciugare appeso.\n\nLa cera d'api conferisce impermeabilità e modellabilità (si scalda col calore delle mani), la colofonia fornisce aderenza (il wrap si attacca a sé stesso e ai contenitori), l'olio migliora penetrazione nelle fibre e flessibilità. Il wrap è riutilizzabile 100+ volte, si lava con acqua fredda e sapone delicato. Non usare con carne cruda o acqua calda (fonde la cera). Alternativa vegana: cera di soia o candelilla al posto della cera d'api.\n\nProdotto simbolo del movimento zero-waste, facile da realizzare in laboratorio con attrezzatura minima (ferro da stiro + carta forno).",
+ "properties": "Impermeabile, modellabile col calore delle mani, adesivo, antibatterico naturale. Food-safe. Riutilizzabile 100+ volte.",
+ "sensory": {
+  "tactile": "Leggermente ceroso, malleabile. Si modella col calore delle mani (35-37°C). Adesivo su sé stesso",
+  "visual": "Tessuto visibile attraverso la cera trasparente-gialla. Aspetto artigianale, irregolare",
+  "thermal": "Sensibile — si ammorbidisce e modella con il calore corporeo. Fonde a ~62°C",
+  "acoustic": "Leggero crepitio quando manipolato",
+  "olfactive": "Profumo gradevole di cera d'api e miele, persistente"
+ },
+ "aesthetic": {
+  "appearance": "Artigianale-naturale, texture tessile visibile sotto il coating ceroso",
+  "finish": "Ceroso, leggermente lucido, irregolare",
+  "aging": "Diventa meno adesivo e più rigido con l'uso ripetuto. Riattivabile col ferro da stiro",
+  "transparency": "Semi-trasparente (si vede il tessuto sottostante)"
+ },
+ "ethical": {
+  "sustainability": "Alto — riutilizzabile, sostituisce pellicola usa-e-getta, ingredienti naturali",
+  "origin": "Rinnovabile — cera d'api (apicoltura), colofonia (pino), olio (lino/jojoba)",
+  "biodegradability": "Completamente biodegradabile a fine vita",
+  "bio_content": "100%",
+  "circular_economy": "Eccellente — riutilizzabile 100+ volte poi compostabile",
+  "certifications": "Cera d'api: food-grade. Alternativa vegana con cera candelilla"
+ },
+ "specs_text": "• Cera d'api: ~85% della miscela\n• Colofonia: ~8% (aderenza)\n• Olio: ~7% (flessibilità)\n• Temp fusione: ~62-65°C\n• Applicazione: ferro da stiro o forno 80°C\n• Lavaggio: acqua fredda + sapone\n• Riutilizzabilità: 100+ volte\n• Durata: 6-12 mesi con uso regolare",
  "ingredienti_correlati": [
  "cera_api",
  "colofonia",
@@ -1586,7 +1954,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Finitura legno, protezione",
  "companies": "DIY",
- "description": "60-70% olio di lino cotto, 10-20% cera d'api, 10-20% cera carnauba. Fondere e mescolare. Finitura penetrante idrorepellente.",
+ "description": "Finitura naturale per legno composta da olio essiccante e cere naturali. Ricetta tipica: 60-70% olio di lino cotto (o tung), 10-20% cera d'api, 10-20% cera di carnauba. Scaldare a bagnomaria (~70°C), mescolare fino a omogeneità, versare in barattolo. Si applica con panno a strati sottili, lasciando penetrare 15-20 minuti, poi togliendo l'eccesso. Asciugatura: 24-48h per strato (l'olio di lino polimerizza per ossidazione, reazione esotermica — stracci usati possono autocombustirsi se accumulati!).\n\nL'olio penetra nel legno e polimerizza (reticolazione ossidativa), creando protezione dall'interno. Le cere restano in superficie formando barriera idrofoba. La cera di carnauba (la più dura cera naturale, dal Copernicia prunifera brasiliano) conferisce durezza superiore alla sola cera d'api. Il risultato è una finitura che esalta le venature, non forma pellicola (a differenza delle vernici), e si può riparare localmente. Tradizione dell'ebanisteria nordeuropea.",
+ "properties": "Penetrante, idrorepellente, esalta venature. Non forma pellicola. Riparabile localmente. Polimerizza per ossidazione.",
+ "sensory": {
+  "tactile": "Superficie satinata, calda al tatto. Si sente il legno sotto, non una pellicola. Liscio e morbido",
+  "visual": "Esalta venature e colore naturale del legno. Finitura calda, non plastica",
+  "thermal": "Caldo (bassa conducibilità, il legno traspira)",
+  "acoustic": "Nessun effetto significativo — il legno mantiene il suo suono naturale",
+  "olfactive": "Odore piacevole di olio di lino e cera durante applicazione. Svanisce in giorni"
+ },
+ "aesthetic": {
+  "appearance": "Naturale autentico — evidenzia il materiale sottostante senza mascherarlo",
+  "finish": "Satinato-opaco (1-2 mani) o semi-lucido (3+ mani con lucidatura)",
+  "aging": "Patina dorata che migliora col tempo. Graffi riparabili localmente con riapplicazione",
+  "transparency": "Trasparente (esalta il legno)"
+ },
+ "ethical": {
+  "sustainability": "Alto — ingredienti naturali, nessun solvente sintetico, lunga durata",
+  "origin": "Rinnovabile — olio di lino (Europa), cera d'api (apicoltura), cera carnauba (Brasile, palma)",
+  "biodegradability": "Olio polimerizzato non biodegrada rapidamente, ma non tossico. Cere biodegradabili",
+  "bio_content": "100%",
+  "circular_economy": "Buona — finitura riparabile, non richiede rimozione completa per manutenzione",
+  "certifications": "Olio lino: food-grade disponibile. Carnauba: E903 (food additive)"
+ },
+ "specs_text": "• Olio di lino cotto: 60-70%\n• Cera d'api: 10-20%\n• Cera carnauba: 10-20%\n• Applicazione: panno, strati sottili\n• Asciugatura: 24-48h per strato (ossidazione)\n• ⚠ Stracci olio lino: rischio autocombustione!\n• Finitura: satinata (1 mano) a semi-lucida (3+ mani)\n• Riparabilità: eccellente (ritocco locale)",
  "ingredienti_correlati": [
  "olio_lino",
  "cera_api",
@@ -1618,7 +2009,30 @@ const MATERIALI_DATA = {
  "replicabile_lab": true,
  "applications": "Film edibile, packaging alimentare, coating frutta",
  "companies": "Notpla, Evoware, Loliware",
- "description": "2-4g alginato di sodio, 200ml acqua, 8-10g glicerina. Frullare fino a liscio, riposare una notte per eliminare bolle. Versare su superficie liscia (acrilico, silicone). Spruzzare soluzione CaCl₂ 10% per reticolare. Asciugare 24-48h. Film trasparente, flessibile, resistente al calore (fino a 150°C), idrosolubile ma resistente a pH neutro/acido dopo reticolazione. Commestibile se ingredienti food-grade.",
+ "description": "Film edibile trasparente ottenuto da alginato di sodio reticolato con ioni calcio. Ricetta base: 2-4g alginato di sodio in 200ml acqua, frullare fino a soluzione omogenea, aggiungere 8-10g glicerina, lasciar riposare una notte per eliminare bolle d'aria. Versare su superficie liscia (acrilico, vetro, silicone) e spruzzare soluzione CaCl₂ al 10% per avviare la reticolazione (modello egg-box: ioni Ca²⁺ chelano i blocchi G dell'alginato creando gel tridimensionale). Asciugare 24-48h a temperatura ambiente.\n\nIl film risultante è trasparente, flessibile, termostabile fino a 150°C (non fonde come gelatina o agar) e completamente commestibile se si usano ingredienti food-grade. È la base della sferificazione di Ferran Adrià e della tecnologia Notpla (packaging edibile per bevande). Dopo reticolazione il film resiste a pH neutro e acido, ma si dissolve lentamente in acqua. Lo spessore si regola con la quantità versata (tipicamente 0.1-0.5mm per film, fino a 2mm per membrane).\n\nApplicazioni commerciali: Notpla (packaging per acqua e condimenti), Evoware (packaging edibile da alghe, Indonesia), Loliware (cannucce edibili). Ricetta a freddo — non richiede cottura, ideale per laboratorio scolastico.",
+ "properties": "Trasparente, flessibile, termostabile (150°C), commestibile, food-safe. Gel ionico irreversibile. Buona barriera O₂, scarsa barriera H₂O.",
+ "sensory": {
+  "tactile": "Liscio, elastico, simile a pellicola plastica sottile. Leggermente appiccicoso se umido",
+  "visual": "Trasparente-traslucido, incolore o leggermente giallastro. Ottima chiarezza ottica",
+  "thermal": "Neutro — non fonde al calore (termostabile fino a 150°C), a differenza di gelatina e agar",
+  "acoustic": "Silenzioso, fruscia leggermente come pellicola alimentare",
+  "olfactive": "Quasi inodore (leggero odore marino dell'alginato che scompare con l'asciugatura)"
+ },
+ "aesthetic": {
+  "appearance": "Industriale-pulito, aspetto simile a pellicola plastica trasparente",
+  "finish": "Liscio lucido su lato stampo, leggermente opaco sul lato aria",
+  "aging": "Stabile per mesi se conservato asciutto. Si degrada rapidamente in acqua o alta umidità",
+  "transparency": "Trasparente (sottile) a traslucido (spesso)"
+ },
+ "ethical": {
+  "sustainability": "Molto alto — alginato da alghe brune (risorsa marina rinnovabile, non richiede terra o acqua dolce)",
+  "origin": "Rinnovabile — alginato da alghe (Laminaria, Macrocystis), glicerina vegetale",
+  "biodegradability": "Completamente biodegradabile, commestibile, compostabile",
+  "bio_content": "100%",
+  "circular_economy": "Eccellente — packaging che si mangia o si composta. Zero rifiuti",
+  "certifications": "Alginato E401 (food additive EU), Notpla: Certified B Corp"
+ },
+ "specs_text": "• Alginato: 1-2% p/v in acqua\n• Glicerina: 4-5% p/v (plastificante)\n• Reticolazione: CaCl₂ spray 5-10%\n• Spessore: 0.1-2 mm\n• Termostabilità: fino a 150°C\n• Barriera O₂: buona\n• Barriera H₂O: scarsa (idrofilo)\n• Tempo preparazione: 10 min + riposo notte + 24-48h asciugatura\n• Shelf life: mesi (asciutto), giorni (umido)",
  "ingredienti_correlati": [
  "alginato",
  "glicerina",

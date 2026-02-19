@@ -433,20 +433,74 @@ const BioLab = {
         h += '<div class="bl-info-section"><h3>Nota AI</h3>';
         h += '<p>I testi descrittivi sono stati generati con assistenza di intelligenza artificiale (Claude, Anthropic) sulla base di conoscenze consolidate di chimica e scienza dei materiali. I concetti di base sono affidabili; dosaggi e tempi sono indicativi, da tarare sperimentalmente.</p></div>';
 
-        h += '<div class="bl-info-section"><h3>Fonti principali</h3>';
-        h += '<ul>';
-        h += '<li><a href="https://materiom.org" target="_blank">Materiom</a> — Database open-source ricette</li>';
-        h += '<li><a href="https://textile-academy.org" target="_blank">Fabricademy</a> — Programma educativo bio-based</li>';
-        h += '<li>Stevens, E.S. — <em>Green Plastics</em> (Princeton, 2002)</li>';
-        h += '<li>Dunne, M. — <em>Bioplastic Cook Book</em> (2018)</li>';
-        h += '<li>Schede tecniche: Sigma-Aldrich, MSK, Sosa</li>';
-        h += '</ul></div>';
+        h += '<div class="bl-info-section"><h3>Fonti e riferimenti</h3>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Letteratura scientifica</h4><ul>';
+        h += '<li>Stevens, E.S. — <em>Green Plastics: An Introduction to the New Science of Biodegradable Plastics</em> (Princeton University Press, 2002)</li>';
+        h += '<li>Rhim, J.W., Park, H.M., Ha, C.S. — Bio-nanocomposites for food packaging applications, <em>Progress in Polymer Science</em>, 2013</li>';
+        h += '<li>Cazón, P., Velazquez, G. et al. — Polysaccharide-based films and coatings for food packaging, <em>Food Hydrocolloids</em>, 2017</li>';
+        h += '<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6211027/" target="_blank">PMC</a> — Alginate-Based Edible Films and Coatings (review)</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Libri pratici e ricettari</h4><ul>';
+        h += '<li>Dunne, M. — <em>Bioplastic Cook Book</em> (2018) — Ricette pratiche per bioplastiche DIY</li>';
+        h += '<li><a href="https://class.textile-academy.org" target="_blank">Fabricademy / TextileLab Waag</a> — Bio-fabrication resources</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Database e piattaforme</h4><ul>';
+        h += '<li><a href="https://materiom.org" target="_blank">Materiom</a> — Database open-source ricette biomateriali (Creative Commons)</li>';
+        h += '<li><a href="https://textile-academy.org" target="_blank">Fabricademy</a> — Programma educativo tessuti e materiali bio-based (Fab Lab Network)</li>';
+        h += '<li><a href="https://issuu.com/nat_arc/docs/bioplastic_cook_book_3" target="_blank">Bioplastic Cook Book</a> — Ricettario Issuu (Margaret Dunne)</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Ricette e documentazione Fabricademy</h4><ul>';
+        h += '<li><a href="https://class.textile-academy.org/2020/loes.bogers/files/recipes/" target="_blank">Loes Bogers / TextileLab Waag</a> — Ricette agar foil, alginate foil, biofoam, gelatina</li>';
+        h += '<li><a href="https://class.textile-academy.org/2022/marisa-satsia/assignments/week06/" target="_blank">Marisa Satsia</a> — Coffee composites, eggshell composite, agar conduttivo</li>';
+        h += '<li><a href="https://class.textile-academy.org/2020/carolina.delgado/assignments/week06/" target="_blank">Carolina Delgado</a> — Biofilm agar+gelatina</li>';
+        h += '<li><a href="https://class.textile-academy.org/2023/rachel-wambach/assignments/week06/" target="_blank">Rachel Wambach</a> — Textile composites (juta, canapa)</li>';
+        h += '<li><a href="https://class.textile-academy.org/2025/rawan-aziziyeh/assignments/week07/" target="_blank">Rawan Aziziyeh</a> — Gelatina+spirulina</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Aziende e progetti citati</h4><ul>';
+        h += '<li><a href="https://www.notpla.com" target="_blank">Notpla</a> — Packaging edibile da alginato</li>';
+        h += '<li><a href="https://www.ecovative.com" target="_blank">Ecovative Design</a> — Materiali a base di micelio</li>';
+        h += '<li><a href="https://biocouture.co.uk" target="_blank">BioCouture / Suzanne Lee</a> — Cellulosa batterica per moda</li>';
+        h += '<li><a href="https://orangefiber.it/" target="_blank">Orange Fiber</a> — Tessuti da agrumi (Catania, Italia)</li>';
+        h += '<li><a href="https://www.dezeen.com/2022/01/12/peelsphere-youyang-song-leather-alternative-biomaterial-fruit-waste/" target="_blank">Peelsphere / Youyang Song</a> — Pelle vegetale da scarti di frutta</li>';
+        h += '<li><a href="https://www.entropyresins.com" target="_blank">Entropy Resins</a>, <a href="https://www.sicomin.com" target="_blank">Sicomin</a> — Bio-resine epossidiche</li>';
+        h += '<li><a href="https://coffeefrom.it" target="_blank">Coffeefrom</a> — Bioplastiche da fondi di caffè (Italia)</li>';
+        h += '<li><a href="https://www.crafthub.eu/material/bio-leather-made-from-waste-coffee-grounds/" target="_blank">CraftHub</a> — Coffee leather DIY</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Schede tecniche e fornitori</h4><ul>';
+        h += '<li><a href="https://www.sigmaaldrich.com" target="_blank">Sigma-Aldrich / Merck</a> — Reagenti chimici</li>';
+        h += '<li><a href="https://msk-ingredients.com" target="_blank">MSK Ingredients</a> — Cucina molecolare</li>';
+        h += '<li><a href="https://sosa.cat" target="_blank">Sosa Ingredients</a> — Texturizzanti alimentari</li>';
+        h += '<li><a href="https://www.naturalpigments.com/artist-materials/shellac-use-art" target="_blank">Natural Pigments</a> — Gommalacca per artisti</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Guide pratiche e tutorial</h4><ul>';
+        h += '<li><a href="https://homesteadandchill.com/diy-homemade-beeswax-wraps/" target="_blank">Homestead and Chill</a> — DIY Beeswax Wraps</li>';
+        h += '<li><a href="https://blog.lostartpress.com/2021/07/12/cook-your-own-linseed-oil-wax-finish/" target="_blank">Lost Art Press</a> — DIY Hardwax Oil</li>';
+        h += '<li><a href="https://workshopcompanion.com/know-how/materials/finish/hard-wax-finish.html" target="_blank">Workshop Companion</a> — Finiture naturali legno</li>';
+        h += '<li><a href="https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/starch" target="_blank">Lab Pastoe</a> — Bioplastiche da amido</li>';
+        h += '<li><a href="https://www.instructables.com/From-Waste-to-Material-Used-Coffee-Grounds-BioPlas/" target="_blank">Instructables</a> — Coffee grounds bioplastic</li>';
+        h += '</ul>';
+
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Comunità</h4><ul>';
+        h += '<li>Instructables — Bioplastics (tutorial maker)</li>';
+        h += '<li>Reddit r/Bioplastics — Discussioni biomateriali</li>';
+        h += '<li><a href="https://preciousplastic.com" target="_blank">Precious Plastic</a> — Riciclo plastica e alternative</li>';
+        h += '<li><a href="https://fablabbcn.org" target="_blank">Fab Lab Barcelona</a> — Biomaterials 101</li>';
+        h += '</ul>';
+
+        h += '</div>';
 
         h += '<div class="bl-info-section"><h3>Credits</h3>';
         h += '<p>Ideazione: Prof. Paolo Maccarrone — Corso "Tipologia dei Nuovi Materiali", Accademia Albertina di Torino</p>';
         h += '<p>Sviluppo database e interfaccia con assistenza AI (Claude, Anthropic)</p>';
         h += '<p>Dati sperimentali: studenti Accademia Albertina e IED Torino, 2025-2026</p>';
-        h += '<p style="margin-top:0.5rem;font-size:0.75rem;color:#999;">BioLab v22 · Database v11.1-IED · Licenza: CC BY-NC-SA (proposta)</p>';
+        h += '<p style="margin-top:0.5rem;font-size:0.75rem;color:#999;">BioLab v22 · Database v11f · Licenza: CC BY-NC-SA (proposta)</p>';
         h += '</div>';
 
         h += '</div>';
