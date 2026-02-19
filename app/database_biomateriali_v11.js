@@ -2,7 +2,7 @@
 // DATABASE BIOMATERIALI v11 - File esterno
 // ============================================
 // VERSIONE: 11 - Colture (te_nero_forte, canapa_hurd, acido_stearico), ruolo_coltura, materiali SCOBY+Mycocomposite
-// DATA: 2026-02-10
+// DATA: 2026-02-19 (v11e: 12 materiali, 29 link aggiornati)
 // BASE: v10.1 (Merge v9.3+v10, ripristino 145 valori persi)
 // 
 // MODIFICHE v6.0:
@@ -190,12 +190,12 @@ const MATERIALI_DATA = {
  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10342135/",
  "link_risorse": [
  {
- "titolo": "PMC - Chitosan-Based Antibacterial Films Review",
- "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10342135/"
+ "titolo": "Fabricademy - Chitosan bioplastic (foto processo)",
+ "url": "https://class.textile-academy.org/2022/annah-sangosanya/assignments/week06/"
  },
  {
- "titolo": "Materiom - Chitosan Bioplastic",
- "url": "https://materiom.org/recipe/688"
+ "titolo": "BioPills - Ricetta bioplastica dal chitosano (IT)",
+ "url": "https://www.biopills.net/la-ricetta-per-la-bioplastica-gamberi-in-aceto/"
  }
  ],
  "credits": {
@@ -312,7 +312,7 @@ const MATERIALI_DATA = {
  ],
  "replicabile_lab": true,
  "fonte": "Materiom",
- "url": "https://materiom.org/recipe/41",
+ "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/starch-bioplastics",
  "link_risorse": [
     {
       "titolo": "Trinity College - Bioplastics (amido)",
@@ -323,8 +323,8 @@ const MATERIALI_DATA = {
       "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
     },
     {
-      "titolo": "Lab Pastoe - Starch Bioplastics",
-      "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/starch-bioplastics"
+      "titolo": "Zanichelli - Produzione bioplastica da amido (IT, PDF)",
+      "url": "https://online.scuola.zanichelli.it/industriagroalimentare2ed-files/laboratorio/p157_Produzione_bioplastica.pdf"
     }
   ],
  "credits": {
@@ -995,11 +995,11 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "Materiom",
- "url": "https://materiom.org/recipe/41",
+ "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/agarfoil/",
  "link_risorse": [
  {
- "titolo": "Materiom - Agar bioplastic (heated) Ag02",
- "url": "https://materiom.org/recipe/41"
+ "titolo": "Fabricademy - Agar Foil ricetta originale (Loes Bogers)",
+ "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/agarfoil/"
  },
  {
  "titolo": "Bioplastic Cook Book - Margaret Dunne",
@@ -1033,11 +1033,11 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "Fabricademy",
- "url": "https://materiom.org/recipe/592",
+ "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/starch",
  "link_risorse": [
  {
- "titolo": "Materiom - Tapioca Starch Bioplastic",
- "url": "https://materiom.org/recipe/592"
+ "titolo": "Lab Pastoe - Starch bioplastics (copre tapioca)",
+ "url": "https://labpastoe.gitbook.io/lab-pastoe/tutorials/bioplastics/starch"
  },
  {
  "titolo": "Fabricademy - Biofabricating Materials",
@@ -1068,10 +1068,10 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "FabTextiles",
- "url": "http://fabtextiles.org/the-secrets-of-bioplastic/",
+ "url": "https://www.nike.com/it/a/toccare-con-mano-come-creare-bio-materiali",
  "link_risorse": [
     {
-      "titolo": "Loes Bogers - Gelatine Foil Recipe (Fabricademy)",
+      "titolo": "Nike - Toccare con mano come creare biomateriali (IT)",
       "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/gelatinefoil/"
     },
     {
@@ -1104,10 +1104,10 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "Fabricademy",
- "url": "https://materiom.org/recipe/43",
+ "url": "https://class.textile-academy.org/2020/carolina.delgado/assignments/week06/",
  "link_risorse": [
     {
-      "titolo": "Fabricademy - Bioplastics Week (agar+gelatina)",
+      "titolo": "Fabricademy - Agar+Gelatine biofilms (Carolina Delgado)",
       "url": "https://class.textile-academy.org/2020/tanja.lovric/assignments/week06/"
     },
     {
@@ -1219,10 +1219,10 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "FabTextiles",
- "url": "http://fabtextiles.org/coffee-leather-bag/",
+ "url": "https://class.textile-academy.org/2023/elena-bannaia/assignments/week06/",
  "link_risorse": [
     {
-      "titolo": "CraftHub - Bio-leather from Coffee Grounds",
+      "titolo": "Fabricademy - Coffee leather + composites (Elena Bannaia)",
       "url": "https://www.crafthub.eu/material/bio-leather-made-from-waste-coffee-grounds/"
     },
     {
@@ -1255,15 +1255,19 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "Remix el Barrio",
- "url": "https://fablabbcn.org/projects/remix-el-barrio",
+ "url": "https://fablabbcn.org/blog/emergent-ideas/biomaterials-101",
  "link_risorse": [
     {
-      "titolo": "Fab Lab Barcelona - Remix El Barrio (scarti agrumi)",
-      "url": "https://fablabbcn.org/projects/remix-el-barrio"
+      "titolo": "Dezeen - Peelsphere pelle da bucce di frutta",
+      "url": "https://www.dezeen.com/2022/01/12/peelsphere-youyang-song-leather-alternative-biomaterial-fruit-waste/"
     },
     {
       "titolo": "Materiom - Orange Peel Bioplastic",
       "url": "https://commons.materiom.org/"
+    },
+    {
+      "titolo": "Orange Fiber - Tessuti da agrumi (azienda italiana)",
+      "url": "https://orangefiber.it/"
     }
   ],
  "credits": {
@@ -1294,11 +1298,11 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "Materiom",
- "url": "https://materiom.org/recipe/60",
+ "url": "https://www.sciencebuddies.org/science-fair-projects/project-ideas/Chem_p101/chemistry/eggshell-chalk",
  "link_risorse": [
     {
-      "titolo": "Materiom - Eggshell Composite",
-      "url": "https://commons.materiom.org/"
+      "titolo": "Fabricademy - Eggshell composite (Marisa Satsia)",
+      "url": "https://class.textile-academy.org/2022/marisa-satsia/assignments/week06/"
     },
     {
       "titolo": "GreenLab Wiki - Compositi da scarti alimentari",
@@ -1445,10 +1449,10 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "Materiom",
- "url": "https://materiom.org/recipe/152",
+ "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/agarfoil/",
  "link_risorse": [
     {
-      "titolo": "Fabricademy - Bioplastics (agar conduttivo)",
+      "titolo": "Fabricademy - Agar bioplastics base (Loes Bogers)",
       "url": "https://class.textile-academy.org/2022/marisa-satsia/assignments/week06/"
     },
     {
@@ -1482,14 +1486,14 @@ const MATERIALI_DATA = {
  "acqua"
  ],
  "fonte": "FabTextiles",
- "url": "https://materiom.org/recipe/411",
+ "url": "https://class.textile-academy.org/2025/rawan-aziziyeh/assignments/week07/",
  "link_risorse": [
     {
-      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
-      "url": "https://issuu.com/nat_arc/docs/bioplastic_cook_book_3"
+      "titolo": "Fabricademy - Gelatin bioplastics (Rawan Aziziyeh 2025)",
+      "url": "https://class.textile-academy.org/2025/rawan-aziziyeh/assignments/week07/"
     },
     {
-      "titolo": "Fabricademy - Bio-chromatic textiles (spirulina)",
+      "titolo": "Bioplastic Cook Book - Ricettario bioplastiche",
       "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/bioplastic-spirulina/"
     }
   ],
