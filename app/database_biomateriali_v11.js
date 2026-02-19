@@ -2,7 +2,7 @@
 // DATABASE BIOMATERIALI v11 - File esterno
 // ============================================
 // VERSIONE: 11 - Colture (te_nero_forte, canapa_hurd, acido_stearico), ruolo_coltura, materiali SCOBY+Mycocomposite
-// DATA: 2026-02-19 (v11e: 12 materiali, 29 link aggiornati)
+// DATA: 2026-02-19 (v11e: 14 materiali, 35 link aggiornati)
 // BASE: v10.1 (Merge v9.3+v10, ripristino 145 valori persi)
 // 
 // MODIFICHE v6.0:
@@ -1531,8 +1531,8 @@ const MATERIALI_DATA = {
  "url": "https://en.wikipedia.org/wiki/Shellac"
  },
  {
- "titolo": "Wood Finishes Direct - Shellac Guide",
- "url": "https://www.woodfinishesdirect.com/page/shellac-guide"
+ "titolo": "Natural Pigments - Shellac: Applications and Use in Art",
+ "url": "https://www.naturalpigments.com/artist-materials/shellac-use-art"
  }
  ],
  "credits": {
@@ -1593,20 +1593,54 @@ const MATERIALI_DATA = {
  "cera_carnauba"
  ],
  "fonte": "Workshop Companion",
- "url": "https://www.workshopcompanion.com/KnowHow/Finishing/Finishes_&_Topcoats/3_Oil_Finishes/3_Oil_Finishes.htm",
+ "url": "https://workshopcompanion.com/know-how/materials/finish/hard-wax-finish.html",
  "link_risorse": [
  {
- "titolo": "Workshop Companion - Oil Finishes",
- "url": "https://www.workshopcompanion.com/KnowHow/Finishing/Finishes_&_Topcoats/3_Oil_Finishes/3_Oil_Finishes.htm"
+ "titolo": "Workshop Companion - Hardwax Oil Finish (DIY ricette)",
+ "url": "https://workshopcompanion.com/know-how/materials/finish/hard-wax-finish.html"
  },
  {
- "titolo": "Wood Magazine - Wax Finishes",
- "url": "https://www.woodmagazine.com/materials-guide/finishes/wax-finishes"
+ "titolo": "Lost Art Press - DIY Linseed Oil & Wax Finish (ricetta)",
+ "url": "https://blog.lostartpress.com/2021/07/12/cook-your-own-linseed-oil-wax-finish/"
  }
  ],
  "credits": {
  "origine": "Tradizione ebanisteria nordeuropea",
  "note": "Olio essiccante (lino/tung) + cera per finitura legno"
+ }
+ },
+ {
+ "id": 33,
+ "name": "Alginate film edibile",
+ "subtitle": "Film commestibile da alginato di sodio",
+ "category": "FILM",
+ "trl": 3,
+ "replicabile_lab": true,
+ "applications": "Film edibile, packaging alimentare, coating frutta",
+ "companies": "Notpla, Evoware, Loliware",
+ "description": "2-4g alginato di sodio, 200ml acqua, 8-10g glicerina. Frullare fino a liscio, riposare una notte per eliminare bolle. Versare su superficie liscia (acrilico, silicone). Spruzzare soluzione CaCl₂ 10% per reticolare. Asciugare 24-48h. Film trasparente, flessibile, resistente al calore (fino a 150°C), idrosolubile ma resistente a pH neutro/acido dopo reticolazione. Commestibile se ingredienti food-grade.",
+ "ingredienti_correlati": [
+ "alginato",
+ "glicerina",
+ "cacl2",
+ "acqua"
+ ],
+ "fonte": "Fabricademy / TextileLab Waag",
+ "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/alginatefoil/",
+ "link_risorse": [
+ {
+ "titolo": "Fabricademy - Alginate Foil Recipe (Loes Bogers / TextileLab Waag)",
+ "url": "https://class.textile-academy.org/2020/loes.bogers/files/recipes/alginatefoil/"
+ },
+ {
+ "titolo": "PMC - Alginate-Based Edible Films and Coatings for Food Packaging (review)",
+ "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6211027/"
+ }
+ ],
+ "credits": {
+ "origine": "Alghe brune (Laminaria, Macrocystis)",
+ "ricetta": "Cecilia Raspanti (TextileLab, Waag Amsterdam), Fabricademy 2019",
+ "note": "Ricetta a freddo, non richiede cottura. Reticolazione con Ca²⁺ (egg-box model)"
  }
  },
  {
