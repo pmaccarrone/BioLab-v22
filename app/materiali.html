@@ -495,12 +495,15 @@
     // ---- AGGIUNGI TUTTI AL CARRELLO ----
     function addAllBtn(ids) {
         if (!ids || !ids.length) return '';
-        return '<button class="mat-add-all-btn" onclick="addAllToCart(' + JSON.stringify(ids) + ')">+ Aggiungi tutti al carrello</button>'
+        // Usa | come separatore per evitare conflitti di virgolette nell'attributo onclick
+        var idsStr = ids.join('|');
+        return '<button class="mat-add-all-btn" onclick="addAllToCart(\'' + idsStr + '\')">+ Aggiungi tutti al carrello</button>'
              + '<div class="mat-add-all-toast" id="matAddAllToast"></div>';
     }
 
-    window.addAllToCart = function(ids) {
+    window.addAllToCart = function(idsStr) {
         if (typeof BioLab === 'undefined' || typeof INGREDIENTI_DATA === 'undefined') return;
+        var ids = idsStr.split('|');
         var aggiunti = [], saltati = [];
         ids.forEach(function(id) {
             if (INGREDIENTI_DATA.ingredienti && INGREDIENTI_DATA.ingredienti[id]) {
@@ -510,10 +513,11 @@
                 saltati.push(id);
             }
         });
+        BioLab.updateCartBadge();
         var msg = aggiunti.length + ' ingredient' + (aggiunti.length === 1 ? 'e aggiunto' : 'i aggiunti') + ' al carrello.';
-        if (saltati.length) msg += ' Non trovati nel database: ' + saltati.join(', ') + '.';
+        if (saltati.length) msg += ' Non trovati nel DB: ' + saltati.join(', ') + '.';
         var toast = document.getElementById('matAddAllToast');
-        if (toast) { toast.textContent = msg; toast.style.opacity = 1; setTimeout(function() { toast.style.opacity = 0; }, 4000); }
+        if (toast) { toast.textContent = msg; toast.style.opacity = '1'; setTimeout(function() { toast.style.opacity = '0'; }, 4000); }
     };
 
     // Helpers
