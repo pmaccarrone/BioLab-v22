@@ -659,10 +659,11 @@ const BioLab = {
             const st = document.createElement('style');
             st.id = 'blTranslateCSS';
             st.textContent =
-                '.bl-translate-widget { display:inline-flex; align-items:center; margin-right:6px; }'
+                '.bl-translate-widget { display:inline-flex; align-items:center; margin-right:6px; opacity:0.6; transition:opacity 0.2s; }'
+              + '.bl-translate-widget:hover { opacity:1; }'
               + '.bl-translate-widget .goog-te-gadget { font-size:0 !important; }'
-              + '.bl-translate-widget .goog-te-gadget-simple { background:rgba(255,255,255,0.15) !important; border:1px solid rgba(255,255,255,0.4) !important; border-radius:5px !important; padding:2px 6px !important; white-space:nowrap !important; }'
-              + '.bl-translate-widget .goog-te-gadget-simple a, .bl-translate-widget .goog-te-gadget-simple span { color:#fff !important; font-size:0.75rem !important; text-decoration:none !important; }'
+              + '.bl-translate-widget .goog-te-gadget-simple { background:rgba(255,255,255,0.1) !important; border:1px solid rgba(255,255,255,0.25) !important; border-radius:5px !important; padding:2px 6px !important; white-space:nowrap !important; }'
+              + '.bl-translate-widget .goog-te-gadget-simple a, .bl-translate-widget .goog-te-gadget-simple span { color:rgba(255,255,255,0.85) !important; font-size:0.75rem !important; text-decoration:none !important; }'
               + '.bl-translate-widget .goog-te-gadget-icon { display:none !important; }'
               + 'body { top: 0 !important; }'
               + '#goog-gt-tt, .goog-te-balloon-frame { display:none !important; }'
@@ -673,7 +674,7 @@ const BioLab = {
         // Callback richiesta da Google Translate
         window.googleTranslateElementInit = function() {
             new google.translate.TranslateElement(
-                { pageLanguage: 'it', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+                { pageLanguage: 'it', includedLanguages: 'it,en,zh-CN,fr,es,de,ja,ar,pt', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
                 'google_translate_element'
             );
         };
