@@ -514,6 +514,7 @@
             }
         });
         BioLab.updateCartBadge();
+        BioLab.renderCartPanel();
         var msg = aggiunti.length + ' ingredient' + (aggiunti.length === 1 ? 'e aggiunto' : 'i aggiunti') + ' al carrello.';
         if (saltati.length) msg += ' Non trovati nel DB: ' + saltati.join(', ') + '.';
         var toast = document.getElementById('matAddAllToast');
