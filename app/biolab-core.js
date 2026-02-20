@@ -659,13 +659,15 @@ const BioLab = {
             const st = document.createElement('style');
             st.id = 'blTranslateCSS';
             st.textContent =
-                '.bl-translate-widget { display:inline-flex; align-items:center; }'
+                '.bl-translate-widget { display:inline-flex; align-items:center; margin-right:6px; }'
               + '.bl-translate-widget .goog-te-gadget { font-size:0 !important; }'
-              + '.bl-translate-widget .goog-te-gadget select { font-size:0.75rem; padding:3px 6px; border:1px solid rgba(255,255,255,0.4); border-radius:5px; background:rgba(255,255,255,0.15); color:#fff; cursor:pointer; outline:none; max-width:90px; }'
-              + '.bl-translate-widget .goog-te-gadget select option { color:#333; background:#fff; }'
-              + '.bl-translate-widget .goog-te-gadget a { display:none !important; }'
+              + '.bl-translate-widget .goog-te-gadget-simple { background:rgba(255,255,255,0.15) !important; border:1px solid rgba(255,255,255,0.4) !important; border-radius:5px !important; padding:2px 6px !important; white-space:nowrap !important; }'
+              + '.bl-translate-widget .goog-te-gadget-simple a, .bl-translate-widget .goog-te-gadget-simple span { color:#fff !important; font-size:0.75rem !important; text-decoration:none !important; }'
+              + '.bl-translate-widget .goog-te-gadget-icon { display:none !important; }'
               + 'body { top: 0 !important; }'
-              + '.skiptranslate { display:none !important; }';
+              + '#goog-gt-tt, .goog-te-balloon-frame { display:none !important; }'
+              + '.skiptranslate iframe { display:none !important; }';
+
             document.head.appendChild(st);
         }
         // Callback richiesta da Google Translate
