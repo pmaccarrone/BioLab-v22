@@ -311,6 +311,7 @@ const BioLab = {
               + '</div>'
               + '<div class="bl-brand-spacer"></div>'
               + '<div class="bl-nav-right">'
+              + '<div id="google_translate_element" class="bl-translate-widget"></div>'
               + '<button class="bl-info-btn" onclick="BioLab.showInfoModal()" title="Info e credits">'
               + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>'
               + '</button>'
@@ -649,6 +650,39 @@ const BioLab = {
         this.initNav();        // genera header + badge nel DOM
         this.loadCart();       // loadCart → updateCartBadge (badge ora esiste)
         this.migrateOldSaves();
+        this.initTranslate();  // widget Google Translate
+    },
+
+    initTranslate() {
+        // CSS per tenere il widget discreto nell'header
+        if (!document.getElementById('blTranslateCSS')) {
+            const st = document.createElement('style');
+            st.id = 'blTranslateCSS';
+            st.textContent =
+                '.bl-translate-widget { display:inline-flex; align-items:center; }'
+              + '.bl-translate-widget .goog-te-gadget { font-size:0 !important; }'
+              + '.bl-translate-widget .goog-te-gadget select { font-size:0.75rem; padding:3px 6px; border:1px solid rgba(255,255,255,0.4); border-radius:5px; background:rgba(255,255,255,0.15); color:#fff; cursor:pointer; outline:none; max-width:90px; }'
+              + '.bl-translate-widget .goog-te-gadget select option { color:#333; background:#fff; }'
+              + '.bl-translate-widget .goog-te-gadget a { display:none !important; }'
+              + 'body { top: 0 !important; }'
+              + '.skiptranslate { display:none !important; }';
+            document.head.appendChild(st);
+        }
+        // Callback richiesta da Google Translate
+        window.googleTranslateElementInit = function() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'it', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+                'google_translate_element'
+            );
+        };
+        // Carica lo script GT solo se non già presente
+        if (!document.getElementById('blGoogleTranslateScript')) {
+            const s = document.createElement('script');
+            s.id = 'blGoogleTranslateScript';
+            s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            s.async = true;
+            document.head.appendChild(s);
+        }
     }
 };
 
