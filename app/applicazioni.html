@@ -6,14 +6,13 @@
     <title>BioLab - Applicazioni</title>
     <link rel="stylesheet" href="biolab.css">
     <style>
-    /* Card thumbnail — small square, left side */
+    /* ── Progetti card (originale) ── */
     .app-card{display:flex;flex-direction:row;gap:10px;overflow:hidden;align-items:flex-start}
     .app-card-thumb{width:56px;height:56px;flex-shrink:0;overflow:hidden;border-radius:6px;background:#f0ede6;display:flex;align-items:center;justify-content:center;margin-top:2px}
     .app-card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .app-card-thumb.no-img{background:#f5f2ec}
     .app-card-thumb.no-img img{display:none}
     .app-card-body{flex:1;min-width:0}
-    /* Modal image */
     .app-modal-img{width:100%;max-height:400px;object-fit:cover;border-radius:8px}
     @media(max-width:768px){
         .app-modal{overflow:auto !important;display:flex !important;flex-direction:column !important}
@@ -22,6 +21,140 @@
         .app-modal-img-wrap{min-height:150px !important;height:150px !important}
         .app-modal-img{object-fit:contain !important;object-position:center !important;background:#f0f0f0}
     }
+
+    /* ── Sezione designer ── */
+    .des-section-header{margin:0 0 20px}
+    .des-section-header h2{font-size:1.25rem;font-weight:700;color:#2d2d2a;margin:0 0 6px}
+    .des-section-header p{font-size:.875rem;color:#666;margin:0}
+
+    .des-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+        gap:20px;
+        margin-bottom:56px;
+    }
+
+    .des-card{
+        background:#fff;
+        border-radius:12px;
+        border:1px solid #e8e4dd;
+        overflow:hidden;
+        cursor:pointer;
+        transition:box-shadow .18s, transform .18s;
+        display:flex;
+        flex-direction:column;
+    }
+    .des-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.10);transform:translateY(-2px)}
+
+    .des-card-img-wrap{
+        position:relative;
+        width:100%;
+        aspect-ratio:1/1;
+        overflow:hidden;
+        background:#f0ede6;
+        flex-shrink:0;
+    }
+    .des-card-proj{
+        width:100%;height:100%;object-fit:cover;display:block;
+        transition:transform .3s;
+    }
+    .des-card:hover .des-card-proj{transform:scale(1.04)}
+    .des-card-img-placeholder{
+        width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+        flex-direction:column;gap:8px;color:#ccc;font-size:.72rem;text-align:center;padding:16px;
+    }
+
+    .des-card-avatar{
+        position:absolute;
+        bottom:10px;left:12px;
+        width:48px;height:48px;
+        border-radius:50%;
+        border:2.5px solid #fff;
+        overflow:hidden;
+        background:#e8e4dd;
+        box-shadow:0 2px 8px rgba(0,0,0,.22);
+    }
+    .des-card-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .des-card-body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:5px;flex:1}
+    .des-card-name{font-size:.95rem;font-weight:700;color:#2d2d2a;line-height:1.25}
+    .des-card-role{font-size:.75rem;color:#999;line-height:1.3}
+    .des-card-progetto{font-size:.75rem;color:#5a5a55;margin-top:2px;font-style:italic;line-height:1.35}
+    .des-card-families{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+    .des-fam-tag{
+        font-size:.67rem;font-weight:600;padding:2px 7px;border-radius:10px;
+        background:#eef4f0;color:#2D6A4F;border:1px solid #c3dece;
+        white-space:nowrap;
+    }
+    .des-card-cta{font-size:.75rem;color:#7a6a54;margin-top:auto;padding-top:10px}
+
+    /* ── Modal designer ── */
+    .des-modal-overlay{
+        display:none;position:fixed;inset:0;
+        background:rgba(0,0,0,.55);z-index:1100;
+        align-items:center;justify-content:center;padding:16px;
+    }
+    .des-modal-overlay.active{display:flex}
+    .des-modal{
+        background:#fff;border-radius:16px;
+        max-width:660px;width:100%;
+        max-height:90vh;overflow-y:auto;
+        position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);
+    }
+    .des-modal-close{
+        position:absolute;top:12px;right:14px;
+        background:rgba(255,255,255,.85);border:none;font-size:1.4rem;
+        color:#555;cursor:pointer;z-index:10;line-height:1;
+        padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);
+    }
+    .des-modal-close:hover{background:#fff;color:#222}
+
+    .des-modal-images{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        border-radius:16px 16px 0 0;
+        overflow:hidden;
+        background:#f0ede6;
+        aspect-ratio:2/1;
+    }
+    .des-modal-images.single{grid-template-columns:1fr;aspect-ratio:1/1}
+    .des-modal-img-box{overflow:hidden;background:#f0ede6}
+    .des-modal-img-box img{width:100%;height:100%;object-fit:cover;display:block}
+    .des-modal-img-box.placeholder{
+        display:flex;align-items:center;justify-content:center;
+        flex-direction:column;gap:6px;color:#ccc;font-size:.72rem;
+    }
+
+    .des-modal-body{padding:22px 24px 28px}
+    .des-modal-name{font-size:1.25rem;font-weight:700;color:#2d2d2a;margin:0 0 3px}
+    .des-modal-role{font-size:.82rem;color:#999;margin:0 0 16px}
+    .des-modal-progetto{
+        background:#f5f2ec;border-radius:8px;padding:10px 14px;
+        font-size:.83rem;color:#5a5a55;margin-bottom:16px;line-height:1.5;
+        border-left:3px solid #c3b99a;
+    }
+    .des-modal-progetto strong{color:#2d2d2a;display:block;margin-bottom:3px;
+        font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+    .des-modal-desc{font-size:.855rem;color:#444;line-height:1.68;margin-bottom:18px}
+    .des-modal-label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+        letter-spacing:.07em;color:#2D6A4F;margin-bottom:6px}
+    .des-modal-bio{font-size:.82rem;color:#555;line-height:1.55;margin-bottom:8px}
+    .des-modal-families{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:18px}
+    .des-modal-perche{font-size:.855rem;color:#444;line-height:1.65;margin-bottom:22px}
+    .des-modal-link{
+        display:inline-flex;align-items:center;gap:6px;
+        background:#2D6A4F;color:#fff;text-decoration:none;
+        padding:9px 18px;border-radius:8px;font-size:.83rem;font-weight:600;
+        transition:background .15s;
+    }
+    .des-modal-link:hover{background:#1e4d38}
+
+    @media(max-width:600px){
+        .des-grid{grid-template-columns:1fr 1fr}
+        .des-modal-images{grid-template-columns:1fr;aspect-ratio:1/1}
+        .des-modal-images .des-modal-img-box:last-child:not(:first-child){display:none}
+    }
+    @media(max-width:380px){.des-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
@@ -29,7 +162,30 @@
 <!-- ===== HEADER ===== -->
 <header class="bl-header" id="blHeader"></header>
 
-<!-- ===== MODAL DETTAGLIO ===== -->
+<!-- ===== MODAL DESIGNER ===== -->
+<div class="des-modal-overlay" id="desModal" onclick="closeDesModal(event)">
+    <div class="des-modal" onclick="event.stopPropagation()">
+        <button class="des-modal-close" onclick="closeDesModal()">&times;</button>
+        <div class="des-modal-images" id="desModalImages"></div>
+        <div class="des-modal-body">
+            <div class="des-modal-name"  id="desModalName"></div>
+            <div class="des-modal-role"  id="desModalRole"></div>
+            <div class="des-modal-progetto" id="desModalProgetto"></div>
+            <div class="des-modal-desc"  id="desModalDesc"></div>
+            <div class="des-modal-label">Biomateriali usati</div>
+            <div class="des-modal-bio"   id="desModalBio"></div>
+            <div class="des-modal-families" id="desModalFamilies"></div>
+            <div class="des-modal-label">Perch&#233; &#232; rilevante</div>
+            <div class="des-modal-perche" id="desModalPerche"></div>
+            <a class="des-modal-link" id="desModalLink" href="#" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                <span id="desModalLinkText">Visita il sito</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL PROGETTI ===== -->
 <div class="app-modal-overlay" id="appModal" onclick="closeModal(event)">
     <div class="app-modal" onclick="event.stopPropagation()">
         <button class="app-modal-close" onclick="closeModal()">&times;</button>
@@ -62,28 +218,34 @@
 
 <!-- ===== CONTENUTO PAGINA ===== -->
 <div class="bl-page-content">
+
+    <!-- DESIGNER -->
+    <div class="bl-section-title des-section-header">
+        <h2>Designer &amp; Ricercatori</h2>
+        <p>Chi ha costruito un linguaggio attorno ai biomateriali. Clicca per saperne di pi&#249;.</p>
+    </div>
+    <div class="des-grid" id="desGrid"></div>
+
+    <!-- PROGETTI -->
     <div class="bl-section-title">
         <h1>Progetti Reali</h1>
         <p>Chi usa i biomateriali nel mondo reale? Aziende, designer e ricercatori come ispirazione per i tuoi esperimenti. Clicca su un progetto per saperne di piu.</p>
     </div>
 
-    <!-- FILTRI CATEGORIA -->
     <div class="app-toolbar">
         <div class="ing-filters" id="appFilters">
             <span class="ing-filter active" data-cat="ALL" onclick="filterApps(null)" id="appFilterAll">Tutti</span>
-            <span class="ing-filter" data-cat="packaging" onclick="filterApps('packaging')">Packaging</span>
-            <span class="ing-filter" data-cat="gioiello" onclick="filterApps('gioiello')">Gioiello</span>
-            <span class="ing-filter" data-cat="tessuto" onclick="filterApps('tessuto')">Tessuto / Pelle</span>
-            <span class="ing-filter" data-cat="pannello" onclick="filterApps('pannello')">Pannello</span>
+            <span class="ing-filter" data-cat="packaging"       onclick="filterApps('packaging')">Packaging</span>
+            <span class="ing-filter" data-cat="gioiello"        onclick="filterApps('gioiello')">Gioiello</span>
+            <span class="ing-filter" data-cat="tessuto"         onclick="filterApps('tessuto')">Tessuto / Pelle</span>
+            <span class="ing-filter" data-cat="pannello"        onclick="filterApps('pannello')">Pannello</span>
             <span class="ing-filter" data-cat="design_scultura" onclick="filterApps('design_scultura')">Design / Scultura</span>
-            <span class="ing-filter" data-cat="didattica" onclick="filterApps('didattica')">Didattica / Kit</span>
+            <span class="ing-filter" data-cat="didattica"       onclick="filterApps('didattica')">Didattica / Kit</span>
         </div>
         <input type="text" class="mat-search" id="appSearch" placeholder="Cerca progetto, materiale..." oninput="renderApps()">
     </div>
 
     <div class="app-count" id="appCount">0 progetti</div>
-
-    <!-- GRIGLIA CARD -->
     <div class="app-grid" id="appGrid"></div>
 </div>
 
@@ -93,295 +255,467 @@
     <p class="bl-footer-credit">Sviluppato con <a href="https://www.anthropic.com" target="_blank" rel="noopener">Claude AI</a> by Anthropic</p>
 </footer>
 
-<!-- ===== CORE ===== -->
 <script src="database_biomateriali_v11.js"></script>
 <script src="biolab-core.js"></script>
 
-<!-- ===== DATI E JS PAGINA ===== -->
+<!-- ===== DESIGNER JS ===== -->
 <script>
 (function() {
     'use strict';
 
-    // ---- CATEGORIE ----
-    // Categorie: icon è UI-only, il resto viene da ESEMPI_REALI.categorie nel DB
+    var IMG_PROJ = '../asset/progetti/';
+    var IMG_PORT = '../asset/ritratti/';
+
+    var DESIGNER = [
+        {
+            slug: 'suzanne_lee',
+            nome: 'Suzanne Lee',
+            ruolo: 'Designer, imprenditrice, consulente',
+            citta: 'Londra / New York',
+            progetto: 'BioCouture (2003) \u2014 giacca coltivata da cellulosa batterica',
+            desc: 'Suzanne Lee \u00e8 la persona che ha dimostrato per prima che si pu\u00f2 letteralmente coltivare un indumento in una vasca da bagno. Nel 2003, partendo dalla ricerca sulla fermentazione del kombucha, ha sviluppato BioCouture: una tecnica per far crescere pellicole di cellulosa batterica in soluzioni di t\u00e8 verde zuccherato, ottenendo fogli compatti e resistenti lavorabili come tessuto o cuoio. Nel 2014 ha fondato Biofabricate, oggi la principale piattaforma globale per l\u2019innovazione nei biomateriali. Ha collaborato con Stella McCartney, Adidas, H&M Foundation e NASA, ed \u00e8 TED Senior Fellow.',
+            biomateriali: 'Cellulosa batterica cresciuta da SCOBY in soluzione zuccherata. Il materiale finale \u00e8 un foglio denso di nanofibre di cellulosa pura, senza additivi chimici.',
+            famiglie: ['COLTURA (SCOBY)'],
+            perche: '\u00c8 il caso pi\u00f9 diretto di come un ingrediente vivo (COLTURA) produca un materiale strutturale senza matrici n\u00e9 reticolanti aggiuntivi. Utile per esplorare le variabili del processo: temperatura, pH, tempo di crescita, spessore del film.',
+            sito: 'https://biofabricate.co'
+        },
+        {
+            slug: 'maurizio_montalti',
+            nome: 'Maurizio Montalti',
+            ruolo: 'Designer, ricercatore, co-fondatore Mogu',
+            citta: 'Amsterdam',
+            progetto: 'Growing Lab (2011\u2013) \u2014 oggetti e pannelli da micelio + scarti agricoli',
+            desc: 'Maurizio Montalti lavora con il micelio da quando era ancora un materiale quasi sconosciuto al design. Con Officina Corpuscoli ad Amsterdam ha sviluppato Growing Lab: vasi, lampade e pannelli ottenuti facendo crescere filamenti fungini attorno a substrati di scarti agricoli (paglia, bagassa, lolla di riso). Il micelio lega le fibre dall\u2019interno, senza colle n\u00e9 pressatura a caldo. Nel 2016 ha co-fondato Mogu, che ha industrializzato il processo per pannelli fonoassorbenti e pavimentazioni in tutta Europa.',
+            biomateriali: 'Micelio di funghi saprofiti (Ganoderma, Pleurotus) su substrato di scarti agricoli. Nessun legante chimico: il micelio stesso crea la matrice strutturale intrecciandosi tra le fibre.',
+            famiglie: ['COLTURA (micelio)', 'CARICA (paglia, lolla di riso, bagassa)'],
+            perche: 'Uno dei migliori esempi di come la famiglia COLTURA interagisca con la famiglia CARICA. Variare il tipo di carica cambia densit\u00e0, texture e rigidit\u00e0 del composito finale. Il suo approccio modulare \u2014 crescita in stampi \u2014 \u00e8 replicabile in laboratorio con tempi e costi contenuti.',
+            sito: 'https://corpuscoli.com'
+        },
+        {
+            slug: 'elissa_brunato',
+            nome: 'Elissa Brunato',
+            ruolo: 'Designer, ricercatrice, fondatrice Radiant Matter',
+            citta: 'Londra',
+            progetto: 'Bio Iridescent Sequin (2019) \u2014 paillette iridescente da nanocristalli di cellulosa',
+            desc: 'Elissa Brunato ha affrontato uno dei problemi pi\u00f9 fastidiosi della moda sostenibile: le paillettes tradizionali sono dischi di plastica metallizzata non biodegradabile. La sua risposta \u00e8 il Bio Iridescent Sequin: una pailletta da nanocristalli di cellulosa (CNC) che produce colori iridescenti attraverso la struttura cristallina, senza pigmenti n\u00e9 rivestimenti metallici. Il colore \u00e8 puramente strutturale, come nelle ali delle farfalle Morpho. Il materiale \u00e8 compostabile in ambiente domestico. Ha poi fondato Radiant Matter, collaborando con RISE (Svezia) e Stella McCartney.',
+            biomateriali: 'Nanocristalli di cellulosa (CNC) estratti da biomassa legnosa o cotone. I cristalli si auto-organizzano in strutture elicoidali che diffrangono la luce producendo iridescenza senza pigmenti.',
+            famiglie: ['CARICA (cellulosa nanocristallina)'],
+            perche: 'Introduce il concetto di colore strutturale: non una sostanza aggiunta ma una propriet\u00e0 emergente dall\u2019organizzazione della materia. La cellulosa non solo come rinforzo meccanico ma come elemento estetico funzionale. Stimola domande sulla differenza tra colorare un materiale e costruire un materiale che \u00e8 gi\u00e0 colorato.',
+            sito: 'https://elissabrunato.com'
+        },
+        {
+            slug: 'tjeerd_veenhoven',
+            nome: 'Tjeerd Veenhoven',
+            ruolo: 'Designer, ricercatore, attivista dei materiali',
+            citta: 'Paesi Bassi',
+            progetto: 'AlgaeFabrics (2013), Palmleather (2010), HuisVeendam (2015)',
+            desc: 'Tjeerd Veenhoven ha esplorato la gamma pi\u00f9 ampia di biomateriali vegetali, con un approccio radicato nel contesto locale e nella giustizia sociale. Con AlgaeFabrics ha sviluppato un filato dall\u2019alga Cladophora, che infesta i laghi olandesi e contiene fino al 70% di cellulosa cristallina. Con Palmleather ha ammorbidito foglie di palma Areca fino a ottenere un materiale simile al cuoio. Con HuisVeendam ha prodotto laminati da amido di patata coinvolgendo comunit\u00e0 rurali in difficolt\u00e0 economica. Ha vinto il Global Change Award H&M Foundation 2015.',
+            biomateriali: 'Cellulosa da alghe Cladophora, foglie di palma Areca, amido di patata. Materiali processati per via meccanica e termica, senza trasformazione chimica.',
+            famiglie: ['POLISACCARIDE_NEUTRO (amido di patata)', 'COLTURA (alghe Cladophora)'],
+            perche: 'Mostra come la stessa famiglia chimica (POLISACCARIDE_NEUTRO) produca output radicalmente diversi a seconda del processo: l\u2019amido di patata pu\u00f2 diventare plastica rigida, film flessibile, adesivo, o pannello composito. Il suo approccio geografico spinge a pensare alle materie prime disponibili localmente.',
+            sito: 'https://tjeerdveenhoven.com'
+        },
+        {
+            slug: 'neri_oxman',
+            nome: 'Neri Oxman',
+            ruolo: 'Architetta, designer, ricercatrice (MIT Media Lab 2010\u20132021)',
+            citta: 'New York',
+            progetto: 'Aguahoja I\u2013III (2018\u20132019) \u2014 padiglioni da chitosano stampati in 3D',
+            desc: 'Neri Oxman ha coniato il termine Material Ecology per descrivere una pratica in cui i materiali sono trattati come sistemi biologici viventi. Al MIT, con il gruppo Mediated Matter, ha esplorato la stampa 3D di biomateriali a scala architettonica. I padiglioni Aguahoja, alti diversi metri, sono stampati con gelatine di chitosano, cellulosa e pectina in concentrazioni variabili, producendo gradienti di rigidit\u00e0 e trasparenza che imitano i gusci di granchio. Completamente biodegradabili: si dissolvono in acqua in poche ore. Le sue opere sono nelle collezioni di MoMA, SFMOMA e Centre Pompidou.',
+            biomateriali: 'Chitosano (da esoscheletro di crostacei) come matrice principale, combinato con cellulosa e pectina in concentrazioni variabili per creare gradienti di propriet\u00e0 meccaniche.',
+            famiglie: ['POLICATIONE (chitosano)', 'POLISACCARIDE_ANIONICO (pectina)', 'CARICA (cellulosa)'],
+            perche: 'Dimostra come variare la concentrazione di un ingrediente lungo un gradiente spaziale produca propriet\u00e0 meccaniche completamente diverse \u2014 rigido dove serve struttura, flessibile dove serve movimento. Un\u2019introduzione potente al concetto di material programming: non una ricetta uniforme ma una grammatica di variazioni.',
+            sito: 'https://oxman.com'
+        },
+        {
+            slug: 'charlotte_mccurdy',
+            nome: 'Charlotte McCurdy',
+            ruolo: 'Designer, ricercatrice, docente Stanford d.school',
+            citta: 'New York / Stanford',
+            progetto: 'After Ancient Sunlight (2019) \u2014 impermeabile carbon-negative da alghe marine',
+            desc: 'Charlotte McCurdy ha costruito un impermeabile da un materiale mai esistito: una bioplastica al 100% da alghe marine, senza mais, senza amido, senza materie prime terrestri. Il progetto parte da una critica precisa: i bioplastici di prima generazione competono con il cibo e richiedono terra coltivabile. Le alghe crescono nell\u2019oceano senza terreno n\u00e9 fertilizzanti, assorbendo CO\u2082 direttamente dall\u2019acqua \u2014 il materiale \u00e8 carbon-negative. Ha presentato il progetto alla Cooper Hewitt Triennial e al Design Museum di Londra. Oggi insegna al d.school di Stanford.',
+            biomateriali: 'Biopolimeri estratti da alghe marine brune (alginati e fucoidani). Nessuna materia prima terrestre. Processo di estrazione e casting sviluppato in laboratorio.',
+            famiglie: ['POLISACCARIDE_ANIONICO (alginati e fucoidani da alghe brune)'],
+            perche: 'Il caso pi\u00f9 radicale di come la famiglia POLISACCARIDE_ANIONICO possa diventare matrice strutturale autonoma, non additivo o modificatore. Spinge a ragionare sull\u2019intera filiera: da dove viene l\u2019ingrediente, quanto costa estrattivamente, cosa succede a fine vita.',
+            sito: 'https://charlottemccurdy.com'
+        },
+        {
+            slug: 'julia_lohmann',
+            nome: 'Julia Lohmann',
+            ruolo: 'Designer, professoressa Aalto University',
+            citta: 'Helsinki',
+            progetto: 'Department of Seaweed (2013, V&A Museum) \u2014 alga kelp come co-designer',
+            desc: 'Julia Lohmann ha fondato il Department of Seaweed nel 2013, durante la sua residenza al Victoria & Albert Museum: un\u2019iniziativa transdisciplinare che riunisce designer, scienziati e artigiani per esplorare le alghe come materiale del futuro. La sua installazione Oki Naganode \u00e8 una struttura scultorea di alga Naga trattata con glicerina per mantenerla flessibile e traslucida \u2014 un materiale che sembra al tempo stesso cuoio e vetro. Non tratta le alghe come risorsa da estrarre ma come organismo con cui co-progettare. Nel 2024 \u00e8 stata nominata Honorary Royal Designer for Industry dalla Royal Society of Arts.',
+            biomateriali: 'Alghe macroalghe marine (kelp giapponese Naga, Saccharina latissima) trattate con glicerina per mantenerle flessibili dopo l\u2019essiccazione. Il materiale viene condizionato fisicamente, non trasformato chimicamente.',
+            famiglie: ['POLISACCARIDE_ANIONICO (alginati nelle alghe kelp)', 'PLASTIFICANTE (glicerina)'],
+            perche: 'Introduce il concetto di agency del materiale: non \u00e8 solo il designer a progettare \u2014 \u00e8 il comportamento dell\u2019alga, la sua struttura, i suoi limiti fisici che determinano la forma finale. Per chi tende a pensare al materiale come qualcosa da piegare alla volont\u00e0 del progetto, questa prospettiva ribaltata \u00e8 preziosa.',
+            sito: 'https://julialohmann.co.uk'
+        },
+        {
+            slug: 'uyen_tran',
+            nome: 'Uyen Tran',
+            ruolo: 'Designer, fondatrice T\u00f4mTex',
+            citta: 'New York (da \u0110\u00e0 N\u1eb5ng, Vietnam)',
+            progetto: 'T\u00f4mTex (2020) \u2014 tessuto-pelle da chitosano di crostacei e fondi di caff\u00e8',
+            desc: 'Uyen Tran \u00e8 cresciuta a \u0110\u00e0 N\u1eb5ng, dove l\u2019industria conciaria \u00e8 al tempo stesso principale fonte di lavoro e principale causa di inquinamento idrico. A Parsons ha sviluppato T\u00f4mTex: un materiale alternativo al cuoio da due scarti alimentari \u2014 gusci di crostacei e fondi di caff\u00e8. Dal chitosano ottenuto dai gusci si ricava una matrice filmogena, i fondi di caff\u00e8 aggiungono struttura e texture. Il risultato \u00e8 cucibile, compostabile in pochi mesi, privo di concia e di backing sintetico. Ha vinto il CFDA Innovation Prize ed \u00e8 finalista del LVMH Innovation Award.',
+            biomateriali: 'Chitosano estratto da gusci di crostacei come matrice principale. Fondi di caff\u00e8 esausti come carica strutturale e cromatica. Pigmenti naturali per la colorazione.',
+            famiglie: ['POLICATIONE (chitosano)', 'CARICA (fondi di caff\u00e8)', 'COLORANTE (carbone, ocra)'],
+            perche: 'Un caso di studio diretto per la combinazione POLICATIONE + CARICA: il chitosano fa da matrice filmogena, i fondi di caff\u00e8 da rinforzo e colorante naturale. Una versione semplificata \u00e8 replicabile in laboratorio \u2014 il chitosano \u00e8 in catalogo, i fondi di caff\u00e8 sono gratis. \u00c8 anche un caso eccellente per discutere il design circolare: il materiale conosce gi\u00e0 la sua via di fine vita prima di essere prodotto.',
+            sito: 'https://tomtex.co'
+        },
+        {
+            slug: 'aniela_hoitink',
+            nome: 'Aniela Hoitink',
+            ruolo: 'Designer, fondatrice NEFFA / MycoTEX',
+            citta: 'Amsterdam',
+            progetto: 'MycoTEX / NEFFA (2014) \u2014 abiti senza cuciture cresciuti da micelio puro',
+            desc: 'Aniela Hoitink ha trovato nel micelio un materiale semifluido compatibile con un processo di produzione addizionale senza taglio n\u00e9 cucitura. Dal 2014, collaborando con il prof. Han W\u00f6sten dell\u2019Universit\u00e0 di Utrecht, ha sviluppato MycoTEX: micelio puro cresciuto in stampi modulari a disco, assemblati direttamente sulla forma del corpo. Zero tessuto tagliato, zero scarti. L\u2019indumento si ripara sostituendo singoli moduli e si composta a fine vita. Ha vinto il Global Change Award H&M Foundation 2018.',
+            biomateriali: 'Micelio puro di Ganoderma lucidum cresciuto in moduli circolari, senza substrato aggiuntivo. Il micelio stesso \u00e8 sia matrice che struttura del tessuto finale.',
+            famiglie: ['COLTURA (micelio puro)'],
+            perche: 'Porta il micelio a un livello diverso rispetto ai compositi su substrato: qui il fungo non lega scarti ma \u00e8 esso stesso il materiale. Vale la pena confrontare i due approcci: micelio + substrato (pi\u00f9 controllabile, pi\u00f9 accessibile) vs micelio puro (propriet\u00e0 estetiche diverse). Il processo modulare stimola riflessioni sul design come sistema di assemblaggio biologico.',
+            sito: 'https://neffa.nl'
+        },
+        {
+            slug: 'eric_klarenbeek',
+            nome: 'Eric Klarenbeek & Maartje Dros',
+            ruolo: 'Studio di design',
+            citta: 'Paesi Bassi',
+            progetto: 'Local Algae Biopolymer (2017) \u2014 mobili da biopolimeri di alghe del Mare del Nord',
+            desc: 'Eric Klarenbeek e Maartje Dros hanno costruito una filiera locale completa: dall\u2019acqua di mare al prodotto finito, tutto entro pochi chilometri. Con Local Algae Biopolymer, in collaborazione con l\u2019istituto oceanografico NIOZ, coltivano alghe kelp nel Mare del Nord, estraggono polisaccaridi e li trasformano in bioplastiche stampabili in 3D per produrre mobili e oggetti di design. Km-zero non come slogan ma come sistema produttivo verificabile. Nel 2018 hanno ricevuto il New Material Award.',
+            biomateriali: 'Polisaccaridi da alghe del Mare del Nord: alginati da Saccharina latissima, agar da alghe rosse Ulva. Trasformati in bioplastiche per stampa 3D FDM.',
+            famiglie: ['POLISACCARIDE_ANIONICO (alginati da alghe brune)', 'POLISACCARIDE_NEUTRO (agar da alghe rosse)', 'COLTURA (alghe kelp, Ulva)'],
+            perche: 'Chiude il cerchio tra POLISACCARIDE_ANIONICO e POLISACCARIDE_NEUTRO in un unico sistema produttivo. Utile per confrontare le due famiglie: alginati (gelificazione ionica con Ca\u00b2\u207a) vs agar (gelificazione termica reversibile). Il modello km-zero \u00e8 uno spunto per ragionare sul sourcing degli ingredienti \u2014 da dove viene l\u2019alginato che compriamo, quanto costa in termini ambientali.',
+            sito: 'https://klarenbeekdros.com'
+        }
+    ];
+
+    // Nomi file personalizzati (solo dove divergono dalla convenzione slug)
+    var PROJ_OVERRIDE = {
+        'suzanne_lee': 'imm_progetto2_suzanne_lee.jpg'
+    };
+
+    function projImg(slug) {
+        return IMG_PROJ + (PROJ_OVERRIDE[slug] || 'imm_progetto_' + slug + '.jpg');
+    }
+    function portImg(slug) {
+        return IMG_PORT + 'imm_designer_' + slug + '.jpg';
+    }
+
+    function renderDesigner() {
+        var html = '';
+        DESIGNER.forEach(function(d, i) {
+            var pImg = projImg(d.slug);
+            var rImg = portImg(d.slug);
+            var famTags = d.famiglie.map(function(f) {
+                var label = f.split('(')[0].trim().replace(/_/g,' ');
+                return '<span class="des-fam-tag">' + esc(label) + '</span>';
+            }).join('');
+
+            html += '<div class="des-card" onclick="openDesModal(' + i + ')">';
+            html += '<div class="des-card-img-wrap">';
+            html += '<img class="des-card-proj" src="' + pImg + '" alt="' + esc(d.nome) + '" loading="lazy"'
+                  + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+            html += '<div class="des-card-img-placeholder" style="display:none">'
+                  + '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5">'
+                  + '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>'
+                  + '<path d="M21 15l-5-5L5 21"/></svg>'
+                  + '<span>' + esc(d.nome) + '</span></div>';
+            html += '<div class="des-card-avatar">'
+                  + '<img src="' + rImg + '" alt="Ritratto ' + esc(d.nome) + '" loading="lazy"'
+                  + ' onerror="this.parentElement.style.display=\'none\'">'
+                  + '</div>';
+            html += '</div>';
+            html += '<div class="des-card-body">';
+            html += '<div class="des-card-name">' + esc(d.nome) + '</div>';
+            html += '<div class="des-card-role">' + esc(d.ruolo) + ' \u00b7 ' + esc(d.citta) + '</div>';
+            html += '<div class="des-card-progetto">' + esc(d.progetto) + '</div>';
+            html += '<div class="des-card-families">' + famTags + '</div>';
+            html += '<div class="des-card-cta">Scopri di pi\u00f9 &rarr;</div>';
+            html += '</div></div>';
+        });
+        document.getElementById('desGrid').innerHTML = html;
+    }
+
+    window.openDesModal = function(i) {
+        var d = DESIGNER[i];
+        if (!d) return;
+        var pImg = projImg(d.slug);
+        var rImg = portImg(d.slug);
+
+        var imgWrap = document.getElementById('desModalImages');
+        imgWrap.className = 'des-modal-images';
+        imgWrap.innerHTML =
+            '<div class="des-modal-img-box">'
+          + '<img src="' + pImg + '" alt="' + esc(d.nome) + '"'
+          + ' onerror="this.parentElement.className=\'des-modal-img-box placeholder\';this.remove()">'
+          + '</div>'
+          + '<div class="des-modal-img-box">'
+          + '<img src="' + rImg + '" alt="Ritratto ' + esc(d.nome) + '"'
+          + ' onerror="this.parentElement.className=\'des-modal-img-box placeholder\';this.remove()">'
+          + '</div>';
+
+        document.getElementById('desModalName').textContent    = d.nome;
+        document.getElementById('desModalRole').textContent    = d.ruolo + '  \u00b7  ' + d.citta;
+        document.getElementById('desModalProgetto').innerHTML  = '<strong>Progetto chiave</strong>' + esc(d.progetto);
+        document.getElementById('desModalDesc').textContent    = d.desc;
+        document.getElementById('desModalBio').textContent     = d.biomateriali;
+
+        var famHtml = d.famiglie.map(function(f) {
+            return '<span class="des-fam-tag">' + esc(f) + '</span>';
+        }).join('');
+        document.getElementById('desModalFamilies').innerHTML  = famHtml;
+        document.getElementById('desModalPerche').textContent  = d.perche;
+
+        var linkEl = document.getElementById('desModalLink');
+        linkEl.href = d.sito;
+        var domain = d.sito.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+        document.getElementById('desModalLinkText').textContent = 'Visita ' + domain;
+
+        document.getElementById('desModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeDesModal = function(ev) {
+        if (ev && ev.target !== ev.currentTarget) return;
+        document.getElementById('desModal').classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') { closeDesModal(); if (window.closeModal) closeModal(); }
+    });
+
+    function esc(s) { return !s ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    document.addEventListener('DOMContentLoaded', renderDesigner);
+})();
+</script>
+
+<!-- ===== PROGETTI JS ===== -->
+<script>
+(function() {
+    'use strict';
+
     var CATEGORIE = (function() {
         var icons = {
-            packaging: '\u{1F4E6}', gioiello: '\u{1F48E}', tessuto: '\u{1F9F5}',
-            pannello: '\u{1F9F1}', design_scultura: '\u{1F3A8}', didattica: '\u{1F393}'
+            packaging:'\u{1F4E6}', gioiello:'\u{1F48E}', tessuto:'\u{1F9F5}',
+            pannello:'\u{1F9F1}', design_scultura:'\u{1F3A8}', didattica:'\u{1F393}'
         };
         var cats = {};
         var dbCats = (typeof ESEMPI_REALI !== 'undefined' && ESEMPI_REALI.categorie) || {};
         for (var k in dbCats) {
-            cats[k] = { label: dbCats[k].label, color: dbCats[k].color, bg: dbCats[k].bg, icon: icons[k] || '' };
+            cats[k] = { label:dbCats[k].label, color:dbCats[k].color, bg:dbCats[k].bg, icon:icons[k]||'' };
         }
         return cats;
     })();
 
-    // Progetti: letti dal database (ESEMPI_REALI.progetti) con normalizzazione campi
     var PROGETTI_RAW = (typeof ESEMPI_REALI !== 'undefined' && ESEMPI_REALI.progetti) || [];
     var PROGETTI = PROGETTI_RAW.map(function(p) {
         return {
-            nome: p.nome || '',
-            desc: p.desc || '',
-            base: p.base || '',
-            link: p.link || '',
-            cat: p.cat || p.categoria || '',
-            img: p.img || null,
-            ingredienti: p.ingredienti || [],
-            dettaglio: p.dettaglio || p.desc || '',
-            note: p.note || ''
+            nome: p.nome||'', desc: p.desc||'', base: p.base||'', link: p.link||'',
+            cat: p.cat||p.categoria||'', img: p.img||null,
+            ingredienti: p.ingredienti||[], dettaglio: p.dettaglio||p.desc||'', note: p.note||''
         };
     });
 
-    // Mapping nome progetto → file immagine in asset/imm_applicazioni/
-    // Keys = p.nome.toLowerCase() esatti dal DB (ESEMPI_REALI.progetti)
-    // Values = nomi file esatti in asset/imm_applicazioni/
     var IMG_MAP = {
-        'notpla (ooho)':                            'notpla.jpg',
-        'shellworks':                               'shellworks.jpg',
-        'ecovative mushroom packaging':             'ecovative-packaging.jpg',
-        'galalite (storica)':                       'galalite2.jpg',
-        'shell homage (billie van katwijk)':        'shell-homage.jpg',
-        'margarita talep':                          'margarita-talep.jpg',
-        'vegea':                                    'vegea.jpg',
-        'pinatex (ananas anam)':                    'pinatex.jpg',
-        'desserto':                                 'desserto.jpg',
-        'tomtex':                                   'tomtex.jpg',
-        'mylo (bolt threads)':                      'mylo.jpg',
-        'reishi (mycoworks)':                       'reishi.jpg',
-        'celium (polybion)':                        'celium2.jpg',
-        'biocouture / biofabricate (suzanne lee)':  'biocouture.jpg',
-        'chip[s] board':                            'chips-board.jpg.pn.jpg',
-        'natural fiber welding':                    'nfw.jpg',
-        'neri oxman \u2014 vespers':                'oxman-vespers3.jpg',
-        'neri oxman \u2014 aguahoja':               'oxman-aguahoja.jpg',
-        'ponto biodesign':                          'Ponto-Biodesign.jpg',
-        'hy-fi tower (the living)':                 'hyfi.jpg',
-        'myco-type (risd)':                         'myco-type.jpg',
-        'fabricademy':                              'fabricademy.jpg',
-        'grow.bio (ecovative)':                     'grow-bio(ecovative).jpg',
-        'grown.bio':                                'grow-bio.jpg',
+        'notpla (ooho)':'notpla.jpg',
+        'shellworks':'shellworks.jpg',
+        'ecovative mushroom packaging':'ecovative-packaging.jpg',
+        'galalite (storica)':'galalite2.jpg',
+        'shell homage (billie van katwijk)':'shell-homage.jpg',
+        'margarita talep':'margarita-talep.jpg',
+        'vegea':'vegea.jpg',
+        'pinatex (ananas anam)':'pinatex.jpg',
+        'desserto':'desserto.jpg',
+        'tomtex':'tomtex.jpg',
+        'mylo (bolt threads)':'mylo.jpg',
+        'reishi (mycoworks)':'reishi.jpg',
+        'celium (polybion)':'celium2.jpg',
+        'biocouture / biofabricate (suzanne lee)':'biocouture.jpg',
+        'chip[s] board':'chips-board.jpg.pn.jpg',
+        'natural fiber welding':'nfw.jpg',
+        'neri oxman \u2014 vespers':'oxman-vespers3.jpg',
+        'neri oxman \u2014 aguahoja':'oxman-aguahoja.jpg',
+        'ponto biodesign':'Ponto-Biodesign.jpg',
+        'hy-fi tower (the living)':'hyfi.jpg',
+        'myco-type (risd)':'myco-type.jpg',
+        'fabricademy':'fabricademy.jpg',
+        'grow.bio (ecovative)':'grow-bio(ecovative).jpg',
+        'grown.bio':'grow-bio.jpg'
     };
 
     function getImg(nome) {
         if (!nome) return null;
         var low = nome.toLowerCase().trim();
-        // Exact match
         if (IMG_MAP[low]) return IMG_MAP[low];
-        // Partial: nome contains key or key contains nome
         for (var key in IMG_MAP) {
             if (low.indexOf(key) >= 0 || key.indexOf(low) >= 0) return IMG_MAP[key];
         }
-        // Word match: any significant word in nome matches a key
-        var words = low.replace(/[()\/\-,.:]/g, ' ').split(/\s+/).filter(function(w) { return w.length > 3; });
-        for (var w = 0; w < words.length; w++) {
-            for (var key2 in IMG_MAP) {
-                if (key2.indexOf(words[w]) >= 0) return IMG_MAP[key2];
-            }
+        var words = low.replace(/[()\/\-,.:]/g,' ').split(/\s+/).filter(function(w){return w.length>3;});
+        for (var w=0;w<words.length;w++) {
+            for (var k2 in IMG_MAP) { if (k2.indexOf(words[w])>=0) return IMG_MAP[k2]; }
         }
         return null;
     }
 
     var IMG_BASE = '../asset/imm_applicazioni/';
-
     var currentCat = null;
 
-    // ---- INIT ----
     document.addEventListener('DOMContentLoaded', function() {
-        // Debug: log unmatched images
         var allBtn = document.getElementById('appFilterAll');
         if (allBtn) allBtn.textContent = 'Tutti (' + PROGETTI.length + ')';
         renderApps();
     });
 
-    // ---- FILTER ----
     window.filterApps = function(cat) {
         currentCat = cat;
         document.querySelectorAll('#appFilters .ing-filter').forEach(function(el) {
             el.classList.remove('active');
-            if (cat === null && el.dataset.cat === 'ALL') el.classList.add('active');
-            else if (el.dataset.cat === cat) el.classList.add('active');
+            if (cat===null && el.dataset.cat==='ALL') el.classList.add('active');
+            else if (el.dataset.cat===cat) el.classList.add('active');
         });
         renderApps();
     };
 
-    // ---- MODAL ----
-    window.openModal = function(idx) {
-        var p = PROGETTI[idx];
-        if (!p) return;
-        var c = CATEGORIE[p.cat] || { label: p.cat, color: '#666', bg: '#f5f5f5' };
-
-        // Image
-        var imgEl = document.getElementById('modalImg');
-        var phEl = document.getElementById('modalImgPh');
-        var imgFile = p.img || getImg(p.nome);
-        imgEl.style.display = 'none';
-        phEl.style.display = 'flex';
-        if (imgFile) {
-            imgEl.onload = function() { this.style.display = 'block'; phEl.style.display = 'none'; };
-            imgEl.onerror = function() { this.style.display = 'none'; phEl.style.display = 'flex'; };
-            imgEl.src = IMG_BASE + imgFile;
-            imgEl.alt = p.nome;
-        }
-
-        document.getElementById('modalCat').textContent = c.label;
-        document.getElementById('modalCat').style.background = c.bg;
-        document.getElementById('modalCat').style.color = c.color;
-
-        document.getElementById('modalTitle').textContent = p.nome;
-        document.getElementById('modalBase').innerHTML = 'Base materiale: <strong>' + esc(p.base) + '</strong>';
-        document.getElementById('modalBody').textContent = p.dettaglio;
-
-        // Ingredienti — match con DB per rendere aggiungibili al carrello
-        var ingEl = document.getElementById('modalIng');
-        if (p.ingredienti && p.ingredienti.length > 0) {
-            var ingHtml = '<strong>Ingredienti principali:</strong> ';
-            ingHtml += p.ingredienti.map(function(i) {
-            var dbId = _matchIngrediente(i);
-            if (dbId) {
-                var inCart = BioLab.isInCart(dbId);
-                var cls = inCart ? 'app-modal-ing-tag in-cart' : 'app-modal-ing-tag addable';
-                var btn = inCart
-                    ? '<span class="' + cls + '">' + esc(i) + ' <span class="ing-check">&#10003;</span></span>'
-                    : '<span class="' + cls + '" onclick="event.stopPropagation(); _addIngFromApp(\'' + dbId + '\',' + idx + ')" title="Aggiungi al carrello">' + esc(i) + ' <span class="ing-plus">+</span></span>';
-                return btn;
-            }
-            return '<span class="app-modal-ing-tag">' + esc(i) + '</span>';
-        }).join(' ');
-            ingEl.innerHTML = ingHtml;
-            ingEl.style.display = 'block';
-        } else {
-            ingEl.style.display = 'none';
-        }
-
-        // Note
-        var noteEl = document.getElementById('modalNote');
-        if (p.note) {
-            noteEl.style.display = 'block';
-            noteEl.textContent = p.note;
-        } else {
-            noteEl.style.display = 'none';
-        }
-
-        // Link
-        var linkEl = document.getElementById('modalLink');
-        if (p.link) {
-            linkEl.href = p.link;
-            linkEl.style.display = 'inline-flex';
-            var domain = p.link.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-            document.getElementById('modalLinkText').textContent = 'Visita ' + domain;
-        } else {
-            linkEl.style.display = 'none';
-        }
-
-        document.getElementById('appModal').classList.add('active');
-        document.body.style.overflow = 'hidden';
-    };
-
-    window.closeModal = function(ev) {
-        if (ev && ev.target !== ev.currentTarget) return;
-        document.getElementById('appModal').classList.remove('active');
-        document.body.style.overflow = '';
-    };
-
-    // ESC to close
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
-    });
-
-    // ---- RENDER ----
     window.renderApps = function() {
-        var search = (document.getElementById('appSearch').value || '').toLowerCase().trim();
+        var search = (document.getElementById('appSearch').value||'').toLowerCase().trim();
         var indices = [];
-        PROGETTI.forEach(function(p, i) {
-            if (currentCat && p.cat !== currentCat) return;
+        PROGETTI.forEach(function(p,i) {
+            if (currentCat && p.cat!==currentCat) return;
             if (search) {
-                var hay = (p.nome + ' ' + p.desc + ' ' + p.base + ' ' + p.cat + ' ' + (p.ingredienti || []).join(' ')).toLowerCase();
-                if (hay.indexOf(search) === -1) return;
+                var hay = (p.nome+' '+p.desc+' '+p.base+' '+p.cat+' '+(p.ingredienti||[]).join(' ')).toLowerCase();
+                if (hay.indexOf(search)===-1) return;
             }
             indices.push(i);
         });
 
         var grid = document.getElementById('appGrid');
-        if (indices.length === 0) {
-            grid.innerHTML = '<div class="mat-empty">Nessun progetto corrisponde ai filtri</div>';
-            document.getElementById('appCount').textContent = '0 progetti';
+        if (indices.length===0) {
+            grid.innerHTML='<div class="mat-empty">Nessun progetto corrisponde ai filtri</div>';
+            document.getElementById('appCount').textContent='0 progetti';
             return;
         }
 
-        var html = '';
+        var html='';
         indices.forEach(function(i) {
-            var p = PROGETTI[i];
-            var c = CATEGORIE[p.cat] || { label: p.cat, color: '#666', bg: '#f5f5f5' };
-            var imgFile = p.img || getImg(p.nome);
-            html += '<div class="app-card" style="border-left-color:' + c.color + '" onclick="openModal(' + i + ')">';
-            // Thumbnail (small)
+            var p=PROGETTI[i];
+            var c=CATEGORIE[p.cat]||{label:p.cat,color:'#666',bg:'#f5f5f5'};
+            var imgFile=p.img||getImg(p.nome);
+            html+='<div class="app-card" style="border-left-color:'+c.color+'" onclick="openModal('+i+')">';
             if (imgFile) {
-                html += '<div class="app-card-thumb"><img src="' + IMG_BASE + esc(imgFile) + '" alt="' + esc(p.nome) + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\')"></div>';
+                html+='<div class="app-card-thumb"><img src="'+IMG_BASE+esc(imgFile)+'" alt="'+esc(p.nome)+'" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\')"></div>';
             } else {
-                html += '<div class="app-card-thumb no-img"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
+                html+='<div class="app-card-thumb no-img"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
             }
-            html += '<div class="app-card-body">';
-            html += '<div class="app-card-cat" style="background:' + c.bg + ';color:' + c.color + '">' + c.label + '</div>';
-            html += '<div class="app-card-name">' + esc(p.nome) + '</div>';
-            html += '<div class="app-card-desc">' + esc(p.desc) + '</div>';
-            html += '<div class="app-card-base">Base: <strong>' + esc(p.base) + '</strong></div>';
-            if (p.ingredienti && p.ingredienti.length > 0) {
-                html += '<div class="app-card-tags">';
-                p.ingredienti.forEach(function(ing) {
-                    html += '<span class="app-card-tag">' + esc(ing) + '</span>';
-                });
-                html += '</div>';
+            html+='<div class="app-card-body">';
+            html+='<div class="app-card-cat" style="background:'+c.bg+';color:'+c.color+'">'+c.label+'</div>';
+            html+='<div class="app-card-name">'+esc(p.nome)+'</div>';
+            html+='<div class="app-card-desc">'+esc(p.desc)+'</div>';
+            html+='<div class="app-card-base">Base: <strong>'+esc(p.base)+'</strong></div>';
+            if (p.ingredienti&&p.ingredienti.length>0) {
+                html+='<div class="app-card-tags">';
+                p.ingredienti.forEach(function(ing){html+='<span class="app-card-tag">'+esc(ing)+'</span>';});
+                html+='</div>';
             }
-            if (p.note) {
-                html += '<div class="app-card-note">' + esc(p.note) + '</div>';
-            }
-            html += '<div class="app-card-cta">Scopri di piu &rarr;</div>';
-            html += '</div>'; // close body
-            html += '</div>';
+            if (p.note) html+='<div class="app-card-note">'+esc(p.note)+'</div>';
+            html+='<div class="app-card-cta">Scopri di piu &rarr;</div>';
+            html+='</div></div>';
         });
-
-        grid.innerHTML = html;
-        document.getElementById('appCount').textContent = indices.length + ' progetti';
+        grid.innerHTML=html;
+        document.getElementById('appCount').textContent=indices.length+' progetti';
     };
 
-    function esc(s) { return !s ? '' : String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    window.openModal = function(idx) {
+        var p=PROGETTI[idx];
+        if (!p) return;
+        var c=CATEGORIE[p.cat]||{label:p.cat,color:'#666',bg:'#f5f5f5'};
+        var imgEl=document.getElementById('modalImg');
+        var phEl=document.getElementById('modalImgPh');
+        var imgFile=p.img||getImg(p.nome);
+        imgEl.style.display='none'; phEl.style.display='flex';
+        if (imgFile) {
+            imgEl.onload=function(){this.style.display='block';phEl.style.display='none';};
+            imgEl.onerror=function(){this.style.display='none';phEl.style.display='flex';};
+            imgEl.src=IMG_BASE+imgFile; imgEl.alt=p.nome;
+        }
+        document.getElementById('modalCat').textContent=c.label;
+        document.getElementById('modalCat').style.background=c.bg;
+        document.getElementById('modalCat').style.color=c.color;
+        document.getElementById('modalTitle').textContent=p.nome;
+        document.getElementById('modalBase').innerHTML='Base materiale: <strong>'+esc(p.base)+'</strong>';
+        document.getElementById('modalBody').textContent=p.dettaglio;
 
-    // Mapping nomi ingredienti nei progetti → ID nel database
+        var ingEl=document.getElementById('modalIng');
+        if (p.ingredienti&&p.ingredienti.length>0) {
+            var ingHtml='<strong>Ingredienti principali:</strong> ';
+            ingHtml+=p.ingredienti.map(function(ing) {
+                var dbId=_matchIngrediente(ing);
+                if (dbId) {
+                    var inCart=BioLab.isInCart(dbId);
+                    var cls=inCart?'app-modal-ing-tag in-cart':'app-modal-ing-tag addable';
+                    return inCart
+                        ? '<span class="'+cls+'">'+esc(ing)+' <span class="ing-check">&#10003;</span></span>'
+                        : '<span class="'+cls+'" onclick="event.stopPropagation();_addIngFromApp(\''+dbId+'\','+idx+')" title="Aggiungi al carrello">'+esc(ing)+' <span class="ing-plus">+</span></span>';
+                }
+                return '<span class="app-modal-ing-tag">'+esc(ing)+'</span>';
+            }).join(' ');
+            ingEl.innerHTML=ingHtml; ingEl.style.display='block';
+        } else { ingEl.style.display='none'; }
+
+        var noteEl=document.getElementById('modalNote');
+        if (p.note){noteEl.style.display='block';noteEl.textContent=p.note;}
+        else noteEl.style.display='none';
+
+        var linkEl=document.getElementById('modalLink');
+        if (p.link) {
+            linkEl.href=p.link; linkEl.style.display='inline-flex';
+            var domain=p.link.replace(/^https?:\/\//,'').replace(/\/.*$/,'');
+            document.getElementById('modalLinkText').textContent='Visita '+domain;
+        } else { linkEl.style.display='none'; }
+
+        document.getElementById('appModal').classList.add('active');
+        document.body.style.overflow='hidden';
+    };
+
+    window.closeModal = function(ev) {
+        if (ev&&ev.target!==ev.currentTarget) return;
+        document.getElementById('appModal').classList.remove('active');
+        document.body.style.overflow='';
+    };
+
     var ING_MAP = {
-        'alginato': 'alginato', 'agar': 'agar', 'chitosano': 'chitosano',
-        'cloruro di calcio': 'cacl2', 'cacl2': 'cacl2',
-        'caseina (da latte)': 'caseina', 'caseina': 'caseina',
-        'acido acetico': 'aceto', 'amido di patata': 'amido_patata',
-        'scoby': 'scoby', 'cellulosa batterica': 'scoby',
-        'micelio fungino': 'micelio', 'micelio (radici fungine)': 'micelio',
-        'micelio (ganoderma)': 'micelio', 'micelio': 'micelio',
-        'fondi di caffè': 'fondi_caffe', 'fondi di caffe': 'fondi_caffe',
-        'tè zuccherato': 'te_nero', 'te zuccherato': 'te_nero',
-        'formaldeide (storica) o borace': 'borace', 'borace': 'borace',
-        'chitina (da gusci di crostacei)': 'chitosano', 'chitina': 'chitosano',
-        'fibre di cotone riciclato': 'fibre_cotone',
-        'bucce': 'bucce_agrumi', 'coloranti naturali': 'curcuma',
-        'pectina': 'pectina', 'glicerina': 'glicerina'
+        'alginato':'alginato','agar':'agar','chitosano':'chitosano',
+        'cloruro di calcio':'cacl2','cacl2':'cacl2',
+        'caseina (da latte)':'caseina','caseina':'caseina',
+        'acido acetico':'aceto','amido di patata':'amido_patata',
+        'scoby':'scoby','cellulosa batterica':'scoby',
+        'micelio fungino':'micelio','micelio (radici fungine)':'micelio',
+        'micelio (ganoderma)':'micelio','micelio':'micelio',
+        'fondi di caff\u00e8':'fondi_caffe','fondi di caffe':'fondi_caffe',
+        't\u00e8 zuccherato':'te_nero','te zuccherato':'te_nero',
+        'formaldeide (storica) o borace':'borace','borace':'borace',
+        'chitina (da gusci di crostacei)':'chitosano','chitina':'chitosano',
+        'fibre di cotone riciclato':'fibre_cotone',
+        'bucce':'bucce_agrumi','coloranti naturali':'curcuma',
+        'pectina':'pectina','glicerina':'glicerina'
     };
 
     window._matchIngrediente = function(nome) {
         if (!nome) return null;
-        var low = nome.toLowerCase().trim();
+        var low=nome.toLowerCase().trim();
         if (ING_MAP[low]) return ING_MAP[low];
-        // Fuzzy: try partial match
         for (var key in ING_MAP) {
-            if (low.indexOf(key) >= 0 || key.indexOf(low) >= 0) return ING_MAP[key];
+            if (low.indexOf(key)>=0||key.indexOf(low)>=0) return ING_MAP[key];
         }
         return null;
     };
 
-    window._addIngFromApp = function(dbId, modalIdx) {
-        BioLab.addToCart(dbId);
-        BioLab.updateCartBadge();
-        // Re-render modal ingredients to show checkmark
-        openModal(modalIdx);
+    window._addIngFromApp = function(dbId,modalIdx) {
+        BioLab.addToCart(dbId); BioLab.updateCartBadge(); openModal(modalIdx);
     };
+
+    function esc(s){return !s?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 })();
 </script>
