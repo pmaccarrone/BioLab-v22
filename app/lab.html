@@ -698,6 +698,41 @@ document.addEventListener('DOMContentLoaded', function() {
         inProgress: (MATERIALI_DATA.materiali_in_progress || []).length
     });
     loadLabState();
+
+    // ── RICEZIONE DA BIOGAME ──
+    var bgPayload = localStorage.getItem('biogame_to_lab');
+    if (bgPayload) {
+        try {
+            var bg = JSON.parse(bgPayload);
+            // Valido solo se recente (< 60 secondi)
+            if (bg.source === 'biogame' && bg.ingredienti && (Date.now() - bg.timestamp < 60000)) {
+                localStorage.removeItem('biogame_to_lab');
+                // Pulisci tavolo corrente
+                clearTavoloSilent();
+                BioLab.clearCart();
+                // Aggiungi ogni ingrediente al cart e al tavolo
+                bg.ingredienti.forEach(function(item) {
+                    var dbIng = INGREDIENTI_DATA.ingredienti[item.id];
+                    if (!dbIng) return;
+                    BioLab.addToCart({ id: item.id, nome: dbIng.nome, famiglia: dbIng.famiglia });
+                    tavolo.push(item.id);
+                    formulaSelection.add(item.id);
+                    // Dose custom se presente
+                    if (item.dose) {
+                        customDosages[item.id] = item.dose;
+                    }
+                });
+                updateCart();
+                updateTavolo();
+                saveLabState();
+                showToast('Ricetta importata da BioGame (' + bg.ingredienti.length + ' ingredienti)', 'success');
+            } else {
+                localStorage.removeItem('biogame_to_lab');
+            }
+        } catch(e) {
+            localStorage.removeItem('biogame_to_lab');
+        }
+    }
     // Render iniziale tutor (se in modalità tutor o carrello già pieno)
     if (typeof BioLab !== 'undefined' && BioLab.Tutor) {
         BioLab.Tutor.render();
