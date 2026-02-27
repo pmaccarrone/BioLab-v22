@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioGame — Crescite | BioLab</title>
+<link rel="stylesheet" href="biolab.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde:#1B5E20;--verde2:#2E7D32;--verde3:#43A047;--verde-p:#C8E6C9;--verde-bg:#E8F5E9;
+  --ocra:#8D6E00;--ocra-bg:#FFFDE7;
+  --carta:#FAFAF6;--carta2:#F0EDE6;--bordo:#D0CCC3;
+  --ink:#1A1A1A;--ink2:#5D5048;--ink3:#9A8E84;
+  --rosso:#B71C1C;
+  --accent:var(--verde); /* overridden per coltura */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Mono',monospace;background:var(--carta);color:var(--ink);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+header{background:var(--verde);color:white;display:flex;align-items:center;justify-content:space-between;padding:10px 24px;flex-shrink:0}
+.logo{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700}.logo em{font-weight:300;color:var(--verde-p);font-style:italic}
+.logo-sub{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:1px}
+.hbtn{font-family:'DM Mono';font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:white;padding:7px 14px;cursor:pointer}.hbtn:hover{background:rgba(255,255,255,.2)}.hbtn.active{background:rgba(255,255,255,.28);border-color:white}
+
+/* ══ LAYOUT — wider right panel ══ */
+.main{flex:1;display:grid;grid-template-columns:270px 1fr 310px;overflow:hidden}
+
+/* ══ LEFT PANEL ══ */
+.panel-left{background:var(--carta2);border-right:1px solid var(--bordo);display:flex;flex-direction:column;overflow-y:auto}
+.pl-section{padding:14px 16px;border-bottom:1px solid var(--bordo)}
+.pl-title{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:500}
+
+.coltura-chips{display:flex;gap:5px}
+.c-chip{flex:1;padding:9px 4px;border:2px solid var(--bordo);background:white;cursor:pointer;text-align:center;transition:all .25s}
+.c-chip:hover{border-color:var(--verde3);background:var(--verde-bg)}
+.c-chip.sel{border-color:var(--verde);background:var(--verde-bg);box-shadow:0 2px 12px rgba(27,94,32,.12)}
+.c-chip .cc-icon{font-size:1.1rem;margin-bottom:3px}
+.c-chip .cc-name{font-family:'Fraunces',serif;font-size:.76rem;font-weight:700;line-height:1.1}
+.c-chip .cc-sub{font-size:.5rem;color:var(--ink3);margin-top:1px}
+
+/* Choice groups */
+.choice-group{margin-bottom:12px}
+.choice-label{font-size:.6rem;color:var(--ink2);margin-bottom:5px;display:flex;align-items:baseline;gap:5px}
+.choice-label .cl-num{font-family:'Fraunces',serif;font-weight:700;color:var(--verde3);font-size:.7rem}
+.choice-options{display:flex;gap:4px}
+.choice-btn{
+  padding:7px 5px;border:1.5px solid var(--bordo);background:white;
+  font-family:'DM Mono';font-size:.58rem;color:var(--ink2);cursor:pointer;
+  transition:all .2s;line-height:1.2;flex:1;min-width:0;text-align:center;
+  overflow:hidden;
+}
+.choice-btn:hover{border-color:var(--verde3);background:var(--verde-bg);color:var(--ink)}
+.choice-btn.sel{border-color:var(--accent-color,var(--verde));background:var(--accent-color,var(--verde));color:white;font-weight:500}
+.choice-btn .cb-main{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.choice-btn .cb-hint{display:block;font-size:.48rem;opacity:.65;margin-top:1px;font-family:'Fraunces',serif;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.choice-btn.sel .cb-hint{opacity:.85}
+
+/* Slider row */
+.slider-group{margin-bottom:14px}
+.slider-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.slider-label{font-size:.6rem;color:var(--ink2);display:flex;align-items:baseline;gap:5px}
+.slider-label .cl-num{font-family:'Fraunces',serif;font-weight:700;color:var(--verde3);font-size:.7rem}
+.slider-val{font-family:'Fraunces',serif;font-size:.85rem;font-weight:700;font-style:italic}
+.slider-desc{font-size:.5rem;color:var(--ink3);font-family:'Fraunces',serif;font-style:italic;margin-top:1px;margin-bottom:6px}
+.range-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer}
+.range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.2);border:2.5px solid white}
+.slider-ticks{display:flex;justify-content:space-between;margin-top:3px;font-size:.46rem;color:var(--ink3)}
+
+/* ══ CENTER — RADAR ══ */
+.panel-center{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--carta)}
+.radar-wrap{position:relative;width:480px;height:480px}
+.radar-svg{width:100%;height:100%}
+.radar-label{
+  position:absolute;font-family:'Fraunces',serif;font-size:.72rem;font-weight:500;
+  color:var(--ink2);text-align:center;pointer-events:none;
+  transition:all .4s ease;width:90px;
+}
+.radar-label .rl-val{font-size:1.15rem;font-weight:700;display:block;margin-top:1px;transition:color .4s}
+.radar-label .rl-name{font-size:.56rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+.radar-coltura{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;text-align:center;margin-top:8px;opacity:.55;transition:color .4s}
+.radar-sub{font-size:.62rem;color:var(--ink3);text-align:center;margin-top:2px;font-family:'Fraunces',serif;font-style:italic}
+
+/* ══ RIGHT PANEL ══ */
+.panel-right{background:white;border-left:1px solid var(--bordo);display:flex;flex-direction:column;overflow-y:auto}
+.pr-header{padding:14px 18px;border-bottom:1px solid var(--bordo)}
+.pr-title{font-family:'Fraunces',serif;font-size:.95rem;font-weight:700;color:var(--verde)}
+.pr-hint{font-size:.56rem;color:var(--ink3);font-style:italic;font-family:'Fraunces',serif;margin-top:2px}
+.insight-card{padding:13px 18px;border-bottom:1px solid #f0ece6}
+.insight-card:last-child{border-bottom:none}
+.ic-choice{font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;font-weight:500}
+.ic-title{font-family:'Fraunces',serif;font-size:.82rem;font-weight:500;color:var(--ink);margin-bottom:5px}
+.ic-text{font-size:.63rem;color:var(--ink2);line-height:1.6}
+.ic-effect{display:inline-block;font-size:.54rem;padding:2px 7px;margin:3px 3px 0 0;border-radius:2px;font-family:'DM Mono'}
+.ic-effect.pos{background:#E8F5E9;color:var(--verde2)}
+.ic-effect.neg{background:#FFF3E0;color:#E65100}
+.ic-effect.neutral{background:#F5F5F5;color:#757575}
+
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px}
+.empty h3{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--verde);font-weight:300;margin-bottom:8px}
+.empty p{font-size:.68rem;color:var(--ink3);line-height:1.5}
+
+
+/* ── Override per integrazione BioLab ── */
+body { height:auto; overflow:auto; display:block; font-family:'DM Mono',monospace; }
+header { display:none !important; }
+.bg-wrapper { height: calc(100vh - 140px); overflow: hidden; display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+
+<div id="blHeader" class="bl-header"></div>
+
+<div class="bg-wrapper">
+  <div class="main">
+    <div class="panel-left">
+      <div class="pl-section">
+        <div class="pl-title">Coltura</div>
+        <div class="coltura-chips" id="coltura-chips">
+          <div class="c-chip" onclick="selectColtura('scoby')"><div class="cc-icon">◎</div><div class="cc-name">SCOBY</div><div class="cc-sub">cellulosa</div></div>
+          <div class="c-chip" onclick="selectColtura('micelio')"><div class="cc-icon">◉</div><div class="cc-name">Micelio</div><div class="cc-sub">rete fungina</div></div>
+          <div class="c-chip" onclick="selectColtura('spirulina')"><div class="cc-icon">◎</div><div class="cc-name">Spirulina</div><div class="cc-sub">cianobatterio</div></div>
+        </div>
+      </div>
+      <div class="pl-section" id="choices-container"><div class="empty"><p>Scegli una coltura</p></div></div>
+    </div>
+    <div class="panel-center">
+      <div style="font-family:'Fraunces',serif;font-size:.72rem;color:var(--ink3);text-align:center;padding:6px 0 0;font-style:italic;letter-spacing:.05em">BioGame · Crescite</div>
+      <div class="radar-wrap" id="radar-wrap"><svg class="radar-svg" id="radar-svg" viewBox="0 0 480 480"></svg></div>
+      <div class="radar-coltura" id="radar-coltura"></div>
+      <div class="radar-sub" id="radar-sub"></div>
+    </div>
+    <div class="panel-right">
+      <div class="pr-header"><div class="pr-title">Perché</div><div class="pr-hint">Cosa cambiano le tue scelte</div></div>
+      <div id="insights-container"><div class="empty"><p>Le spiegazioni appariranno qui</p></div></div>
+    </div>
+  </div><!-- /main -->
+</div><!-- /bg-wrapper -->
+
+<script src="biolab-core.js"></script>
+<script>
+// ═══════════════════════════════════════
+// ACCENTS per coltura
+// ═══════════════════════════════════════
+const ACCENTS = {
+  scoby: '#C07020',   // warm orange-amber
+  micelio: '#5D4037', // dark earth brown
+  spirulina: '#00796B' // deep teal
+};
+const ACCENT_BG = {
+  scoby: '#FFF3E0',
+  micelio: '#EFEBE9',
+  spirulina: '#E0F2F1'
+};
+const ACCENT_LIGHT = {
+  scoby: 'rgba(192,112,32,.12)',
+  micelio: 'rgba(93,64,55,.10)',
+  spirulina: 'rgba(0,121,107,.10)'
+};
+
+// ═══════════════════════════════════════
+// AXES — 5 per coltura, 3 comuni + 2 specifici
+// ═══════════════════════════════════════
+const AXES = {
+  scoby: [
+    {id:'flex', name:'Flessibilità'},
+    {id:'resist', name:'Resistenza'},
+    {id:'resH2O', name:'Res. acqua'},
+    {id:'trasp', name:'Trasparenza'},
+    {id:'lavorab', name:'Lavorabilità'}
+  ],
+  micelio: [
+    {id:'flex', name:'Flessibilità'},
+    {id:'resist', name:'Resistenza'},
+    {id:'resH2O', name:'Res. acqua'},
+    {id:'leggerezza', name:'Leggerezza'},
+    {id:'isolamento', name:'Isolamento'}
+  ],
+  spirulina: [
+    {id:'flex', name:'Flessibilità'},
+    {id:'resist', name:'Resistenza'},
+    {id:'resH2O', name:'Res. acqua'},
+    {id:'pigmento', name:'Pigmentazione'},
+    {id:'integrab', name:'Integrabilità'}
+  ]
+};
+
+// ═══════════════════════════════════════
+// COLTURE DATA
+// ═══════════════════════════════════════
+const COLTURE = {
+  scoby: {
+    nome:'SCOBY', sotto:'Cellulosa batterica',
+    base:{flex:55, resist:30, resH2O:15, trasp:35, lavorab:60},
+    // SLIDER: durata crescita (giorni)
+    slider:{
+      id:'giorni', label:'Durata crescita', num:'1',
+      min:5, max:35, step:1, val:14, unit:'giorni',
+      ticks:['5','10','14','21','28','35'],
+      desc:'Trascina per esplorare spessore e proprietà',
+      // Continuous effect function
+      effect(v){
+        const t = (v-5)/30; // 0→1
+        return {
+          flex: -t*30,        // più giorni = meno flessibile
+          resist: t*25,       // più giorni = più resistente
+          resH2O: t*15,       // più giorni = più resH2O (acetico)
+          trasp: -t*18,       // più giorni = più opaco
+          lavorab: -t*20      // più giorni = meno lavorabile
+        };
+      },
+      perche(v){
+        if(v<=9) return {titolo:`${v} giorni — pellicola sottile`, testo:'Pellicola di 2-3 mm umida. Molto flessibile, quasi tessuto. Si taglia e cuce facilmente. Ma fragile e sensibile all\'acqua.', effetti:['+flex','+lavorab','−resist']};
+        if(v<=17) return {titolo:`${v} giorni — crescita standard`, testo:'Pellicola di 5-8 mm umida. Buon equilibrio tra flessibilità e resistenza. Punto di partenza consigliato.', effetti:['equilibrato']};
+        if(v<=24) return {titolo:`${v} giorni — pellicola spessa`, testo:'Pellicola densa, 8-12 mm. Più rigida e opaca. Buona per applicazioni strutturali. Più acido acetico = migliore resistenza acqua.', effetti:['+resist','+resH2O','−flex']};
+        return {titolo:`${v} giorni — massimo spessore`, testo:'Pellicola molto densa (>12 mm). Tende a stratificarsi. Dura e poco flessibile. Può essere tagliata in lastre. Odore acetico forte.', effetti:['+resist','+resH2O','−flex','−lavorab']};
+      }
+    },
+    scelte:[
+      {id:'te', label:'Tipo di tè', num:'2',
+        opzioni:[
+          {nome:'Nero', hint:'denso, tannini', val:{resist:+8, trasp:-10, lavorab:0, flex:0, resH2O:+3},
+           perche:{titolo:'Tè nero — tannini abbondanti', testo:'I tannini reticolano le fibre di cellulosa. Pellicola più densa, leggermente brunita, migliore resistenza meccanica.', effetti:['+resist','+resH2O','−trasp']}},
+          {nome:'Verde', hint:'leggero, chiaro', val:{resist:-5, trasp:+15, lavorab:+5, flex:+8, resH2O:-3},
+           perche:{titolo:'Tè verde — meno tannini', testo:'Pellicola più chiara e sottile. Più flessibile ma meno resistente. Colore pallido, quasi lattiginoso.', effetti:['+trasp','+flex','−resist']}},
+          {nome:'Oolong', hint:'via di mezzo', val:{resist:+3, trasp:+2, lavorab:+2, flex:+3, resH2O:0},
+           perche:{titolo:'Oolong — ossidazione parziale', testo:'Via di mezzo tra nero e verde. Tannini moderati, colore ambrato leggero. Buon compromesso.', effetti:['equilibrato']}}
+        ]
+      },
+      {id:'essiccazione', label:'Essiccazione', num:'3',
+        opzioni:[
+          {nome:'Umido', hint:'morbido, deperibile', val:{flex:+15, resist:-15, trasp:-5, resH2O:-20, lavorab:+15},
+           perche:{titolo:'Nessuna essiccazione', testo:'Morbido, pieghevole, si modella. Si degrada in giorni. Per installazioni temporanee o stampaggio.', effetti:['+flex','+lavorab','−resH2O','−resist']}},
+          {nome:'All\'aria', hint:'pergamena', val:{flex:-10, resist:+10, trasp:+15, resH2O:+5, lavorab:0},
+           perche:{titolo:'Essiccazione all\'aria', testo:'Perde ~75% spessore. Diventa traslucida tipo pergamena. Abbastanza rigida ma piegabile se reidratata.', effetti:['+trasp','+resist','−flex']}},
+          {nome:'Ventilata', hint:'rapida, rigido', val:{flex:-18, resist:+18, trasp:+10, resH2O:+15, lavorab:-8},
+           perche:{titolo:'Essiccazione ventilata 40°C', testo:'Più rapida e uniforme. Materiale più rigido, superficie liscia. Meno lavorabile a freddo.', effetti:['+resist','+resH2O','−flex','−lavorab']}}
+        ]
+      },
+      {id:'post', label:'Post-processing', num:'4',
+        opzioni:[
+          {nome:'Nessuno', hint:'naturale', val:{flex:0, resist:0, trasp:0, resH2O:0, lavorab:0},
+           perche:{titolo:'Nessun trattamento', testo:'Il materiale resta nel suo stato naturale. Utile per capire le proprietà di base.', effetti:['nessuna modifica']}},
+          {nome:'Glicerina', hint:'morbido, cucibile', val:{flex:+20, resist:-8, trasp:+5, resH2O:-5, lavorab:+20},
+           perche:{titolo:'Bagno in glicerina', testo:'Penetra nelle fibre, le mantiene mobili. Morbido quasi come cuoio. Si cuce, piega, avvolge. Ma diventa igroscopico.', effetti:['+flex','+lavorab','−resist','−resH2O']}},
+          {nome:'Tannini', hint:'resistente, scuro', val:{flex:-5, resist:+5, trasp:-20, resH2O:+20, lavorab:-3},
+           perche:{titolo:'Concia con tannini', testo:'Come la concia del cuoio: reticola le proteine residue. Colore bruno intenso. Miglior resistenza all\'acqua.', effetti:['+resH2O','−trasp']}},
+          {nome:'Cera d\'api', hint:'impermeabile', val:{flex:-3, resist:+3, trasp:-12, resH2O:+18, lavorab:-5},
+           perche:{titolo:'Cera d\'api', testo:'Coating superficiale idrofobo. Non penetra, agisce in superficie. Finitura satinata.', effetti:['+resH2O','−trasp']}}
+        ]
+      }
+    ]
+  },
+
+  micelio: {
+    nome:'Micelio', sotto:'Rete fungina su substrato',
+    base:{flex:10, resist:35, resH2O:15, leggerezza:70, isolamento:65},
+    slider:{
+      id:'colonizzazione', label:'Colonizzazione', num:'2',
+      min:50, max:110, step:5, val:100, unit:'%',
+      ticks:['50%','70%','100%','110%'],
+      desc:'100% = tutto bianco. Oltre = pelle superficiale',
+      effect(v){
+        const t = (v-50)/60; // 0→1
+        return {
+          flex: t<0.5 ? t*10 : -(t-0.5)*20,
+          resist: t*25 - 5,
+          resH2O: t*15 - 5,
+          leggerezza: -t*15,
+          isolamento: t<0.8 ? t*5 : -(t-0.8)*30
+        };
+      },
+      perche(v){
+        if(v<70) return {titolo:`${v}% — colonizzazione parziale`, testo:'Il micelio non ha legato tutto il substrato. Blocco friabile, fragile ai bordi. Rapido ma materiale debole.', effetti:['−resist','−resH2O','fragile']};
+        if(v<95) return {titolo:`${v}% — quasi completa`, testo:'La maggior parte del substrato è colonizzata. Ancora qualche zona visibile. Buona coesione ma non ottimale.', effetti:['in progresso']};
+        if(v<=105) return {titolo:`${v}% — completa`, testo:'Tutto bianco. Rete continua. Punto di raccolta ottimale per la maggior parte delle applicazioni.', effetti:['ottimale']};
+        return {titolo:`${v}% — colonizzazione estesa`, testo:'Il micelio si addensa, forma "pelle" superficiale. Più compatto ma rischio fruttificazione (funghi che spuntano).', effetti:['+resist','−leggerezza','rischio frutti']};
+      }
+    },
+    scelte:[
+      {id:'substrato', label:'Substrato', num:'1',
+        opzioni:[
+          {nome:'Segatura', hint:'compatto, denso', val:{resist:+15, flex:-5, resH2O:+5, leggerezza:-15, isolamento:-5},
+           perche:{titolo:'Segatura hardwood', testo:'Fibra di legno duro → composito compatto e resistente. Pesante ma meccanicamente forte.', effetti:['+resist','−leggerezza']}},
+          {nome:'Fondi caffè', hint:'veloce, nutriente', val:{resist:+5, flex:+5, resH2O:0, leggerezza:+5, isolamento:+5},
+           perche:{titolo:'Fondi di caffè', testo:'Già pastorizzati dal brewing. Colonizzazione rapida grazie ai nutrienti residui. Risultato equilibrato.', effetti:['veloce','equilibrato']}},
+          {nome:'Paglia', hint:'leggero, isolante', val:{resist:-5, flex:+10, resH2O:-5, leggerezza:+20, isolamento:+15},
+           perche:{titolo:'Paglia tritata', testo:'Fibre cave e leggere. Eccellente isolante termico/acustico. Molto leggero. Meno resistente.', effetti:['+leggerezza','+isolamento','−resist']}},
+          {nome:'Mix', hint:'segatura + caffè', val:{resist:+10, flex:0, resH2O:+3, leggerezza:-5, isolamento:+5},
+           perche:{titolo:'Mix segatura + caffè', testo:'Densità della segatura + velocità del caffè. Buon compromesso pratico.', effetti:['+resist','equilibrato']}}
+        ]
+      },
+      {id:'compressione', label:'Compressione', num:'3',
+        opzioni:[
+          {nome:'Leggera', hint:'poroso, isolante', val:{resist:-5, flex:+5, resH2O:-3, leggerezza:+15, isolamento:+15},
+           perche:{titolo:'Compressione leggera', testo:'Struttura porosa conservata. Massimo potere isolante e minimo peso. Meno resistente allo schiacciamento.', effetti:['+leggerezza','+isolamento','−resist']}},
+          {nome:'Media', hint:'equilibrato', val:{resist:+5, flex:0, resH2O:+3, leggerezza:0, isolamento:0},
+           perche:{titolo:'Compressione media', testo:'Riduce spessore del 30-40%. Buon compromesso densità/porosità. Tiene la forma nello stampo.', effetti:['equilibrato']}},
+          {nome:'Forte', hint:'denso, strutturale', val:{resist:+18, flex:-10, resH2O:+12, leggerezza:-20, isolamento:-15},
+           perche:{titolo:'Compressione forte', testo:'Blocco denso, simile a pannello truciolare. Perde proprietà isolanti ma guadagna resistenza meccanica.', effetti:['+resist','+resH2O','−leggerezza','−isolamento']}}
+        ]
+      },
+      {id:'post', label:'Finitura', num:'4',
+        opzioni:[
+          {nome:'Nessuna', hint:'naturale', val:{resist:0, flex:0, resH2O:0, leggerezza:0, isolamento:0},
+           perche:{titolo:'Nessun trattamento', testo:'Blocco disattivato (cotto 70-80°C). Superficie opaca, colore del substrato.', effetti:['nessuna modifica']}},
+          {nome:'Pressa calda', hint:'skin, +densità', val:{resist:+20, flex:-10, resH2O:+5, leggerezza:-10, isolamento:-10},
+           perche:{titolo:'Pressatura a caldo', testo:'150-180°C. Crea "pelle" superficiale liscia e dura. Molto più denso. Aspetto professionale.', effetti:['+resist','−flex','−leggerezza']}},
+          {nome:'Gommalacca', hint:'impermeabile', val:{resist:+5, flex:-3, resH2O:+30, leggerezza:0, isolamento:0},
+           perche:{titolo:'Coating gommalacca', testo:'Vernice naturale, barriera impermeabile. Finitura lucida. Protegge superficie dall\'umidità.', effetti:['+resH2O','finitura lucida']}}
+        ]
+      }
+    ]
+  },
+
+  spirulina: {
+    nome:'Spirulina', sotto:'Cianobatterio → biomassa',
+    base:{flex:10, resist:10, resH2O:5, pigmento:75, integrab:65},
+    slider:{
+      id:'densita', label:'Densità coltura', num:'1',
+      min:5, max:40, step:1, val:20, unit:'g/L',
+      ticks:['5','10','20','30','40'],
+      desc:'Più densa = più pigmento, crescita più lunga',
+      effect(v){
+        const t = (v-5)/35;
+        return {
+          flex: t*5,
+          resist: t*5,
+          resH2O: t*5,
+          pigmento: t*25 - 5,
+          integrab: -t*15
+        };
+      },
+      perche(v){
+        if(v<=10) return {titolo:`${v} g/L — diluita`, testo:'Verde chiaro, poca biomassa. Resa bassa ma qualità alta. Buona come pigmento delicato.', effetti:['−pigmento','+integrab','bassa resa']};
+        if(v<=25) return {titolo:`${v} g/L — standard`, testo:'14-21 giorni con LED. Verde intenso. Buon compromesso resa/qualità.', effetti:['standard']};
+        return {titolo:`${v} g/L — molto densa`, testo:'Crescita prolungata, LED 24h, 30°C. Verde scuro quasi blu. Abbondante ma più difficile da integrare uniformemente.', effetti:['+pigmento','+resist','−integrab']};
+      }
+    },
+    scelte:[
+      {id:'destinazione', label:'Destinazione', num:'2',
+        opzioni:[
+          {nome:'Foglio', hint:'essiccato, fragile', val:{resist:-10, flex:-20, pigmento:+10, integrab:-30, resH2O:-10},
+           perche:{titolo:'Foglio essiccato', testo:'Biomassa filtrata e stesa. Sottile, verde intenso, fragile. Interessante visivamente ma non strutturale.', effetti:['−flex','−resist','+pigmento','fragile']}},
+          {nome:'Composito', hint:'con matrice', val:{resist:+20, flex:+25, pigmento:-5, integrab:+15, resH2O:+10},
+           perche:{titolo:'Composito con matrice', testo:'Biomassa miscelata con agar o amido (→ BioGame chimico). La matrice dà struttura, la spirulina colore e biodegradabilità.', effetti:['+resist','+flex','+resH2O','→ chimico']}},
+          {nome:'Pigmento', hint:'→ BioGame chimico', val:{resist:-10, flex:0, pigmento:+25, integrab:+25, resH2O:0},
+           perche:{titolo:'Biomassa come pigmento', testo:'Non diventa materiale autonomo. Colora altri biomateriali nel BioGame chimico. Massima integrabilità.', effetti:['+pigmento','+integrab','→ chimico']}}
+        ]
+      },
+      {id:'post', label:'Post-processing', num:'3',
+        opzioni:[
+          {nome:'Nessuno', hint:'tal quale', val:{resist:0, flex:0, pigmento:0, integrab:0, resH2O:0},
+           perche:{titolo:'Nessun trattamento', testo:'Materiale nel suo stato naturale. Per fogli: fragile. Per compositi: dipende dalla matrice.', effetti:['nessuna modifica']}},
+          {nome:'Matrice agar', hint:'+struttura', val:{resist:+20, flex:+15, pigmento:-10, integrab:+5, resH2O:+10},
+           perche:{titolo:'Matrice agar/amido', testo:'Struttura biopolimerica. Film colorato con proprietà meccaniche decenti. La matrice "diluisce" il colore.', effetti:['+resist','+flex','−pigmento']}},
+          {nome:'Glicerina', hint:'+flessibilità', val:{resist:-5, flex:+15, pigmento:0, integrab:+5, resH2O:-5},
+           perche:{titolo:'Plastificazione glicerina', testo:'Aggiunta al composito. Più flessibile ma meno resistente all\'acqua (igroscopica).', effetti:['+flex','−resist','−resH2O']}}
+        ]
+      }
+    ]
+  }
+};
+
+// ═══ STATE ═══
+let cur = null; // current coltura key
+let choices = {};
+let sliderVal = 0;
+
+// ═══ RADAR ═══
+const CX=240, CY=225, R=160;
+let currentV=[0,0,0,0,0], targetV=[0,0,0,0,0];
+let animFrame=null;
+
+function ptAt(i,r){const a=-Math.PI/2+(2*Math.PI*i/5);return[CX+r*Math.cos(a),CY+r*Math.sin(a)]}
+function lblAt(i){const r=R+44;const a=-Math.PI/2+(2*Math.PI*i/5);return[CX+r*Math.cos(a),CY+r*Math.sin(a)]}
+
+function smoothPath(pts){
+  const n=pts.length;let d=`M${pts[0][0]} ${pts[0][1]}`;
+  for(let i=0;i<n;i++){
+    const c=pts[i],nx=pts[(i+1)%n],pv=pts[(i-1+n)%n];
+    const f=0.25;
+    const dx1=(nx[0]-pv[0])*f, dy1=(nx[1]-pv[1])*f;
+    const nnx=pts[(i+2)%n];
+    const dx2=(c[0]-nnx[0])*f, dy2=(c[1]-nnx[1])*f;
+    d+=` C${c[0]+dx1} ${c[1]+dy1},${nx[0]+dx2} ${nx[1]+dy2},${nx[0]} ${nx[1]}`;
+  }
+  return d;
+}
+
+function renderRadar(){
+  if(!cur) return;
+  const svg=document.getElementById('radar-svg');
+  const axes=AXES[cur], acc=ACCENTS[cur];
+  let g='';
+  // Grid
+  for(let ring=1;ring<=4;ring++){
+    const rr=R*ring/4;const ps=[];for(let i=0;i<5;i++)ps.push(ptAt(i,rr));
+    g+=`<polygon points="${ps.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${ring===4?'#c8c4bc':'#e8e4de'}" stroke-width="${ring===4?1.5:0.7}" ${ring<4?'stroke-dasharray="3,3"':''}/>`;
+  }
+  for(let i=0;i<5;i++){const[x,y]=ptAt(i,R);g+=`<line x1="${CX}" y1="${CY}" x2="${x}" y2="${y}" stroke="#e0dcd6" stroke-width="0.6"/>`}
+  // Shape
+  const dp=currentV.map((v,i)=>ptAt(i,R*Math.max(0.06,v/100)));
+  const sp=smoothPath(dp);
+  g+=`<defs>
+    <radialGradient id="rg" cx="50%" cy="45%" r="60%"><stop offset="0%" stop-color="${acc}" stop-opacity="0.3"/><stop offset="100%" stop-color="${acc}" stop-opacity="0.06"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <path d="${sp}" fill="url(#rg)" stroke="${acc}" stroke-width="2.5" filter="url(#glow)" opacity="0.9"/>
+  <path d="${sp}" fill="none" stroke="${acc}" stroke-width="1.2" stroke-opacity="0.4"/>`;
+  dp.forEach(([x,y])=>{g+=`<circle cx="${x}" cy="${y}" r="5" fill="${acc}" stroke="white" stroke-width="2.5"/>`});
+  svg.innerHTML=g;
+  // Labels
+  const w=document.getElementById('radar-wrap');
+  w.querySelectorAll('.radar-label').forEach(e=>e.remove());
+  axes.forEach((ax,i)=>{
+    const[lx,ly]=lblAt(i);const v=Math.round(currentV[i]);
+    const el=document.createElement('div');el.className='radar-label';
+    el.style.cssText=`left:${lx}px;top:${ly}px;transform:translate(-50%,-50%)`;
+    el.innerHTML=`<span class="rl-val" style="color:${acc}">${v}</span><span class="rl-name">${ax.name}</span>`;
+    w.appendChild(el);
+  });
+}
+
+function animate(){
+  let moving=false;
+  for(let i=0;i<5;i++){const d=targetV[i]-currentV[i];if(Math.abs(d)>0.3){currentV[i]+=d*0.14;moving=true}else currentV[i]=targetV[i]}
+  renderRadar();
+  if(moving)animFrame=requestAnimationFrame(animate);else animFrame=null;
+}
+function kick(){if(!animFrame)animFrame=requestAnimationFrame(animate)}
+
+// ═══ CALC ═══
+function calcProfile(){
+  if(!cur) return;
+  const c=COLTURE[cur], axes=AXES[cur];
+  const vals={...c.base};
+  // Slider effect
+  if(c.slider){
+    const ef=c.slider.effect(sliderVal);
+    for(const[k,v]of Object.entries(ef)) vals[k]=Math.max(0,Math.min(100,(vals[k]||0)+v));
+  }
+  // Discrete choices
+  c.scelte.forEach(s=>{
+    const idx=choices[s.id];
+    if(idx!==undefined){const opt=s.opzioni[idx];for(const[k,v]of Object.entries(opt.val))vals[k]=Math.max(0,Math.min(100,(vals[k]||0)+v))}
+  });
+  axes.forEach((ax,i)=>{targetV[i]=vals[ax.id]||0});
+  kick();
+}
+
+// ═══ UI ═══
+function selectColtura(k){
+  cur=k; choices={}; sliderVal=COLTURE[k].slider.val;
+  currentV=AXES[k].map(ax=>COLTURE[k].base[ax.id]||0);
+  targetV=[...currentV];
+  // Accent
+  document.documentElement.style.setProperty('--accent-color', ACCENTS[k]);
+  // Chips
+  document.querySelectorAll('.c-chip').forEach((el,i)=>{el.classList.toggle('sel',['scoby','micelio','spirulina'][i]===k)});
+  document.getElementById('radar-coltura').textContent=COLTURE[k].nome;
+  document.getElementById('radar-coltura').style.color=ACCENTS[k];
+  document.getElementById('radar-sub').textContent=COLTURE[k].sotto;
+  renderChoices(); calcProfile(); renderInsights();
+}
+
+function setSlider(v){sliderVal=+v; calcProfile(); renderInsights();
+  document.getElementById('slider-val-display').textContent=v+' '+COLTURE[cur].slider.unit;
+  document.getElementById('slider-val-display').style.color=ACCENTS[cur];
+}
+
+function selectChoice(sid,idx){choices[sid]=idx; calcProfile(); renderChoices(); renderInsights()}
+
+function renderChoices(){
+  const c=COLTURE[cur], s=c.slider, acc=ACCENTS[cur];
+  let h=`<div class="pl-title">Scelte progettuali</div>`;
+  // Slider
+  h+=`<div class="slider-group">
+    <div class="slider-header">
+      <div class="slider-label"><span class="cl-num">${s.num}</span> ${s.label}</div>
+      <div class="slider-val" id="slider-val-display" style="color:${acc}">${sliderVal} ${s.unit}</div>
+    </div>
+    <div class="slider-desc">${s.desc}</div>
+    <input type="range" class="range-slider" min="${s.min}" max="${s.max}" step="${s.step}" value="${sliderVal}"
+      oninput="setSlider(this.value)"
+      style="background:linear-gradient(to right,${ACCENT_BG[cur]},${acc});--thumb-color:${acc}">
+    <div class="slider-ticks">${s.ticks.map(t=>`<span>${t}</span>`).join('')}</div>
+  </div>`;
+  // Discrete choices
+  c.scelte.forEach(sc=>{
+    h+=`<div class="choice-group"><div class="choice-label"><span class="cl-num">${sc.num}</span> ${sc.label}</div><div class="choice-options">`;
+    sc.opzioni.forEach((opt,i)=>{
+      const sel=choices[sc.id]===i;
+      h+=`<div class="choice-btn ${sel?'sel':''}" onclick="selectChoice('${sc.id}',${i})" ${sel?`style="background:${acc};border-color:${acc}"`:''}><span class="cb-main">${opt.nome}</span><span class="cb-hint">${opt.hint}</span></div>`;
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('choices-container').innerHTML=h;
+  // Style slider thumb
+  const ss=document.querySelector('.range-slider');
+  if(ss){
+    ss.style.setProperty('--thumb-color',acc);
+    const style=document.getElementById('dynamic-thumb')||document.createElement('style');
+    style.id='dynamic-thumb';
+    style.textContent=`.range-slider::-webkit-slider-thumb{background:${acc}} .range-slider::-moz-range-thumb{background:${acc}}`;
+    document.head.appendChild(style);
+  }
+}
+
+function renderInsights(){
+  const c=COLTURE[cur], acc=ACCENTS[cur];
+  let h='';
+  // Slider insight
+  if(c.slider){
+    const p=c.slider.perche(sliderVal);
+    h+=`<div class="insight-card"><div class="ic-choice" style="color:${acc}">${c.slider.label}</div><div class="ic-title">${p.titolo}</div><div class="ic-text">${p.testo}</div><div style="margin-top:5px">${p.effetti.map(e=>{const cls=e.startsWith('+')?'pos':e.startsWith('−')||e.startsWith('-')?'neg':'neutral';return`<span class="ic-effect ${cls}">${e}</span>`}).join('')}</div></div>`;
+  }
+  // Choice insights
+  c.scelte.forEach(s=>{
+    const idx=choices[s.id];
+    if(idx===undefined) return;
+    const opt=s.opzioni[idx], p=opt.perche;
+    h+=`<div class="insight-card"><div class="ic-choice" style="color:${acc}">${s.label}</div><div class="ic-title">${p.titolo}</div><div class="ic-text">${p.testo}</div><div style="margin-top:5px">${p.effetti.map(e=>{const cls=e.startsWith('+')?'pos':e.startsWith('−')||e.startsWith('-')?'neg':'neutral';return`<span class="ic-effect ${cls}">${e}</span>`}).join('')}</div></div>`;
+  });
+  if(!h) h='<div class="empty" style="padding:30px"><p>Fai una scelta per vedere le spiegazioni</p></div>';
+  document.getElementById('insights-container').innerHTML=h;
+}
+
+renderRadar();
+</script>
+</body>
+</html>

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioGame — Ricette | BioLab</title>
+<link rel="stylesheet" href="biolab.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde:#1B5E20; --verde2:#2E7D32; --verde3:#43A047;
+  --verde-p:#C8E6C9; --verde-bg:#E8F5E9;
+  --ocra:#8D6E00; --ocra-bg:#FFFDE7;
+  --carta:#FAFAF6; --carta2:#F0EDE6;
+  --bordo:#D0CCC3; --ink:#1A1A1A; --ink2:#5D5048;
+  --rosso:#B71C1C; --azzurro:#1565C0;
+  --r: 0; /* usato per animazione */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Mono',monospace;background:var(--carta);color:var(--ink);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+/* HEADER */
+header{background:var(--verde);color:white;display:flex;align-items:center;justify-content:space-between;padding:11px 24px;flex-shrink:0;z-index:10}
+.logo{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
+.logo em{font-weight:300;color:var(--verde-p);font-style:italic}
+.logo-sub{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:2px}
+.hbtn{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:white;padding:8px 16px;cursor:pointer;transition:background .2s}
+.hbtn:hover{background:rgba(255,255,255,.22)}
+
+/* LAYOUT */
+.main{flex:1;display:grid;grid-template-columns:270px 1fr 290px;overflow:hidden}
+
+/* ── SINISTRA: PERCHÉ ── */
+.panel-perche{background:var(--ocra-bg);border-right:2px solid var(--ocra);display:flex;flex-direction:column;overflow:hidden}
+.ph-header{background:var(--ocra);color:white;padding:11px 18px;display:flex;align-items:baseline;gap:10px}
+.ph-title{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+.ph-hint{font-size:.62rem;opacity:.75;font-style:italic;font-family:'Fraunces',serif}
+.perche-body{flex:1;padding:20px 18px;overflow-y:auto}
+.perche-ing-nome{font-size:1.15rem;font-weight:700;color:var(--verde);margin-bottom:4px;line-height:1.15}
+.perche-ing-fam{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ocra);margin-bottom:14px}
+.perche-testo{font-size:.78rem;color:#5D4037;line-height:1.7}
+.perche-testo b{color:var(--verde);font-weight:700}
+.effetti-wrap{margin-top:16px;padding-top:14px;border-top:1px solid #e0d4b8}
+.effetto-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ef-label{font-size:.68rem;color:var(--ink2);width:94px;flex-shrink:0}
+.ef-arrow{font-size:.85rem;font-weight:700;width:16px;text-align:center}
+.ef-arrow.su{color:var(--verde2)}.ef-arrow.giu{color:var(--rosso)}.ef-arrow.neu{color:#aaa}
+.ef-desc{font-size:.66rem;color:var(--ink2)}
+.rl-wrap{margin-top:20px;padding-top:16px;border-top:1px solid #e0d4b8}
+.rl-title{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:10px}
+.rl-item{display:flex;align-items:center;gap:10px;padding:7px 10px;cursor:pointer;border-radius:3px;transition:background .15s;margin-bottom:3px}
+.rl-item:hover{background:#f0e4c0}
+.rl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rl-nome{font-size:.7rem;color:var(--ink2)}
+.rl-g{font-size:.62rem;color:#aaa;margin-left:auto}
+
+/* ── CENTRO ── */
+.panel-cerchio{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--carta);padding:16px;overflow:hidden;position:relative}
+.cerchio-wrap{position:relative;width:480px;height:480px;flex-shrink:0}
+#canvas-raggi{position:absolute;top:0;left:0;pointer-events:none;z-index:1}
+#canvas-torta{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;cursor:pointer}
+.cerchio-centro{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:114px;height:114px;background:white;border-radius:50%;border:2px solid var(--bordo);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;pointer-events:none;z-index:6;box-shadow:0 2px 14px rgba(0,0,0,.08)}
+.centro-label{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:3px}
+.centro-val{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--verde);line-height:1;transition:all .3s}
+.centro-sub{font-size:.54rem;color:#aaa;margin-top:4px;font-style:italic;font-family:'Fraunces',serif}
+
+/* PALLE */
+.palla{position:absolute;width:58px;height:58px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--bordo);background:white;transition:transform .2s,box-shadow .2s,border-color .3s,background .3s,width .25s,height .25s,margin .25s;z-index:10;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:5px}
+.palla:hover{transform:scale(1.12);box-shadow:0 5px 16px rgba(0,0,0,.16)}
+.palla.active-raggera{transform:scale(1.15);box-shadow:0 5px 20px rgba(0,0,0,.2)}
+.palla-cat{font-size:.48rem;letter-spacing:.07em;text-transform:uppercase;color:#bbb;line-height:1;margin-bottom:2px}
+.palla-nome{font-family:'Fraunces',serif;font-size:.6rem;font-weight:700;line-height:1.15;color:var(--ink);word-break:break-word}
+.palla.filled{width:70px;height:70px;margin-left:-6px;margin-top:-6px;box-shadow:0 4px 14px rgba(0,0,0,.13);border-width:2.5px}
+.palla.filled .palla-cat{font-size:.52rem;opacity:.85}
+.palla.filled .palla-nome{font-size:.75rem}
+
+/* CASCATA PALLE */
+.palla.attiva{ border-color: var(--verde2) !important; box-shadow: 0 0 0 3px rgba(46,125,50,.18), 0 2px 8px rgba(0,0,0,.08) }
+.palla.attenuata{ opacity:.38; filter:grayscale(.5) }
+.palla.obbligatoria{ border-color: var(--ocra) !important; box-shadow: 0 0 0 3px rgba(141,110,0,.22), 0 2px 8px rgba(0,0,0,.08); animation: pulsaObblig 1.8s ease-in-out infinite }
+@keyframes pulsaObblig{ 0%,100%{box-shadow:0 0 0 3px rgba(141,110,0,.22)}  50%{box-shadow:0 0 0 6px rgba(141,110,0,.38)} }
+
+/* PANNELLO LISTA overflow */
+.lista-panel{position:absolute;background:white;border:1px solid var(--bordo);z-index:35;min-width:200px;max-height:280px;box-shadow:0 8px 28px rgba(0,0,0,.16);display:none;flex-direction:column;animation:slideIn .15s ease}
+.lista-panel.open{display:flex}
+.lista-header{padding:10px 14px 8px;border-bottom:1px solid var(--carta2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.lista-cat{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ocra)}
+.lista-close{font-size:.6rem;color:#bbb;cursor:pointer;letter-spacing:.06em;text-transform:uppercase}
+.lista-close:hover{color:var(--verde)}
+.lista-items{overflow-y:auto;flex:1;padding:6px 0}
+.lista-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background .12s}
+.lista-item:hover{background:var(--verde-bg)}
+.lista-item.sel{background:var(--verde-bg);color:var(--verde)}
+.lista-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lista-nome{font-size:.72rem;color:var(--ink)}
+.lista-item.sel .lista-nome{color:var(--verde);font-weight:700}
+
+#raggera-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:20}
+#raggera-layer.open{pointer-events:all}
+.raggio-btn{position:absolute;transform:translate(-50%,-50%);background:white;border:1.5px solid var(--bordo);border-radius:22px;padding:6px 13px;font-size:.68rem;font-family:'Fraunces',serif;white-space:nowrap;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.13);transition:all .18s;color:var(--ink);text-align:center;line-height:1.3;animation:raggioPop .18s ease both}
+@keyframes raggioPop{from{opacity:0;transform:translate(-50%,-50%) scale(.7)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.raggio-btn:hover{background:var(--verde-bg);border-color:var(--verde2);color:var(--verde);transform:translate(-50%,-50%) scale(1.06)}
+.raggio-btn .rb-fam{font-size:.5rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa;display:block;margin-bottom:2px;font-style:normal}
+.raggio-btn.rimuovi{border-style:dashed;color:#aaa;font-style:italic;font-size:.64rem}
+.raggio-btn.rimuovi:hover{border-color:var(--rosso);color:var(--rosso);background:#fff5f5}
+.raggio-btn.selezionato{border-color:var(--verde2);background:var(--verde-bg);color:var(--verde);font-weight:700}
+
+/* SLIDER POPUP */
+.slider-popup{position:absolute;background:white;border:1px solid var(--bordo);padding:18px 18px 14px;z-index:30;min-width:200px;box-shadow:0 8px 28px rgba(0,0,0,.14);display:none;animation:slideIn .15s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.slider-popup.open{display:block}
+.sp-cat{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:4px}
+.sp-nome{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--verde);margin-bottom:14px}
+
+/* scala qualitativa */
+.sp-scala{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.sp-scala-labels{display:flex;justify-content:space-between;align-items:center}
+.sp-scala-label{font-family:'Fraunces',serif;font-size:.75rem;font-style:italic;color:var(--ink2)}
+.sp-scala-g{font-size:.62rem;color:#bbb;letter-spacing:.03em} /* grammi, piccoli e grigi */
+.custom-slider{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;outline:none;cursor:pointer;background:linear-gradient(to right, var(--verde-bg), var(--verde3))}
+.custom-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--verde);cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.2);border:2px solid white;transition:transform .15s}
+.custom-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.custom-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--verde);cursor:pointer;border:2px solid white}
+.sp-intensita{font-family:'Fraunces',serif;font-size:.85rem;font-style:italic;color:var(--verde2);text-align:center;margin:8px 0 4px;min-height:1.2em;transition:all .2s}
+.sp-grammi-display{font-size:.62rem;color:#bbb;text-align:center;margin-bottom:10px}
+.sp-note{font-size:.66rem;color:#aaa;font-style:italic;font-family:'Fraunces',serif;line-height:1.45;border-top:1px solid var(--carta2);padding-top:10px;margin-top:4px}
+.sp-close{display:block;text-align:center;margin-top:12px;font-size:.6rem;color:#bbb;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:color .15s}
+.sp-close:hover{color:var(--verde)}
+
+/* BUDGET */
+.budget-strip{width:100%;max-width:440px;margin-top:14px;display:flex;align-items:center;gap:10px}
+.budget-label{font-size:.62rem;color:#aaa;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+.budget-track{flex:1;height:5px;background:var(--carta2);border-radius:3px;overflow:hidden}
+.budget-fill{height:100%;background:var(--verde3);border-radius:3px;transition:width .5s,background .4s}
+.budget-fill.warn{background:var(--ocra)}.budget-fill.over{background:var(--rosso)}
+.budget-num{font-size:.62rem;color:#aaa;white-space:nowrap}
+.nota-tiny{font-size:.6rem;font-style:italic;font-family:'Fraunces',serif;color:#bbb;text-align:center;margin-top:6px}
+
+/* ── DESTRA ── */
+.panel-output{background:var(--carta2);border-left:1px solid var(--bordo);display:flex;flex-direction:column;overflow:hidden}
+.out-section{padding:16px 20px 0;flex-shrink:0}
+.out-title{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:10px}
+.out-title.verde{color:var(--verde2)}.out-title.blu{color:var(--azzurro)}
+.legenda{display:flex;gap:16px;margin-bottom:12px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:.64rem;color:var(--ink2)}
+.leg-dot{width:11px;height:11px;border-radius:2px;flex-shrink:0}
+.leg-dot.verde{background:var(--verde3)}.leg-dot.blu{background:var(--azzurro);opacity:.5}
+
+/* barre verticali output */
+.barre-v-group{display:flex;gap:6px;align-items:flex-end;height:136px;position:relative;margin-bottom:8px}
+.barre-v-group::before{content:'';position:absolute;left:0;right:0;top:0;bottom:24px;background:repeating-linear-gradient(to bottom,transparent,transparent calc(33.33% - .5px),var(--bordo) calc(33.33% - .5px),var(--bordo) 33.33%);opacity:.3;pointer-events:none}
+.bv-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bv-bars{width:100%;height:calc(100% - 24px);display:flex;align-items:flex-end;justify-content:center;gap:3px}
+.bv-bar{border-radius:2px 2px 0 0;transition:height .55s cubic-bezier(.34,1.2,.64,1);min-height:2px;width:42%}
+.bv-bar.out-bar{background:var(--verde3)}.bv-bar.tgt-bar{background:var(--azzurro);opacity:.45}
+.bv-label{font-size:.58rem;text-align:center;color:var(--ink2);height:24px;display:flex;align-items:center;justify-content:center;line-height:1.1}
+
+/* match */
+.match-box{background:white;border-top:1px solid var(--bordo);padding:14px 20px;text-align:center;flex-shrink:0}
+.match-lbl{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:4px}
+.match-num{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;line-height:1;transition:color .6s ease}
+.match-desc{font-family:'Fraunces',serif;font-size:.72rem;font-style:italic;color:#aaa;margin-top:4px}
+
+/* target */
+.target-section{padding:14px 20px 16px;flex-shrink:0;border-top:1px solid var(--bordo)}
+.tgt-sub{font-size:.58rem;font-style:italic;font-family:'Fraunces',serif;color:#aaa;margin-bottom:10px}
+.tgt-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.tgt-label{font-size:.65rem;width:82px;flex-shrink:0;color:var(--ink2)}
+.tgt-track{flex:1;height:9px;background:white;border:1px solid var(--bordo);border-radius:3px;cursor:pointer;overflow:hidden}
+.tgt-fill{height:100%;background:var(--azzurro);opacity:.55;border-radius:3px;transition:width .2s}
+.tgt-val{font-size:.6rem;color:#bbb;width:22px;text-align:right}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(27,94,32,.65);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--carta);padding:30px;width:390px;border:1px solid var(--bordo);box-shadow:0 16px 48px rgba(0,0,0,.2)}
+.modal h2{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:300;color:var(--verde);margin-bottom:5px}
+.modal p{font-family:'Fraunces',serif;font-size:.76rem;font-style:italic;color:#aaa;margin-bottom:22px;line-height:1.5}
+.modal-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.modal-row label{font-size:.66rem;width:116px;color:var(--ink2)}
+.modal-row input[type=range]{flex:1;accent-color:var(--azzurro)}
+.modal-row .mv{font-size:.62rem;color:#aaa;width:24px;text-align:right}
+.modal-actions{display:flex;gap:10px;margin-top:22px}
+.btn{font-family:'DM Mono';font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;border:none}
+.btn-p{background:var(--verde);color:white}.btn-p:hover{background:var(--verde2)}
+.btn-s{background:transparent;color:#888;border:1px solid var(--bordo)}.btn-s:hover{border-color:#888}
+
+/* ── Override per integrazione BioLab ── */
+body { height:auto; overflow:auto; display:block; font-family:'DM Mono',monospace; }
+header { display:none !important; }
+.bg-wrapper { height: calc(100vh - 140px); overflow: hidden; display: flex; flex-direction: column; }
+.bg-centro-title { font-family:'Fraunces',serif; font-size:.72rem; color:var(--ink3); text-align:center; padding:6px 0 0; font-style:italic; letter-spacing:.05em; }
+</style>
+</head>
+<body>
+
+<div id="blHeader" class="bl-header"></div>
+
+<div class="bg-wrapper">
+
+<div class="main">
+
+  <!-- SINISTRA -->
+  <div class="panel-perche">
+    <div class="ph-header">
+      <span class="ph-title">Perché</span>
+      <span class="ph-hint">— clicca fetta o palla</span>
+    </div>
+    <div class="perche-body" id="perche-body">
+      <div class="perche-ing-nome">Inizia dal cerchio</div>
+      <div class="perche-testo">
+        Clicca una delle <b>palle</b> intorno al cerchio: si apre una raggera con gli ingredienti disponibili per quel ruolo.<br><br>
+        Parti sempre da una <b>matrice</b> — è la spina dorsale del materiale.<br><br>
+        Clicca una <b>fetta della torta</b> per rileggere il perché di un ingrediente già inserito.
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRO -->
+  <div class="panel-cerchio">
+    <!-- titolino rimosso: sovrapposizione arco -->
+    <div class="cerchio-wrap" id="cerchio-wrap">
+      <canvas id="canvas-raggi" width="480" height="480"></canvas>
+      <canvas id="canvas-torta" width="220" height="220"></canvas>
+      <!-- SVG overlay: arco "flusso di scelte" — overflow:visible evita clipping -->
+      <svg id="svg-arco" viewBox="0 0 480 480" width="480" height="480"
+           style="position:absolute;top:0;left:0;pointer-events:none;z-index:3;overflow:visible">
+        <defs>
+          <!-- linea arco: R=248, da M1 (sinistra, 180°) CW 105° → (304,0) in alto-destra -->
+          <path id="arco-line"     d="M -8,240 A 248,248 0 0,1 304,0" fill="none"/>
+          <!-- path testo: R=236, leggermente interno -->
+          <path id="arco-text-path" d="M 4,240 A 236,236 0 0,1 301,12" fill="none"/>
+        </defs>
+        <!-- linea -->
+        <use href="#arco-line" stroke="rgba(180,100,20,0.50)" stroke-width="2.5"
+             stroke-linecap="round" fill="none"/>
+        <!-- cerchietto partenza allineato a M1 -->
+        <circle cx="-8" cy="240" r="4" fill="rgba(180,100,20,0.55)"/>
+        <!-- freccia fine: rotate=105 (tangente CW a 285°) -->
+        <polygon points="0,-9 7,4 -7,4"
+          fill="rgba(180,100,20,0.60)"
+          transform="translate(304,0) rotate(105)"/>
+        <!-- testo sul path -->
+        <text font-family="DM Mono, monospace" font-size="9" font-weight="600"
+              fill="rgba(180,100,20,0.55)" letter-spacing="2">
+          <textPath href="#arco-text-path" startOffset="10%">
+            flusso di scelte
+          </textPath>
+        </text>
+      </svg>
+      <div class="cerchio-centro">
+        <div class="centro-label">Totale</div>
+        <div class="centro-val" id="centro-val">—</div>
+        <div class="centro-sub">su 100ml H₂O</div>
+      </div>
+      <div id="palle-container"></div>
+      <div id="raggera-layer"></div>
+      <div id="slider-container"></div>
+      <div id="lista-panel" class="lista-panel"></div>
+    </div>
+    <div class="budget-strip">
+      <span class="budget-label">peso secco</span>
+      <div class="budget-track"><div class="budget-fill" id="budget-fill"></div></div>
+      <span class="budget-num" id="budget-num">0g / 100ml</span>
+    </div>
+    <div class="nota-tiny">Palla vuota → ingredienti disponibili &nbsp;·&nbsp; Palla piena → cambia o regola &nbsp;·&nbsp; Fetta → rileggi perché</div>
+    <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+      <button style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--verde3);background:var(--verde-bg);color:var(--verde);padding:6px 16px;cursor:pointer;border-radius:2px" onclick="openModal()">Imposta chiavistello ▸</button>
+      <button id="btn-porta-lab" style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid #b35c2a;background:#fdf0e6;color:#b35c2a;padding:6px 16px;cursor:pointer;border-radius:2px;display:none" onclick="portaAlLab()">Porta al Lab ▸</button>
+    </div>
+  </div>
+
+  <!-- DESTRA -->
+  <div class="panel-output">
+    <div class="out-section">
+      <div class="out-title verde">Output calcolato</div>
+      <div class="legenda">
+        <div class="leg-item"><div class="leg-dot verde"></div>ottenuto</div>
+        <div class="leg-item"><div class="leg-dot blu"></div>target</div>
+      </div>
+      <div class="barre-v-group" id="barre-out"></div>
+    </div>
+    <div class="match-box">
+      <div class="match-lbl">Matching chiave / chiavistello</div>
+      <div class="match-num" id="match-num">—</div>
+      <div class="match-desc" id="match-desc">Aggiungi una matrice per iniziare</div>
+    </div>
+    <div class="target-section">
+      <div class="out-title blu">Chiavistello (target)</div>
+      <div class="tgt-sub">Clicca le barre per modificare il tuo obiettivo</div>
+      <div class="tgt-row"><span class="tgt-label">Trasparenza</span><div class="tgt-track" onclick="clickTarget('trasparenza',event)"><div class="tgt-fill" id="tf-trasparenza" style="width:60%"></div></div><span class="tgt-val" id="tv-trasparenza">60</span></div>
+      <div class="tgt-row"><span class="tgt-label">Flessibilità</span><div class="tgt-track" onclick="clickTarget('flessibilita',event)"><div class="tgt-fill" id="tf-flessibilita" style="width:80%"></div></div><span class="tgt-val" id="tv-flessibilita">80</span></div>
+      <div class="tgt-row"><span class="tgt-label">Resist. H₂O</span><div class="tgt-track" onclick="clickTarget('resistenzaH2O',event)"><div class="tgt-fill" id="tf-resistenzaH2O" style="width:30%"></div></div><span class="tgt-val" id="tv-resistenzaH2O">30</span></div>
+      <div class="tgt-row"><span class="tgt-label">Resist. mecc.</span><div class="tgt-track" onclick="clickTarget('resistenzaMecc',event)"><div class="tgt-fill" id="tf-resistenzaMecc" style="width:50%"></div></div><span class="tgt-val" id="tv-resistenzaMecc">50</span></div>
+      <div class="tgt-row"><span class="tgt-label">Biodegr.</span><div class="tgt-track" onclick="clickTarget('biodegradabilita',event)"><div class="tgt-fill" id="tf-biodegradabilita" style="width:90%"></div></div><span class="tgt-val" id="tv-biodegradabilita">90</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>Imposta il chiavistello</h2>
+    <p>Definisci il materiale che stai cercando. Puoi sempre cambiarlo mentre giochi — il chiavistello può cambiare forma.</p>
+    <div class="modal-row"><label>Trasparenza</label><input type="range" min="0" max="100" value="60" id="m-trasparenza" oninput="mval('trasparenza',this.value)"><span class="mv" id="mv-trasparenza">60</span></div>
+    <div class="modal-row"><label>Flessibilità</label><input type="range" min="0" max="100" value="80" id="m-flessibilita" oninput="mval('flessibilita',this.value)"><span class="mv" id="mv-flessibilita">80</span></div>
+    <div class="modal-row"><label>Resist. H₂O</label><input type="range" min="0" max="100" value="30" id="m-resistenzaH2O" oninput="mval('resistenzaH2O',this.value)"><span class="mv" id="mv-resistenzaH2O">30</span></div>
+    <div class="modal-row"><label>Resist. mecc.</label><input type="range" min="0" max="100" value="50" id="m-resistenzaMecc" oninput="mval('resistenzaMecc',this.value)"><span class="mv" id="mv-resistenzaMecc">50</span></div>
+    <div class="modal-row"><label>Biodegradabilità</label><input type="range" min="0" max="100" value="90" id="m-biodegradabilita" oninput="mval('biodegradabilita',this.value)"><span class="mv" id="mv-biodegradabilita">90</span></div>
+    <div class="modal-actions">
+      <button class="btn btn-p" onclick="applyModal()">Applica</button>
+      <button class="btn btn-s" onclick="closeModal()">Annulla</button>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- /bg-wrapper -->
+
+<script src="biolab-core.js"></script>
+<script src="database_biomateriali_v11.js"></script>
+<script src="biogame-adapter.js"></script>
+<script>
+const PROPS = ['trasparenza','flessibilita','resistenzaH2O','resistenzaMecc','biodegradabilita'];
+const PROP_LABELS = {trasparenza:'Trasp.',flessibilita:'Fless.',resistenzaH2O:'H₂O',resistenzaMecc:'Mecc.',biodegradabilita:'Biodeg.'};
+
+// Descrizioni qualitative per lo slider (continue, non a scatti)
+function intensitaLabel(ratio) {
+  if (ratio < 0.15) return 'pochissimo';
+  if (ratio < 0.32) return 'poco';
+  if (ratio < 0.52) return 'moderato';
+  if (ratio < 0.72) return 'abbastanza';
+  if (ratio < 0.88) return 'molto';
+  return 'al massimo';
+}
+
+// ── DATI DAL DB REALE (via adapter) ──
+const _data = buildBioGameData();
+const ING = _data.ING;
+const IMPLICAZIONI = _data.IMPLICAZIONI;
+const FAM_CANDIDATI = _data.FAM_CANDIDATI;
+
+// stato cascata
+let cascataState = {};
+
+// MAX voci in raggera prima di passare a pannello lista
+const RAGGERA_MAX = 5;
+
+const SLOT_CFG = [
+  {id:'m1', label:'Matrice 1',    cat:'matrice',      fam:'matrice',      angolo:264},
+  {id:'m2', label:'Matrice 2',    cat:'matrice',      fam:'matrice',      angolo:297},
+  {id:'pla',label:'Plastificante',cat:'plastificante',fam:'plastificante',angolo:330},
+  {id:'ret',label:'Reticolante',  cat:'reticolante',  fam:'reticolante',  angolo:  3},
+  {id:'lip',label:'Lipide',       cat:'lipide',       fam:'lipide',       angolo: 36},
+  {id:'car',label:'Carica',       cat:'carica',       fam:'carica',       angolo: 69},
+  {id:'col',label:'Colorante',    cat:'colorante',    fam:'colorante',    angolo:102},
+  {id:'add',label:'Additivo',     cat:'additivo',     fam:'additivo',     angolo:135},
+  {id:'r1', label:'+',            cat:'libero',       fam:'libero',       angolo:168},
+  {id:'r2', label:'+',            cat:'libero',       fam:'libero',       angolo:201},
+  {id:'r3', label:'+',            cat:'libero',       fam:'libero',       angolo:234},
+];
+
+let slotData={}, target={trasparenza:60,flessibilita:80,resistenzaH2O:30,resistenzaMecc:50,biodegradabilita:90};
+let activeRaggera=null, activeSlider=null, tortaSlices=[];
+// animazione torta
+let tortaAnimData={}, tortaAnimFrame=null;
+
+const CX=240,CY=240,R_PALLE=192,R_TORTA=108;
+
+function init(){buildOutputBars();buildPalle();updateAll();document.addEventListener('click',closeAll);}
+
+// ═══ OUTPUT BARS ═══
+function buildOutputBars(){
+  const c=document.getElementById('barre-out'); c.innerHTML='';
+  PROPS.forEach(p=>{c.innerHTML+=`<div class="bv-col"><div class="bv-bars">
+    <div class="bv-bar tgt-bar" id="bvt-${p}" style="height:${target[p]}%"></div>
+    <div class="bv-bar out-bar" id="bvo-${p}" style="height:0%"></div>
+  </div><div class="bv-label">${PROP_LABELS[p]}</div></div>`;});
+}
+function updateOutputBars(p){
+  PROPS.forEach(k=>{
+    document.getElementById('bvo-'+k).style.height=(p?Math.round(p[k]||0):0)+'%';
+    document.getElementById('bvt-'+k).style.height=target[k]+'%';
+  });
+}
+
+// ═══ PALLE ═══
+function buildPalle(){
+  const pc=document.getElementById('palle-container');
+  const sc=document.getElementById('slider-container');
+  pc.innerHTML=''; sc.innerHTML='';
+  SLOT_CFG.forEach(slot=>{
+    const rad=(slot.angolo-90)*Math.PI/180;
+    const px=CX+R_PALLE*Math.cos(rad)-29, py=CY+R_PALLE*Math.sin(rad)-29;
+    const palla=document.createElement('div');
+    palla.className='palla'; palla.id='palla-'+slot.id;
+    palla.style.left=px+'px'; palla.style.top=py+'px';
+    palla.innerHTML=`<div class="palla-cat" id="pc-${slot.id}">${slot.cat}</div>
+      <div class="palla-nome" id="pn-${slot.id}">${slot.label}</div>`;
+    palla.addEventListener('click',e=>{e.stopPropagation();onPallaClick(slot,px+29,py+29);});
+    pc.appendChild(palla);
+    const sp=document.createElement('div');
+    sp.className='slider-popup'; sp.id='sp-'+slot.id;
+    const spLeft=px+29>CX?(px-208):(px+64);
+    sp.style.left=Math.max(0,spLeft)+'px';
+    sp.style.top=Math.max(8,Math.min(py-10,390))+'px';
+    sp.addEventListener('click',e=>e.stopPropagation());
+    sc.appendChild(sp);
+  });
+}
+
+function onPallaClick(slot,cx,cy){
+  if(slotData[slot.id]) showPerche(slotData[slot.id].ingId);
+  if(activeRaggera===slot.id){closeAll();return;}
+  closeAll();
+  showRaggera(slot,cx,cy);
+}
+
+function showRaggera(slot, pallaCX, pallaCY){
+  closeAll();
+  document.getElementById('palla-'+slot.id).classList.add('active-raggera');
+  activeRaggera = slot.id;
+
+  if(slotData[slot.id]){
+    // ── PALLA PIENA: popup regolazione ──
+    openRegolaPanel(slot, pallaCX, pallaCY);
+  } else {
+    // ── PALLA VUOTA: lista scelta ──
+    const usati = new Set(Object.entries(slotData)
+      .filter(([sid])=>sid!==slot.id).map(([,d])=>d.ingId));
+    const candidati = (FAM_CANDIDATI[slot.fam]||[]).filter(id=>!usati.has(id));
+    if(!candidati.length){ closeAll(); return; }
+    if(candidati.length > RAGGERA_MAX){
+      showListaPanel(slot, pallaCX, pallaCY, candidati);
+    } else {
+      showRaggeraSmall(slot, pallaCX, pallaCY, candidati);
+    }
+  }
+}
+
+function openRegolaPanel(slot, pallaCX, pallaCY){
+  // posiziona sul lato opposto alla palla rispetto al centro
+  const sp = document.getElementById('sp-'+slot.id);
+  sp.classList.add('open');
+  activeSlider = slot.id;
+  buildRegolaContent(slot.id);
+}
+
+function buildRegolaContent(slotId){
+  const slot = SLOT_CFG.find(s=>s.id===slotId);
+  const d = slotData[slotId]; if(!d) return;
+  const ing = ING[d.ingId];
+  const ratio = (d.grammi-ing.gMin)/(ing.gMax-ing.gMin);
+  const sp = document.getElementById('sp-'+slotId);
+  sp.innerHTML=`
+    <div class="sp-cat">${ing.cat}</div>
+    <div class="sp-nome">${ing.nome}</div>
+    <div class="sp-scala">
+      <div class="sp-scala-labels">
+        <span class="sp-scala-label">poco</span>
+        <span class="sp-scala-label">molto</span>
+      </div>
+      <input type="range" class="custom-slider"
+        min="${ing.gMin}" max="${ing.gMax}" step="${ing.gMax<=8?0.2:0.5}" value="${d.grammi}"
+        oninput="onSl('${slotId}',this.value)">
+      <div class="sp-scala-labels">
+        <span class="sp-scala-g">${ing.gMin}g</span>
+        <span class="sp-scala-g">${ing.gMax}g</span>
+      </div>
+    </div>
+    <div class="sp-intensita" id="spint-${slotId}">${intensitaLabel(ratio)}</div>
+    <div class="sp-grammi-display" id="spg-${slotId}">${d.grammi.toFixed(1)}g su 100ml</div>
+    <div class="sp-note">${ing.nota_slider}</div>
+    <div style="display:flex;gap:8px;margin-top:14px;align-items:center;justify-content:space-between">
+      <div class="sp-close" onclick="closeAll()">chiudi ×</div>
+      <div class="sp-close" style="color:var(--ocra)" onclick="onCambiaIng('${slotId}')">cambia</div>
+      <div class="sp-close" style="color:#c0392b" onclick="removeIng('${slotId}')">rimuovi</div>
+    </div>`;
+}
+
+function onCambiaIng(slotId){
+  // chiude il popup regolazione e apre la lista selezione
+  const slot = SLOT_CFG.find(s=>s.id===slotId);
+  document.getElementById('sp-'+slotId).classList.remove('open');
+  activeSlider = null;
+  const palla = document.getElementById('palla-'+slotId);
+  const px = parseFloat(palla.style.left);
+  const py = parseFloat(palla.style.top);
+  const pallaCX = px + 29, pallaCY = py + 29;
+  const usati = new Set(Object.entries(slotData)
+    .filter(([sid])=>sid!==slotId).map(([,d])=>d.ingId));
+  const candidati = (FAM_CANDIDATI[slot.fam]||[]).filter(id=>!usati.has(id));
+  if(candidati.length > RAGGERA_MAX){
+    showListaPanel(slot, pallaCX, pallaCY, candidati);
+  } else {
+    showRaggeraSmall(slot, pallaCX, pallaCY, candidati);
+  }
+}
+
+function showRaggeraSmall(slot, pallaCX, pallaCY, candidati){
+  const rl = document.getElementById('raggera-layer'); rl.innerHTML='';
+  const n = candidati.length;
+  const baseRad = (slot.angolo-90)*Math.PI/180;
+  const R_BTN = 90;
+  const spread = Math.min(90,26*(n-1))*Math.PI/180;
+  const startRad = n===1 ? baseRad : baseRad-spread/2;
+  const step = n===1 ? 0 : spread/(n-1);
+  candidati.forEach((ingId,idx)=>{
+    const angle = startRad+step*idx;
+    const bx = pallaCX+R_BTN*Math.cos(angle);
+    const by = pallaCY+R_BTN*Math.sin(angle);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible';
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',pallaCX); line.setAttribute('y1',pallaCY);
+    line.setAttribute('x2',bx); line.setAttribute('y2',by);
+    line.setAttribute('stroke','#C0BDB4'); line.setAttribute('stroke-width','1');
+    line.setAttribute('stroke-dasharray','4,3');
+    svg.appendChild(line); rl.appendChild(svg);
+    const btn = document.createElement('div');
+    btn.className = 'raggio-btn';
+    btn.style.left = bx+'px'; btn.style.top = by+'px';
+    btn.style.animationDelay = (idx*0.04)+'s';
+    const ing = ING[ingId];
+    btn.innerHTML = `<span class="rb-fam">${ing.cat}</span>${ing.nome}`;
+    btn.addEventListener('click',e=>{e.stopPropagation(); selectIng(slot.id,ingId);});
+    rl.appendChild(btn);
+  });
+  rl.classList.add('open');
+}
+
+function showListaPanel(slot, pallaCX, pallaCY, candidati){
+  const lp = document.getElementById('lista-panel');
+  const pallaADestra = pallaCX > CX;
+  const lpx = pallaADestra
+    ? Math.min(pallaCX + 36, 470-190)
+    : Math.max(0, pallaCX - 195);
+  const lpy = Math.max(4, Math.min(pallaCY - 60, 320));
+  lp.style.left = lpx+'px'; lp.style.top = lpy+'px'; lp.style.width='185px';
+  lp.innerHTML=`
+    <div class="lista-header">
+      <span class="lista-cat">${slot.cat}</span>
+      <span class="lista-close" onclick="closeAll()">chiudi ×</span>
+    </div>
+    <div class="lista-items">
+      ${candidati.map(id=>{
+        const ing=ING[id];
+        return`<div class="lista-item" onclick="selectIng('${slot.id}','${id}')">
+          <div class="lista-dot" style="background:${ing.colore}"></div>
+          <span class="lista-nome">${ing.nome}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  lp.classList.add('open');
+}
+
+function openSliderPanel(slotId){ buildRegolaContent(slotId); document.getElementById('sp-'+slotId).classList.add('open'); activeSlider=slotId; }
+
+function closeAll(){
+  const rl=document.getElementById('raggera-layer');
+  rl.innerHTML=''; rl.classList.remove('open');
+  document.querySelectorAll('.slider-popup').forEach(s=>s.classList.remove('open'));
+  document.querySelectorAll('.palla').forEach(p=>p.classList.remove('active-raggera'));
+  document.getElementById('lista-panel').classList.remove('open');
+  activeRaggera=null; activeSlider=null;
+}
+
+function selectIng(slotId,ingId){
+  const ing=ING[ingId];
+  slotData[slotId]={ingId,grammi:(ing.gMin+ing.gMax)/2};
+  updatePalla(slotId); showPerche(ingId);
+  // chiudi lista/raggera, apri subito popup regolazione
+  document.getElementById('lista-panel').classList.remove('open');
+  document.getElementById('raggera-layer').innerHTML='';
+  openSliderPanel(slotId);
+  updateAll();
+}
+
+function removeIng(slotId){
+  delete slotData[slotId]; updatePalla(slotId); closeAll(); updateAll();
+}
+
+function onSl(slotId,val){
+  slotData[slotId].grammi=parseFloat(val);
+  const ing=ING[slotData[slotId].ingId];
+  const ratio=(parseFloat(val)-ing.gMin)/(ing.gMax-ing.gMin);
+  const il=document.getElementById('spint-'+slotId);
+  const gl=document.getElementById('spg-'+slotId);
+  if(il) il.textContent=intensitaLabel(ratio);
+  if(gl) gl.textContent=parseFloat(val).toFixed(1)+'g su 100ml';
+  updateAll();
+}
+
+function updatePalla(slotId){
+  const slot=SLOT_CFG.find(s=>s.id===slotId);
+  const palla=document.getElementById('palla-'+slotId);
+  const catEl=document.getElementById('pc-'+slotId);
+  const nomeEl=document.getElementById('pn-'+slotId);
+  const d=slotData[slotId];
+  if(d){
+    const ing=ING[d.ingId];
+    palla.className='palla filled';
+    palla.style.borderColor=ing.colore;
+    palla.style.background=ing.colore+'14';
+    catEl.textContent=slot.cat; catEl.style.color=ing.colore+'99';
+    nomeEl.textContent=ing.nome; nomeEl.style.color=ing.colore;
+  } else {
+    palla.className='palla'; palla.style.borderColor=''; palla.style.background='';
+    catEl.textContent=slot.cat; catEl.style.color='';
+    nomeEl.textContent=slot.label; nomeEl.style.color='';
+  }
+}
+
+// ═══ RAGGI canvas ═══
+function drawRaggi(){
+  const canvas=document.getElementById("canvas-raggi");
+  const ctx=canvas.getContext("2d");
+  ctx.clearRect(0,0,480,480);
+  const R_RING = R_TORTA + 22;
+  // anello fisso attorno alla torta
+  ctx.save();
+  ctx.beginPath(); ctx.arc(CX,CY,R_RING,0,Math.PI*2);
+  ctx.strokeStyle="rgba(43,120,43,0.10)"; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.restore();
+  // linee palla → anello
+  SLOT_CFG.forEach(slot=>{
+    if(!slotData[slot.id]) return;
+    const ing=ING[slotData[slot.id].ingId];
+    const rad=(slot.angolo-90)*Math.PI/180;
+    const rx=CX+R_RING*Math.cos(rad), ry=CY+R_RING*Math.sin(rad);
+    const px=CX+R_PALLE*Math.cos(rad), py=CY+R_PALLE*Math.sin(rad);
+    ctx.save(); ctx.beginPath(); ctx.arc(rx,ry,3,0,Math.PI*2);
+    ctx.fillStyle=ing.colore+"99"; ctx.fill(); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(px,py);
+    ctx.strokeStyle=ing.colore+"66"; ctx.lineWidth=1.5;
+    ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  });
+}
+
+// ═══ TORTA con animazione ═══
+function drawTorta(){
+  const canvas=document.getElementById('canvas-torta');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,r=W/2-4;
+  ctx.clearRect(0,0,W,H);
+  tortaSlices=[];
+
+  const filled=Object.entries(slotData);
+  if(!filled.length){
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle='#D0CCC3'; ctx.setLineDash([5,4]); ctx.lineWidth=2; ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#ccc'; ctx.font='italic 11px Fraunces, serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('clicca una palla',cx,cy); return;
+  }
+
+  const tot=filled.reduce((s,[,d])=>s+d.grammi,0);
+  let startA=-Math.PI/2;
+
+  filled.forEach(([slotId,d])=>{
+    const ing=ING[d.ingId];
+    const slice=(d.grammi/tot)*Math.PI*2;
+    const endA=startA+slice;
+
+    // ottieni progresso animazione (0→1)
+    const prog=tortaAnimData[slotId]!==undefined ? tortaAnimData[slotId] : 1;
+
+    const isHovered = hoveredSlice===slotId;
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,startA,endA); ctx.closePath();
+    ctx.fillStyle=ing.colore+(isHovered?'ff':'cc'); ctx.fill();
+    // bordo hover: anello esterno alla fetta
+    if(isHovered){
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,startA,endA); ctx.closePath();
+      ctx.strokeStyle=ing.colore; ctx.lineWidth=4; ctx.stroke();
+    }
+    ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke();
+    ctx.restore();
+
+    if(slice>0.28){
+      const midA=startA+slice/2;
+      const lx=cx+(r*0.62)*Math.cos(midA);
+      const ly=cy+(r*0.62)*Math.sin(midA);
+      ctx.save();
+      ctx.fillStyle='rgba(255,255,255,.92)'; ctx.font='bold 10px DM Mono, monospace';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(d.grammi.toFixed(0)+'g',lx,ly);
+      ctx.restore();
+    }
+
+    tortaSlices.push({slotId,ingId:d.ingId,startA,endA});
+    startA=endA;
+  });
+
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.strokeStyle='#D0CCC3'; ctx.lineWidth=1; ctx.stroke();
+}
+
+// animazione entrata fette
+function animateSlice(slotId){
+  tortaAnimData[slotId]=0;
+  const start=performance.now();
+  const dur=320;
+  function frame(now){
+    const t=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-t,3); // ease-out cubic
+    tortaAnimData[slotId]=ease;
+    drawTorta();
+    drawRaggi();
+    if(t<1) requestAnimationFrame(frame);
+    else { tortaAnimData[slotId]=1; drawTorta(); }
+  }
+  requestAnimationFrame(frame);
+}
+
+// hover fette torta
+let hoveredSlice=null;
+document.getElementById('canvas-torta').addEventListener('mousemove',e=>{
+  const canvas=e.currentTarget,rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left-canvas.width/2,my=e.clientY-rect.top-canvas.height/2;
+  const dist=Math.sqrt(mx*mx+my*my),r=canvas.width/2-4;
+  if(dist<54||dist>r){if(hoveredSlice){hoveredSlice=null;drawTorta();}return;}
+  let angle=Math.atan2(my,mx);
+  let found=null;
+  tortaSlices.forEach(sl=>{
+    let sa=sl.startA,ea=sl.endA,a=angle;
+    while(a<sa-Math.PI) a+=Math.PI*2;
+    while(a>ea+Math.PI) a-=Math.PI*2;
+    if(a>=sa-0.02&&a<=ea+0.02) found=sl.slotId;
+  });
+  if(found!==hoveredSlice){hoveredSlice=found;drawTorta();}
+});
+document.getElementById('canvas-torta').addEventListener('mouseleave',()=>{
+  if(hoveredSlice){hoveredSlice=null;drawTorta();}
+});
+
+document.getElementById('canvas-torta').addEventListener('click',e=>{
+  e.stopPropagation();
+  const canvas=e.currentTarget, rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left-canvas.width/2, my=e.clientY-rect.top-canvas.height/2;
+  const dist=Math.sqrt(mx*mx+my*my), r=canvas.width/2-4;
+  if(dist<54||dist>r) return;
+  let angle=Math.atan2(my,mx);
+  tortaSlices.forEach(sl=>{
+    let sa=sl.startA,ea=sl.endA,a=angle;
+    while(a<sa-Math.PI) a+=Math.PI*2;
+    while(a>ea+Math.PI) a-=Math.PI*2;
+    if(a>=sa-0.02&&a<=ea+0.02) showPerche(sl.ingId);
+  });
+  closeAll();
+});
+
+// ═══ PERCHÉ ═══
+function showPerche(ingId){
+  const ing=ING[ingId];
+  const eff=Object.entries(ing.effetti||{}).map(([p,e])=>`
+    <div class="effetto-row">
+      <span class="ef-label">${PROP_LABELS[p]}</span>
+      <span class="ef-arrow ${e.dir}">${e.dir==='su'?'↑':e.dir==='giu'?'↓':'→'}</span>
+      <span class="ef-desc">${e.note}</span>
+    </div>`).join('');
+  const rl=Object.values(slotData).length?`
+    <div class="rl-wrap">
+      <div class="rl-title">Ingredienti in ricetta — clicca per rileggere</div>
+      ${Object.values(slotData).map(d=>{const i=ING[d.ingId];return`
+        <div class="rl-item" onclick="showPerche('${d.ingId}')">
+          <div class="rl-dot" style="background:${i.colore}"></div>
+          <span class="rl-nome">${i.nome}</span>
+          <span class="rl-g">${d.grammi.toFixed(0)}g</span>
+        </div>`;}).join('')}
+    </div>`:'';
+  document.getElementById('perche-body').innerHTML=`
+    <div class="perche-ing-nome">${ing.nome}</div>
+    <div class="perche-ing-fam">${ing.cat}</div>
+    <div class="perche-testo">${ing.perche}</div>
+    ${eff?`<div class="effetti-wrap">${eff}</div>`:''}
+    ${rl}`;
+}
+
+// ═══ CALCOLO ═══
+function calcProfilo(){
+  const filled=Object.values(slotData);
+  const matrici=filled.filter(d=>ING[d.ingId].fam==='matrice');
+  if(!matrici.length) return null;
+  let p={};PROPS.forEach(k=>p[k]=0);
+  const totMat=matrici.reduce((s,d)=>s+d.grammi,0);
+  matrici.forEach(d=>{const ing=ING[d.ingId];PROPS.forEach(k=>p[k]+=(ing.props[k]||0)*(d.grammi/totMat));});
+  filled.filter(d=>ING[d.ingId].fam!=='matrice').forEach(d=>{
+    const ing=ING[d.ingId];
+    const ratio=Math.min((d.grammi-ing.gMin)/(ing.gMax-ing.gMin),1);
+    PROPS.forEach(k=>{if(ing.delta&&ing.delta[k])p[k]=Math.max(0,Math.min(100,p[k]+ing.delta[k]*ratio));});
+  });
+  PROPS.forEach(k=>p[k]=Math.round(p[k]));
+  return p;
+}
+
+// ═══ CASCATA ═══
+function aggiornaCascata(){
+  // trova matrici selezionate
+  const matriciSelezionate = Object.values(slotData)
+    .filter(d=>ING[d.ingId].fam==='matrice')
+    .map(d=>d.ingId);
+
+  if(!matriciSelezionate.length){
+    // nessuna matrice: tutte neutre
+    SLOT_CFG.forEach(slot=>{
+      const p=document.getElementById('palla-'+slot.id);
+      if(!p) return;
+      p.classList.remove('attiva','attenuata','obbligatoria');
+    });
+    // mostra suggerimento nel perché solo se body è ancora quello iniziale
+    return;
+  }
+
+  // unisci implicazioni di tutte le matrici selezionate
+  let sblocca=new Set(), obbliga=new Set();
+  matriciSelezionate.forEach(ingId=>{
+    const impl=IMPLICAZIONI[ingId];
+    if(!impl) return;
+    impl.sblocca.forEach(f=>sblocca.add(f));
+    impl.obbliga.forEach(id=>obbliga.add(id));
+    // aggiorna suggerimento nel perché se non c'è già un ingrediente attivo
+  });
+
+  // mostra suggerimento cascata nel pannello perché se non c'è selezione attiva
+  const hasSugg = matriciSelezionate.length > 0;
+  const percheBody = document.getElementById('perche-body');
+  if(hasSugg && percheBody.querySelector('.cascata-sugg')){
+    // già mostrato, aggiorna solo
+  } else if(hasSugg && !percheBody.querySelector('.perche-ing-nome[data-ing]')){
+    // pannello perché è ancora quello intro — aggiungi suggerimento
+  }
+
+  SLOT_CFG.forEach(slot=>{
+    const p=document.getElementById('palla-'+slot.id);
+    if(!p) return;
+    // slot matrice: sempre attivo
+    if(slot.fam==='matrice'){ p.classList.remove('attiva','attenuata','obbligatoria'); return; }
+
+    // slot con ingrediente già scelto: non toccare
+    if(slotData[slot.id]){ p.classList.remove('attiva','attenuata','obbligatoria'); return; }
+
+    const famSblocca = sblocca.has(slot.fam);
+    // obbligatoria se la fam contiene un ingrediente obbligato
+    const famObblig = FAM_CANDIDATI[slot.fam]&&
+      FAM_CANDIDATI[slot.fam].some(id=>obbliga.has(id));
+
+    p.classList.remove('attiva','attenuata','obbligatoria');
+    if(famObblig)       p.classList.add('obbligatoria');
+    else if(famSblocca) p.classList.add('attiva');
+    else                p.classList.add('attenuata');
+  });
+
+  // aggiorna suggerimento nel perché se il pannello è ancora vuoto/intro
+  const primaRiga = percheBody.querySelector('.perche-ing-nome');
+  if(primaRiga && primaRiga.textContent === 'Inizia dal cerchio'){
+    const sugg = matriciSelezionate.map(id=>IMPLICAZIONI[id]?.suggerisce).filter(Boolean).join(' — ');
+    percheBody.innerHTML=`
+      <div class="perche-ing-nome">Cosa aggiungere?</div>
+      <div class="perche-ing-fam">cascata dalla matrice</div>
+      <div class="perche-testo">${sugg}</div>
+      <div class="rl-wrap">
+        <div class="rl-title">Palle verdi = consigliate &nbsp;·&nbsp; Arancio = obbligatorie &nbsp;·&nbsp; Grigie = non rilevanti</div>
+      </div>`;
+  }
+}
+
+// ═══ PENALTY: materiale non formato ═══
+function calcPenalty(){
+  const matriciSel=Object.values(slotData).filter(d=>ING[d.ingId].fam==='matrice').map(d=>d.ingId);
+  let penaltyMsg=null;
+  matriciSel.forEach(ingId=>{
+    const impl=IMPLICAZIONI[ingId];
+    if(!impl||!impl.penalty_se_manca.length) return;
+    impl.penalty_se_manca.forEach(fam=>{
+      const famPresente=Object.values(slotData).some(d=>ING[d.ingId].fam===fam);
+      if(!famPresente) penaltyMsg=`⚠ ${ING[ingId].nome} richiede ${fam} — materiale non formato`;
+    });
+  });
+  return penaltyMsg;
+}
+
+
+let prevSlotIds=new Set();
+function updateAll(){
+  const filled=Object.entries(slotData);
+  const tot=filled.reduce((s,[,d])=>s+d.grammi,0);
+  const pct=Math.min((tot/75)*100,100);
+  const bf=document.getElementById('budget-fill');
+  bf.style.width=pct+'%';
+  bf.className='budget-fill'+(pct>95?' over':pct>70?' warn':'');
+  document.getElementById('budget-num').textContent=tot.toFixed(0)+'g / 100ml';
+  document.getElementById('centro-val').textContent=filled.length?tot.toFixed(0)+'g':'—';
+
+  // rileva nuovi slot → animazione
+  const currentIds=new Set(filled.map(([id])=>id));
+  currentIds.forEach(id=>{if(!prevSlotIds.has(id)) animateSlice(id);});
+  prevSlotIds=new Set(currentIds);
+
+  drawRaggi();
+  drawTorta();
+  aggiornaCascata();
+  const profilo=calcProfilo();
+  updateOutputBars(profilo);
+  updateMatch(profilo);
+
+  // Mostra/nascondi "Porta al Lab" se c'è almeno 1 matrice
+  const hasMatrice = filled.some(([,d])=>ING[d.ingId]?.cat==='matrice');
+  const btnLab = document.getElementById('btn-porta-lab');
+  if(btnLab) btnLab.style.display = hasMatrice ? '' : 'none';
+}
+
+function scoreColor(score){
+  // verde pieno a 80, rosso pieno a 60, interpolazione lineare a tratti
+  let h;
+  if(score >= 80)      h = 60 + (score-80)*3;   // 80→60 (giallo-verde), 100→120 (verde)
+  else if(score >= 60) h = 25 + (score-60)*1.75; // 60→25 (arancio), 80→60
+  else                 h = score * 0.42;          // 0→0 (rosso), 60→25
+  return `hsl(${Math.round(h)},72%,38%)`;
+}
+
+function updateMatch(profilo){
+  const el=document.getElementById('match-num'),desc=document.getElementById('match-desc');
+  const penalty=calcPenalty();
+  if(penalty){
+    el.textContent='—';el.style.color='#aaa';
+    desc.textContent=penalty; desc.style.color=scoreColor(20);
+    return;
+  }
+  if(!profilo){el.textContent='—';el.style.color='#aaa';desc.textContent='Aggiungi una matrice per iniziare';desc.style.color='';return;}
+  let tot=0; PROPS.forEach(p=>tot+=(100-Math.abs((profilo[p]||0)-target[p])));
+  const score=Math.round(tot/PROPS.length);
+  el.textContent=score+'%';
+  el.style.color=scoreColor(score);
+  desc.style.color='';
+  desc.textContent=score>=80?'Ottimo — la chiave entra nel chiavistello':
+    score>=60?'Zona di negoziazione — continua a calibrare':
+    'Lontano dal target — cambia strategia';
+}
+
+function clickTarget(prop,e){
+  const rect=e.currentTarget.getBoundingClientRect();
+  const v=Math.max(0,Math.min(100,Math.round(((e.clientX-rect.left)/rect.width)*100)));
+  target[prop]=v;
+  document.getElementById('tf-'+prop).style.width=v+'%';
+  document.getElementById('tv-'+prop).textContent=v;
+  if(document.getElementById('bvt-'+prop)) document.getElementById('bvt-'+prop).style.height=v+'%';
+  updateMatch(calcProfilo());
+}
+
+function openModal(){
+  PROPS.forEach(p=>{document.getElementById('m-'+p).value=target[p];document.getElementById('mv-'+p).textContent=target[p];});
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+function mval(p,v){document.getElementById('mv-'+p).textContent=v;}
+function applyModal(){
+  PROPS.forEach(p=>{target[p]=parseInt(document.getElementById('m-'+p).value);
+    document.getElementById('tf-'+p).style.width=target[p]+'%';
+    document.getElementById('tv-'+p).textContent=target[p];});
+  buildOutputBars();closeModal();updateAll();
+}
+
+// ═══ PORTA AL LAB ═══
+function portaAlLab(){
+  const filled = Object.entries(slotData);
+  if(!filled.length){ return; }
+
+  // Costruisci payload: array di {id, nome, famiglia, dose, ruolo}
+  const payload = filled.map(([slotId, d]) => {
+    const ing = ING[d.ingId];
+    const dbIng = INGREDIENTI_DATA?.ingredienti?.[d.ingId];
+    return {
+      id: d.ingId,
+      nome: dbIng?.nome || ing.nome,
+      famiglia: dbIng?.famiglia || ing.famiglia_db || '',
+      dose: d.grammi,
+      ruolo: ing.cat
+    };
+  });
+
+  // Scrivi nel localStorage per il Lab
+  localStorage.setItem('biogame_to_lab', JSON.stringify({
+    ingredienti: payload,
+    timestamp: Date.now(),
+    source: 'biogame'
+  }));
+
+  // Naviga al Lab in modalità Sperimenta
+  window.location.href = 'lab.html#sperimenta';
+}
+
+init();
+</script>
+</body>
+</html>

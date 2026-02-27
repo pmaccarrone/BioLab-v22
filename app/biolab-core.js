@@ -293,7 +293,7 @@ const BioLab = {
         { href: 'applicazioni.html',name:'Applicazioni', sub: 'Progetti reali' },
         // — Cerniera —
         { type: 'separator' },
-        { href: '#',               name: 'BioGame',      sub: 'Configuratore', action: 'biogame' },
+        { href: 'biogame.html',    name: 'BioGame',      sub: 'Ricette & Crescite', dropdown: 'biogame' },
         { type: 'separator' },
         // — Sezione Esperta —
         { href: 'lab.html',        name: 'Laboratorio',  sub: 'Sperimenta & Tutor', dropdown: true },
@@ -337,14 +337,20 @@ const BioLab = {
                 }
                 const page = link.href.replace('.html', '').replace(/#.*/, '');
                 const active = (page === this.currentPage) ? ' active' : '';
-                if (link.action === 'biogame') {
-                    h += '<a href="#" class="bl-nav-link bl-nav-biogame" onclick="event.preventDefault();BioLab.showToast(\'BioGame in arrivo — stay tuned!\',\'info\')">'
-                      + '<span class="bl-nav-link-name">' + link.name + '</span>'
-                      + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>';
-                } else if (link.action === 'guide') {
+                if (link.action === 'guide') {
                     h += '<a href="#" class="bl-nav-link bl-nav-guide" onclick="event.preventDefault();BioLab.showGuideModal()">'
                       + '<span class="bl-nav-link-name">' + link.name + '</span>'
                       + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>';
+                } else if (link.dropdown === 'biogame') {
+                    const bgActive = (this.currentPage === 'biogame' || this.currentPage === 'biogame_crescite') ? ' active' : '';
+                    h += '<div class="bl-nav-dropdown">'
+                      + '<a href="biogame.html" class="bl-nav-link' + bgActive + '">'
+                      + '<span class="bl-nav-link-name">' + link.name + '<span class="bl-nav-arrow"> &#9662;</span></span>'
+                      + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>'
+                      + '<div class="bl-nav-dropdown-menu">'
+                      + '<a href="biogame.html" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9881;</span> Ricette<span class="bl-dropdown-desc">Costruisci il tuo biomateriale</span></a>'
+                      + '<a href="biogame_crescite.html" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9752;</span> Crescite<span class="bl-dropdown-desc">SCOBY, Micelio, Spirulina</span></a>'
+                      + '</div></div>';
                 } else if (link.dropdown) {
                     h += '<div class="bl-nav-dropdown">'
                       + '<a href="' + link.href + '#sperimenta" class="bl-nav-link' + active + '">'
