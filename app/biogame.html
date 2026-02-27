@@ -55,8 +55,8 @@ header{background:var(--verde);color:white;display:flex;align-items:center;justi
 .rl-g{font-size:.62rem;color:#aaa;margin-left:auto}
 
 /* ── CENTRO ── */
-.panel-cerchio{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--carta);padding:16px;overflow:hidden;position:relative}
-.cerchio-wrap{position:relative;width:480px;height:480px;flex-shrink:0}
+.panel-cerchio{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--carta);padding:16px;overflow:visible;position:relative}
+.cerchio-wrap{position:relative;width:480px;height:480px;flex-shrink:0;overflow:visible}
 #canvas-raggi{position:absolute;top:0;left:0;pointer-events:none;z-index:1}
 #canvas-torta{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;cursor:pointer}
 .cerchio-centro{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:114px;height:114px;background:white;border-radius:50%;border:2px solid var(--bordo);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;pointer-events:none;z-index:6;box-shadow:0 2px 14px rgba(0,0,0,.08)}
@@ -94,6 +94,9 @@ header{background:var(--verde);color:white;display:flex;align-items:center;justi
 .lista-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .lista-nome{font-size:.72rem;color:var(--ink)}
 .lista-item.sel .lista-nome{color:var(--verde);font-weight:700}
+.lista-group-label{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ocra);padding:8px 14px 3px;font-weight:500;border-top:1px solid var(--carta2);margin-top:2px}
+.guida-group-label:first-child{border-top:none;margin-top:0}
+.guida-ibr-item:hover{background:rgba(179,92,42,.16) !important;border-color:rgba(179,92,42,.4) !important}
 
 #raggera-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:20}
 #raggera-layer.open{pointer-events:all}
@@ -185,6 +188,39 @@ header{background:var(--verde);color:white;display:flex;align-items:center;justi
 .btn-p{background:var(--verde);color:white}.btn-p:hover{background:var(--verde2)}
 .btn-s{background:transparent;color:#888;border:1px solid var(--bordo)}.btn-s:hover{border-color:#888}
 
+/* ── MODALITÀ GUIDATA ── */
+.mode-toggle{display:flex;gap:0;border:1.5px solid var(--bordo);border-radius:3px;overflow:hidden}
+.mode-btn{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;cursor:pointer;border:none;background:white;color:var(--ink2);transition:all .2s}
+.mode-btn.active{background:var(--verde);color:white;font-weight:500}
+.mode-btn:hover:not(.active){background:var(--verde-bg)}
+.guida-steps{display:flex;gap:3px;align-items:center;margin:10px 0 6px}
+.guida-step-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--bordo);background:white;transition:all .3s}
+.guida-step-dot.done{background:var(--verde3);border-color:var(--verde3)}
+.guida-step-dot.skip{background:#ddd;border-color:#ccc}
+.guida-step-dot.current{border-color:var(--ocra);background:var(--ocra);box-shadow:0 0 0 3px rgba(141,110,0,.2)}
+.guida-step-dot.future{border-color:var(--bordo)}
+.guida-progress{font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ocra);margin-bottom:6px}
+.guida-q{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--verde);line-height:1.3;margin-bottom:10px}
+.guida-note{font-size:.76rem;color:#5D4037;line-height:1.65;margin-bottom:12px}
+.guida-skip-btn{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px dashed var(--bordo);background:white;color:var(--ink2);padding:5px 14px;cursor:pointer;border-radius:2px;transition:all .2s;margin-top:4px}
+.guida-skip-btn:hover{border-color:var(--ocra);color:var(--ocra);background:var(--ocra-bg)}
+.guida-obblig-tag{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rosso);background:#fce4ec;padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:8px}
+.guida-aff-ok{font-size:.6rem;color:var(--verde2);margin-top:4px;font-style:italic;font-family:'Fraunces',serif}
+.guida-aff-no{font-size:.6rem;color:var(--rosso);margin-top:4px;font-style:italic;font-family:'Fraunces',serif}
+.palla.guida-focus{border-color:var(--ocra) !important;box-shadow:0 0 0 4px rgba(141,110,0,.25),0 2px 8px rgba(0,0,0,.08);animation:guidaPulse 1.6s ease-in-out infinite}
+@keyframes guidaPulse{0%,100%{box-shadow:0 0 0 4px rgba(141,110,0,.25)}50%{box-shadow:0 0 0 7px rgba(141,110,0,.4)}}
+.palla.guida-completata{opacity:.85}
+.palla.guida-attenuata{opacity:.3;filter:grayscale(.6)}
+.palla.guida-attiva{border-color:var(--verde-p) !important;opacity:.65}
+.guida-completo{background:var(--verde-bg);border:1px solid var(--verde-p);border-radius:4px;padding:14px 16px;margin-top:10px}
+.guida-completo-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--verde);margin-bottom:6px}
+.guida-completo-tech{font-size:.74rem;color:#5D4037;line-height:1.6}
+.guida-completo-tech strong{color:var(--verde)}
+.guida-matrice-picker{margin-top:14px}
+.guida-matrice-btn{display:block;width:100%;text-align:left;font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 12px;margin-bottom:4px;border:1.5px solid var(--bordo);background:white;color:var(--ink);cursor:pointer;border-radius:3px;transition:all .15s}
+.guida-matrice-btn:hover{border-color:var(--verde2);background:var(--verde-bg);color:var(--verde)}
+.guida-matrice-btn .gmb-intro{font-size:.62rem;color:var(--ink2);font-style:italic;font-family:'Fraunces',serif;margin-top:2px;line-height:1.35;display:block}
+
 /* ── Override per integrazione BioLab ── */
 body { height:auto; overflow:auto; display:block; font-family:'DM Mono',monospace; }
 header { display:none !important; }
@@ -211,7 +247,8 @@ header { display:none !important; }
       <div class="perche-testo">
         Clicca una delle <b>palle</b> intorno al cerchio: si apre una raggera con gli ingredienti disponibili per quel ruolo.<br><br>
         Parti sempre da una <b>matrice</b> — è la spina dorsale del materiale.<br><br>
-        Clicca una <b>fetta della torta</b> per rileggere il perché di un ingrediente già inserito.
+        Clicca una <b>fetta della torta</b> per rileggere il perché di un ingrediente già inserito.<br><br>
+        <b>Modalità Guidato:</b> usa il toggle in basso per un percorso passo-passo.
       </div>
     </div>
   </div>
@@ -264,9 +301,14 @@ header { display:none !important; }
       <span class="budget-num" id="budget-num">0g / 100ml</span>
     </div>
     <div class="nota-tiny">Palla vuota → ingredienti disponibili &nbsp;·&nbsp; Palla piena → cambia o regola &nbsp;·&nbsp; Fetta → rileggi perché</div>
-    <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
-      <button style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--verde3);background:var(--verde-bg);color:var(--verde);padding:6px 16px;cursor:pointer;border-radius:2px" onclick="openModal()">Imposta chiavistello ▸</button>
+    <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;align-items:center">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="mode-libero" onclick="setMode('libero')">Libero</button>
+        <button class="mode-btn" id="mode-guidato" onclick="setMode('guidato')">Guidato</button>
+      </div>
+      <button style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--verde3);background:var(--verde-bg);color:var(--verde);padding:6px 16px;cursor:pointer;border-radius:2px" onclick="openModal()">Chiavistello ▸</button>
       <button id="btn-porta-lab" style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid #b35c2a;background:#fdf0e6;color:#b35c2a;padding:6px 16px;cursor:pointer;border-radius:2px;display:none" onclick="portaAlLab()">Porta al Lab ▸</button>
+      <button style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid #999;background:#f5f5f5;color:#777;padding:6px 16px;cursor:pointer;border-radius:2px;margin-left:auto" onclick="svuotaTutto()">Svuota tutto</button>
     </div>
   </div>
 
@@ -320,6 +362,7 @@ header { display:none !important; }
 <script src="biolab-core.js"></script>
 <script src="database_biomateriali_v11.js"></script>
 <script src="biogame-adapter.js"></script>
+<script src="biogame-guida.js"></script>
 <script>
 const PROPS = ['trasparenza','flessibilita','resistenzaH2O','resistenzaMecc','biodegradabilita'];
 const PROP_LABELS = {trasparenza:'Trasp.',flessibilita:'Fless.',resistenzaH2O:'H₂O',resistenzaMecc:'Mecc.',biodegradabilita:'Biodeg.'};
@@ -369,6 +412,293 @@ const CX=240,CY=240,R_PALLE=192,R_TORTA=108;
 
 function init(){buildOutputBars();buildPalle();updateAll();document.addEventListener('click',closeAll);}
 
+// ═══ MODALITÀ: Libero / Guidato ═══
+let currentMode = 'libero';
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-libero').classList.toggle('active', mode==='libero');
+  document.getElementById('mode-guidato').classList.toggle('active', mode==='guidato');
+
+  if (mode === 'guidato') {
+    enterGuidedMode();
+  } else {
+    exitGuidedMode();
+  }
+}
+
+function enterGuidedMode() {
+  // Controlla se c'è già una matrice selezionata
+  const matriceSel = Object.entries(slotData)
+    .filter(([,d]) => ING[d.ingId]?.cat === 'matrice')
+    .map(([,d]) => d.ingId);
+
+  if (matriceSel.length > 0 && BioGameGuida.hasScenario(matriceSel[0])) {
+    BioGameGuida.activate(matriceSel[0]);
+    // Auto-require (es. alginato → CaCl₂)
+    handleAutoRequire();
+    // Applica chiavistello suggerito
+    applyGuidaChiavistello();
+    BioGameGuida.syncWithSlots(slotData);
+    updateGuidaPerche();
+    updateGuidaPalle();
+  } else {
+    BioGameGuida.deactivate();
+    showGuidaMatricePicker();
+  }
+}
+
+function exitGuidedMode() {
+  BioGameGuida.deactivate();
+  // Rimuovi classi guida dalle palle
+  SLOT_CFG.forEach(s => {
+    const p = document.getElementById('palla-'+s.id);
+    if(p) p.classList.remove('guida-focus','guida-completata','guida-attenuata','guida-attiva');
+  });
+  // Ripristina perché iniziale o ingrediente
+  const filled = Object.values(slotData);
+  if (filled.length > 0) {
+    showPerche(filled[filled.length-1].ingId);
+  } else {
+    document.getElementById('perche-body').innerHTML=`
+      <div class="perche-ing-nome">Inizia dal cerchio</div>
+      <div class="perche-testo">
+        Clicca una delle <b>palle</b> intorno al cerchio.<br><br>
+        Parti da una <b>matrice</b>.<br><br>
+        Oppure attiva la modalità <b>Guidato</b> per un percorso passo-passo.
+      </div>`;
+  }
+}
+
+function showGuidaMatricePicker() {
+  const matriciDisp = BioGameGuida.getMatriciDisponibili()
+    .filter(id => ING[id]); // solo quelli presenti nel BioGame
+  const body = document.getElementById('perche-body');
+  let h = `<div class="perche-ing-nome">Scegli la matrice</div>
+    <div class="perche-ing-fam">modalità guidata</div>
+    <div class="perche-testo">La modalità guidata ti accompagna passo-passo nella costruzione della ricetta. Scegli la base del materiale:</div>
+    <div class="guida-matrice-picker">`;
+
+  matriciDisp.forEach(id => {
+    const sc = BioGameGuida.SCENARI_GUIDA[id];
+    const nome = ING[id]?.nome || id;
+    const intro = sc.intro.substring(0, 80) + (sc.intro.length > 80 ? '...' : '');
+    h += `<button class="guida-matrice-btn" onclick="selectGuidaMatrice('${id}')">
+      ${nome}<span class="gmb-intro">${intro}</span></button>`;
+  });
+  h += '</div>';
+  body.innerHTML = h;
+}
+
+function selectGuidaMatrice(matriceId) {
+  // Se la matrice non è già in uno slot, mettila in m1
+  const alreadyInSlot = Object.entries(slotData).find(([,d]) => d.ingId === matriceId);
+  if (!alreadyInSlot) {
+    const ing = ING[matriceId];
+    if (ing) {
+      slotData['m1'] = { ingId: matriceId, grammi: (ing.gMin + ing.gMax) / 2 };
+      updatePalla('m1');
+    }
+  }
+
+  BioGameGuida.activate(matriceId);
+  handleAutoRequire();
+  applyGuidaChiavistello();
+  BioGameGuida.syncWithSlots(slotData);
+  updateAll();
+  updateGuidaPerche();
+  updateGuidaPalle();
+}
+
+function handleAutoRequire() {
+  const state = BioGameGuida.getState();
+  if (!state.autoRequired) return;
+  const reqId = state.autoRequired;
+  // Mettilo in slot reticolante se vuoto
+  if (!slotData['ret'] && ING[reqId]) {
+    const ing = ING[reqId];
+    slotData['ret'] = { ingId: reqId, grammi: (ing.gMin + ing.gMax) / 2 };
+    updatePalla('ret');
+  }
+}
+
+function applyGuidaChiavistello() {
+  const state = BioGameGuida.getState();
+  const sc = BioGameGuida.SCENARI_GUIDA[state.matriceId];
+  if (!sc?.chiavistello) return;
+  const ch = sc.chiavistello;
+  PROPS.forEach(p => {
+    target[p] = ch[p];
+    const tf = document.getElementById('tf-'+p);
+    const tv = document.getElementById('tv-'+p);
+    if(tf) tf.style.width = ch[p]+'%';
+    if(tv) tv.textContent = ch[p];
+  });
+  buildOutputBars();
+}
+
+function updateGuidaPerche() {
+  if (!BioGameGuida.isActive()) return;
+  const content = BioGameGuida.getPercheContent();
+  if (!content) return;
+
+  const body = document.getElementById('perche-body');
+  const state = BioGameGuida.getState();
+  const sc = BioGameGuida.SCENARI_GUIDA[state.matriceId];
+
+  if (content.tipo === 'completo') {
+    // Tutti gli step fatti
+    let h = `<div class="perche-ing-nome">Ricetta pronta</div>
+      <div class="perche-ing-fam">modalità guidata</div>`;
+
+    // Step dots
+    h += renderStepDots(sc, state);
+
+    h += `<div class="guida-completo">
+      <div class="guida-completo-title">✓ Composizione completata</div>
+      <div class="guida-completo-tech"><strong>Tecnica:</strong> ${content.testo}</div>
+    </div>`;
+
+    // Lista ingredienti in ricetta
+    h += renderGuidaRicetta();
+
+    body.innerHTML = h;
+    return;
+  }
+
+  // Step corrente
+  let h = `<div class="perche-ing-nome">${ING[state.matriceId]?.nome || state.matriceId}</div>
+    <div class="perche-ing-fam">modalità guidata</div>`;
+
+  // Step dots
+  h += renderStepDots(sc, state);
+
+  // Progress label
+  h += `<div class="guida-progress">${content.progress}</div>`;
+
+  // Obbligatorio tag
+  if (content.obbligatorio) {
+    h += `<div class="guida-obblig-tag">obbligatorio</div>`;
+  }
+
+  // Domanda
+  h += `<div class="guida-q">${content.titolo}</div>`;
+
+  // Nota didattica
+  if (content.note) {
+    h += `<div class="guida-note">${content.note}</div>`;
+  }
+
+  // Mostra affinità per gli ingredienti della categoria target
+  if (content.isIbridazione) {
+    // ── IBRIDAZIONE: mostra matrici complementari cliccabili ──
+    const candidati = BioGameGuida.getIbridazioniCandidati(ING);
+    if (candidati.length > 0) {
+      h += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #e0d4b8">
+        <div style="font-size:.60rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ocra);margin-bottom:6px">Matrici complementari</div>`;
+      candidati.forEach(id => {
+        const ing = ING[id]; if (!ing) return;
+        const nota = BioGameGuida.getIbridazioneNotaForPair(id);
+        h += `<div class="guida-ibr-item" onclick="selectIng('m2','${id}')" style="cursor:pointer;padding:5px 8px;margin:2px 0;border-radius:6px;background:rgba(179,92,42,.08);border:1px solid rgba(179,92,42,.2);transition:background .15s">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="lista-dot" style="background:${ing.colore}"></div>
+            <strong style="font-size:.72rem;color:var(--testo)">${ing.nome}</strong>
+            <span style="font-size:.55rem;color:#999;margin-left:auto">${BioGameGuida.FAMIGLIA_MAP[id]?.replace(/_/g,' ').toLowerCase() || ''}</span>
+          </div>
+          ${nota ? `<div style="font-size:.58rem;color:#887;margin-top:3px;line-height:1.3">${nota}</div>` : ''}
+        </div>`;
+      });
+      h += `</div>`;
+    }
+  } else {
+    // ── STEP NORMALE: mostra affinità ingredienti ──
+    const targetSlot = SLOT_CFG.find(s => s.id === content.slotTarget);
+    if (targetSlot) {
+      const candidati = (FAM_CANDIDATI[targetSlot.fam]||[]).filter(id => {
+        return !Object.values(slotData).some(d => d.ingId === id);
+      });
+      const affNotes = candidati.map(id => {
+        const aff = BioGameGuida.getAffinita(id);
+        if (!aff) return null;
+        return { id, nome: ING[id]?.nome, ...aff };
+      }).filter(Boolean);
+
+      if (affNotes.length > 0) {
+        h += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #e0d4b8">`;
+        affNotes.forEach(a => {
+          const cls = a.tag === 'consigliato' ? 'guida-aff-ok' : 'guida-aff-no';
+          const icon = a.tag === 'consigliato' ? '★' : '⚠';
+          h += `<div class="${cls}">${icon} ${a.nome}: ${a.nota}</div>`;
+        });
+        h += `</div>`;
+      }
+    }
+  }
+
+  // Skip button
+  if (content.skippable) {
+    h += `<button class="guida-skip-btn" onclick="guidaSkip(${content.stepIdx})">${content.skipLabel}</button>`;
+  }
+
+  // Hint per cliccare la palla
+  h += `<div style="font-size:.62rem;color:#bbb;margin-top:12px;font-style:italic;font-family:'Fraunces',serif">
+    Clicca la palla pulsante per scegliere →</div>`;
+
+  // Lista ingredienti già scelti
+  h += renderGuidaRicetta();
+
+  body.innerHTML = h;
+}
+
+function renderStepDots(sc, state) {
+  if (!sc?.steps) return '';
+  let h = '<div class="guida-steps">';
+  sc.steps.forEach((step, i) => {
+    let cls = 'guida-step-dot';
+    if (state.completed.has(i)) cls += ' done';
+    else if (state.skipped.has(i)) cls += ' skip';
+    else if (i === state.currentStep) cls += ' current';
+    else cls += ' future';
+    h += `<div class="${cls}" title="${step.q}"></div>`;
+  });
+  h += '</div>';
+  return h;
+}
+
+function renderGuidaRicetta() {
+  const filled = Object.values(slotData);
+  if (filled.length === 0) return '';
+  let h = `<div class="rl-wrap">
+    <div class="rl-title">Ingredienti in ricetta</div>`;
+  filled.forEach(d => {
+    const i = ING[d.ingId];
+    h += `<div class="rl-item" onclick="showPerche('${d.ingId}');if(BioGameGuida.isActive())setTimeout(updateGuidaPerche,10)">
+      <div class="rl-dot" style="background:${i.colore}"></div>
+      <span class="rl-nome">${i.nome}</span>
+      <span class="rl-g">${d.grammi.toFixed(0)}g</span>
+    </div>`;
+  });
+  h += '</div>';
+  return h;
+}
+
+function updateGuidaPalle() {
+  if (!BioGameGuida.isActive()) return;
+  SLOT_CFG.forEach(slot => {
+    const p = document.getElementById('palla-'+slot.id);
+    if (!p) return;
+    p.classList.remove('guida-focus','guida-completata','guida-attenuata','guida-attiva');
+    const stato = BioGameGuida.getPallaStato(slot.id, slot, slotData);
+    if (stato !== 'neutra') p.classList.add('guida-'+stato);
+  });
+}
+
+function guidaSkip(stepIdx) {
+  BioGameGuida.skipStep(stepIdx);
+  updateGuidaPerche();
+  updateGuidaPalle();
+}
+
 // ═══ OUTPUT BARS ═══
 function buildOutputBars(){
   const c=document.getElementById('barre-out'); c.innerHTML='';
@@ -403,7 +733,7 @@ function buildPalle(){
     sp.className='slider-popup'; sp.id='sp-'+slot.id;
     const spLeft=px+29>CX?(px-208):(px+64);
     sp.style.left=Math.max(0,spLeft)+'px';
-    sp.style.top=Math.max(8,Math.min(py-10,390))+'px';
+    sp.style.top=Math.max(8,Math.min(py-10,280))+'px';
     sp.addEventListener('click',e=>e.stopPropagation());
     sc.appendChild(sp);
   });
@@ -428,7 +758,16 @@ function showRaggera(slot, pallaCX, pallaCY){
     // ── PALLA VUOTA: lista scelta ──
     const usati = new Set(Object.entries(slotData)
       .filter(([sid])=>sid!==slot.id).map(([,d])=>d.ingId));
-    const candidati = (FAM_CANDIDATI[slot.fam]||[]).filter(id=>!usati.has(id));
+    let candidati;
+
+    // In guida ibridazione: filtra solo matrici complementari
+    if (BioGameGuida.isActive() && slot.id === 'm2') {
+      const ibrCand = BioGameGuida.getIbridazioniCandidati(ING);
+      candidati = ibrCand.filter(id => !usati.has(id));
+    } else {
+      candidati = (FAM_CANDIDATI[slot.fam]||[]).filter(id=>!usati.has(id));
+    }
+
     if(!candidati.length){ closeAll(); return; }
     if(candidati.length > RAGGERA_MAX){
       showListaPanel(slot, pallaCX, pallaCY, candidati);
@@ -532,25 +871,53 @@ function showRaggeraSmall(slot, pallaCX, pallaCY, candidati){
 function showListaPanel(slot, pallaCX, pallaCY, candidati){
   const lp = document.getElementById('lista-panel');
   const pallaADestra = pallaCX > CX;
+  const isLibero = slot.fam === 'libero';
+  const panelW = isLibero ? 220 : 185;
   const lpx = pallaADestra
-    ? Math.min(pallaCX + 36, 470-190)
-    : Math.max(0, pallaCX - 195);
-  const lpy = Math.max(4, Math.min(pallaCY - 60, 320));
-  lp.style.left = lpx+'px'; lp.style.top = lpy+'px'; lp.style.width='185px';
-  lp.innerHTML=`
-    <div class="lista-header">
-      <span class="lista-cat">${slot.cat}</span>
-      <span class="lista-close" onclick="closeAll()">chiudi ×</span>
-    </div>
-    <div class="lista-items">
-      ${candidati.map(id=>{
-        const ing=ING[id];
-        return`<div class="lista-item" onclick="selectIng('${slot.id}','${id}')">
+    ? Math.min(pallaCX + 36, 470 - panelW)
+    : Math.max(0, pallaCX - panelW - 5);
+  const lpy = Math.max(4, Math.min(pallaCY - 60, isLibero ? 40 : 320));
+  lp.style.left = lpx+'px'; lp.style.top = lpy+'px'; lp.style.width = panelW+'px';
+  if (isLibero) lp.style.maxHeight = '400px';
+
+  let itemsHtml;
+  if (isLibero) {
+    // Raggruppati per categoria
+    const CAT_ORDER = ['matrice','plastificante','reticolante','lipide','carica','colorante','additivo'];
+    const CAT_LABELS = {matrice:'Matrici',plastificante:'Plastificanti',reticolante:'Reticolanti',
+      lipide:'Lipidi/Coating',carica:'Cariche',colorante:'Coloranti',additivo:'Additivi'};
+    const grouped = {};
+    candidati.forEach(id => {
+      const cat = ING[id]?.cat || 'altro';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(id);
+    });
+    itemsHtml = CAT_ORDER.filter(c => grouped[c]?.length).map(cat =>
+      `<div class="lista-group-label">${CAT_LABELS[cat] || cat}</div>` +
+      grouped[cat].map(id => {
+        const ing = ING[id];
+        return `<div class="lista-item" onclick="selectIng('${slot.id}','${id}')">
           <div class="lista-dot" style="background:${ing.colore}"></div>
           <span class="lista-nome">${ing.nome}</span>
         </div>`;
-      }).join('')}
-    </div>`;
+      }).join('')
+    ).join('');
+  } else {
+    itemsHtml = candidati.map(id => {
+      const ing = ING[id];
+      return `<div class="lista-item" onclick="selectIng('${slot.id}','${id}')">
+        <div class="lista-dot" style="background:${ing.colore}"></div>
+        <span class="lista-nome">${ing.nome}</span>
+      </div>`;
+    }).join('');
+  }
+
+  lp.innerHTML=`
+    <div class="lista-header">
+      <span class="lista-cat">${isLibero ? 'tutti gli ingredienti' : slot.cat}</span>
+      <span class="lista-close" onclick="closeAll()">chiudi ×</span>
+    </div>
+    <div class="lista-items">${itemsHtml}</div>`;
   lp.classList.add('open');
 }
 
@@ -563,6 +930,10 @@ function closeAll(){
   document.querySelectorAll('.palla').forEach(p=>p.classList.remove('active-raggera'));
   document.getElementById('lista-panel').classList.remove('open');
   activeRaggera=null; activeSlider=null;
+  // ── Guida: ripristina pannello guidato dopo chiusura popup ──
+  if (BioGameGuida.isActive()) {
+    setTimeout(updateGuidaPerche, 30);
+  }
 }
 
 function selectIng(slotId,ingId){
@@ -573,11 +944,32 @@ function selectIng(slotId,ingId){
   document.getElementById('lista-panel').classList.remove('open');
   document.getElementById('raggera-layer').innerHTML='';
   openSliderPanel(slotId);
+
+  // ── Guida: matrice selezionata → attiva guida se in modo guidato ──
+  if (currentMode === 'guidato' && ing.cat === 'matrice') {
+    if (BioGameGuida.hasScenario(ingId) && !BioGameGuida.isActive()) {
+      BioGameGuida.activate(ingId);
+      handleAutoRequire();
+      applyGuidaChiavistello();
+    }
+  }
+  // ── Guida: sync slot → step ──
+  if (BioGameGuida.isActive()) {
+    BioGameGuida.syncWithSlots(slotData);
+    setTimeout(() => { updateGuidaPerche(); updateGuidaPalle(); }, 50);
+  }
+
   updateAll();
 }
 
 function removeIng(slotId){
-  delete slotData[slotId]; updatePalla(slotId); closeAll(); updateAll();
+  delete slotData[slotId]; updatePalla(slotId); closeAll();
+  // ── Guida: sync ──
+  if (BioGameGuida.isActive()) {
+    BioGameGuida.syncWithSlots(slotData);
+    setTimeout(() => { updateGuidaPerche(); updateGuidaPalle(); }, 50);
+  }
+  updateAll();
 }
 
 function onSl(slotId,val){
@@ -758,6 +1150,18 @@ function showPerche(ingId){
       <span class="ef-arrow ${e.dir}">${e.dir==='su'?'↑':e.dir==='giu'?'↓':'→'}</span>
       <span class="ef-desc">${e.note}</span>
     </div>`).join('');
+
+  // Nota ibridazione se m2 è riempito e guida attiva
+  let ibrNota = '';
+  if (BioGameGuida.isActive() && slotData.m2?.ingId === ingId) {
+    const nota = BioGameGuida.getIbridazioneNotaForPair(ingId);
+    if (nota) {
+      ibrNota = `<div style="margin:8px 0;padding:8px 10px;background:rgba(179,92,42,.08);border-left:3px solid var(--ocra);border-radius:4px;font-size:.65rem;line-height:1.4;color:#665">
+        <strong>Ibridazione:</strong> ${nota}
+      </div>`;
+    }
+  }
+
   const rl=Object.values(slotData).length?`
     <div class="rl-wrap">
       <div class="rl-title">Ingredienti in ricetta — clicca per rileggere</div>
@@ -772,6 +1176,7 @@ function showPerche(ingId){
     <div class="perche-ing-nome">${ing.nome}</div>
     <div class="perche-ing-fam">${ing.cat}</div>
     <div class="perche-testo">${ing.perche}</div>
+    ${ibrNota}
     ${eff?`<div class="effetti-wrap">${eff}</div>`:''}
     ${rl}`;
 }
@@ -907,6 +1312,11 @@ function updateAll(){
   const hasMatrice = filled.some(([,d])=>ING[d.ingId]?.cat==='matrice');
   const btnLab = document.getElementById('btn-porta-lab');
   if(btnLab) btnLab.style.display = hasMatrice ? '' : 'none';
+
+  // ── Guida: applica stati palle (override cascata in modo guidato) ──
+  if (BioGameGuida.isActive()) {
+    updateGuidaPalle();
+  }
 }
 
 function scoreColor(score){
@@ -987,6 +1397,32 @@ function portaAlLab(){
 
   // Naviga al Lab in modalità Sperimenta
   window.location.href = 'lab.html#sperimenta';
+}
+
+function svuotaTutto(){
+  closeAll();
+  Object.keys(slotData).forEach(id => {
+    delete slotData[id];
+    updatePalla(id);
+  });
+  // Reset target a default
+  PROPS.forEach(k => target[k] = 50);
+  document.querySelectorAll('.tgt-slider').forEach(s => s.value = 50);
+  document.querySelectorAll('[id^="tgt-v-"]').forEach(el => el.textContent = '50');
+  // Reset guida
+  if (BioGameGuida.isActive()) {
+    BioGameGuida.deactivate();
+    document.querySelectorAll('.palla').forEach(p => {
+      p.classList.remove('guida-focus','guida-attenuata','guida-completata','guida-attiva');
+    });
+  }
+  // Reset perché
+  document.getElementById('perche-body').innerHTML = `
+    <div class="perche-testo" style="margin-top:14px">
+      Seleziona un ingrediente per capire il suo ruolo nella ricetta.
+      <br><br><strong>Modalità Guidato</strong>: scegli una matrice e segui il percorso passo-passo.
+    </div>`;
+  updateAll();
 }
 
 init();
