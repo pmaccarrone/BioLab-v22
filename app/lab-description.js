@@ -128,7 +128,7 @@ function generateMaterialDescription(selectedIds, matrice, plastificante, lipide
     const hasCarragenina = selectedIds.some(id => (ings[id]?.nome || '').toLowerCase().includes('carragenina'));
     const needsBoiling = hasAgar || hasCarragenina || hasAmido;
     
-    if (selectedIds.length > 4) { diffLevel++; diffReasons.push('formula complessa (' + selectedIds.length + ' ingredienti)'); }
+    if (selectedIds.length > 4) { diffLevel++; diffReasons.push('ricetta complessa (' + selectedIds.length + ' ingredienti)'); }
     if (selectedIds.length > 6) { diffLevel++; }
     if (needsBoiling) { diffLevel++; diffReasons.push('richiede ebollizione controllata'); }
     if (hasReticolante && hasAlginato) { diffLevel++; diffReasons.push('gelificazione ionica (timing critico)'); }
@@ -498,7 +498,7 @@ function generateMaterialDescription(selectedIds, matrice, plastificante, lipide
         var lipideNomi = [];
         selectedIds.forEach(function(id) { var ing = ings[id]; if (ing && ing.famiglia === 'RESINA_LIPIDE') lipideNomi.push(ing.nome); });
         html += '<p style="background:#fff3e0;padding:10px 14px;border-radius:8px;border-left:3px solid #e65100;font-size:0.9em;">';
-        html += 'Il lipide (' + (lipideNomi.length > 0 ? lipideNomi.join(', ') : 'lipide') + ') viene applicato come <b>rivestimento superficiale</b>, non mescolato nella formula. ';
+        html += 'Il lipide (' + (lipideNomi.length > 0 ? lipideNomi.join(', ') : 'lipide') + ') viene applicato come <b>rivestimento superficiale</b>, non mescolato nella ricetta. ';
         html += 'Questo massimizza la <span class="desc-positive">barriera all\'acqua</span> senza alterare trasparenza, flessibilita o meccanica del materiale base.</p>';
         html += '<p style="font-size:0.85em;color:#546e7a;">Effetti: <span class="desc-positive">+++ resistenza H2O (superficie)</span>, trasparenza e meccanica invariate rispetto al substrato.</p>';
     }

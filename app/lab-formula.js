@@ -352,9 +352,65 @@ function applyPostCalcModifiers(trasp, flex, h2o, mecc, formula) {
 }
 
 
+
 // =============================================
-// CALCOLO FORMULA + DOSAGGI (from v97)
+// CALCOLO FORMULA + DOSAGGI — v2 (grammi reali per 100ml solvente)
 // =============================================
+
+// Determina il solvente richiesto da un ingrediente matrice
+function _getSolvente(ing) {
+    if (!ing) return { id: 'acqua', label: 'acqua', note: '' };
+    var nome = (ing.nome || '').toLowerCase();
+    // Parametri IED hanno priorità
+    if (ing.parametri_IED && ing.parametri_IED.solvente_obbligatorio) {
+        return { id: 'speciale', label: ing.parametri_IED.solvente_obbligatorio, note: '' };
+    }
+    // Casi noti
+    if (nome.includes('zeina'))
+        return { id: 'etanolo', label: 'etanolo 70%', note: 'La zeina è solubile solo in alcool' };
+    if (nome.includes('chitosano'))
+        return { id: 'acido_acetico', label: 'acido acetico 1\u20132%', note: 'Il chitosano richiede pH acido per sciogliersi' };
+    if (nome.includes('gommalacca'))
+        return { id: 'alcool', label: 'alcool etilico', note: 'La gommalacca si scioglie in alcool, non in acqua' };
+    if (nome.includes('colofonia'))
+        return { id: 'alcool', label: 'alcool o trementina', note: '' };
+    if (nome.includes('caseina'))
+        return { id: 'latte', label: 'latte (intero o scremato)', note: 'La caseina si ottiene per acidificazione del latte caldo' };
+    // Default
+    return { id: 'acqua', label: 'acqua', note: '' };
+}
+
+// Grammi base per 100ml solvente — dal range DB dell'ingrediente
+function _baseGrams(ing) {
+    var p = (ing && ing.parametri) ? ing.parametri : {};
+    var gMin = p.range_percent_min;
+    var gMax = p.range_percent_max;
+    // Fallback per famiglia se il DB non ha range
+    if (gMin == null || gMax == null) {
+        var fam = ing ? ing.famiglia : '';
+        var defaults = {
+            'PROTEINA': [5, 15], 'POLISACCARIDE_NEUTRO': [2, 10], 'POLISACCARIDE_ANIONICO': [1, 5],
+            'POLICATIONE': [2, 8], 'COLTURA': [1, 5], 'PLASTIFICANTE': [5, 30],
+            'SALE_RETICOLANTE': [0.5, 5], 'CARICA': [3, 20], 'RESINA_LIPIDE': [2, 10],
+            'COLORANTE': [0.3, 4], 'ADDITIVO': [1, 10], 'ACIDO': [1, 5]
+        };
+        var d = defaults[fam] || [1, 10];
+        gMin = gMin != null ? gMin : d[0];
+        gMax = gMax != null ? gMax : d[1];
+    }
+    return {
+        base: Math.round((gMin + gMax) / 2 * 10) / 10,
+        min: Math.max(0.5, gMin),
+        max: Math.round(gMax * 1.3 * 10) / 10
+    };
+}
+
+// Step per +/- in base alla famiglia
+function _doseStep(fam) {
+    if (fam === 'SALE_RETICOLANTE' || fam === 'COLORANTE') return 0.5;
+    if (fam === 'POLISACCARIDE_ANIONICO') return 0.5;
+    return 1;
+}
 
 function calculateFormula() {
   try {
@@ -398,58 +454,63 @@ function calculateFormula() {
         }
     });
     
-    // Calcola percentuali BASE
-    let formula = [];
-    let totalPercent = 0;
+    // =========================================================
+    // SOLVENTE — determinato dalla matrice principale
+    // =========================================================
+    const SOLVENTE_ML = 100;
+    let solvente = { id: 'acqua', label: 'acqua', note: '' };
+    let solventiDiversi = false;
     
     if (matrici.length > 0) {
-        const perMatrice = Math.round(70 / matrici.length);
-        matrici.forEach(m => { formula.push({ ...m, percent: perMatrice }); totalPercent += perMatrice; });
-    }
-    plastificanti.forEach(p => {
-        const pct = Math.round(((p.ing.range_percent_min || 10) + (p.ing.range_percent_max || 30)) / 2);
-        formula.push({ ...p, percent: pct }); totalPercent += pct;
-    });
-    if (cariche.length > 0) {
-        const perCarica = Math.round(15 / cariche.length);
-        cariche.forEach(c => { formula.push({ ...c, percent: perCarica }); totalPercent += perCarica; });
-    }
-    reticolanti.forEach(r => {
-        const pct = Math.round(((r.ing.range_percent_min || 1) + (r.ing.range_percent_max || 5)) / 2);
-        formula.push({ ...r, percent: pct }); totalPercent += pct;
-    });
-    if (lipidi.length > 0) {
-        const perLipide = Math.round(10 / lipidi.length);
-        lipidi.forEach(l => { formula.push({ ...l, percent: perLipide }); totalPercent += perLipide; });
-    }
-    coloranti.forEach(c => { formula.push({ ...c, percent: 2 }); totalPercent += 2; });
-    acidi.forEach(a => { formula.push({ ...a, percent: 2 }); totalPercent += 2; });
-    altri.forEach(o => { formula.push({ ...o, percent: 5 }); totalPercent += 5; });
-    
-    // Normalizza a 100% per i valori BASE
-    if (totalPercent !== 100 && formula.length > 0) {
-        const factor = 100 / totalPercent;
-        let sum = 0;
-        formula.forEach((f, i) => {
-            if (i < formula.length - 1) { f.percent = Math.round(f.percent * factor); sum += f.percent; }
-            else { f.percent = 100 - sum; }
-        });
-    }
-    
-    let hasCustom = false;
-    formula.forEach(f => {
-        f.basePercent = f.percent;
-        if (customDosages[f.id] !== undefined) {
-            f.percent = customDosages[f.id];
-            f.modified = true;
-            hasCustom = true;
+        solvente = _getSolvente(matrici[0].ing);
+        if (matrici.length > 1) {
+            for (let mi = 1; mi < matrici.length; mi++) {
+                const altroSolv = _getSolvente(matrici[mi].ing);
+                if (altroSolv.id !== solvente.id) { solventiDiversi = true; break; }
+            }
         }
+    }
+    
+    // =========================================================
+    // GRAMMI REALI per 100ml di solvente
+    // Usa range dal DB (range_percent_min/max)
+    // =========================================================
+    let formula = [];
+    
+    const allGroups = [matrici, plastificanti, reticolanti, cariche, lipidi, coloranti, acidi, altri];
+    allGroups.forEach(group => {
+        group.forEach(item => {
+            const bg = _baseGrams(item.ing);
+            const grams = (customDosages[item.id] !== undefined)
+                ? customDosages[item.id]
+                : bg.base;
+            formula.push({
+                ...item,
+                grams: grams,
+                baseGrams: bg.base,
+                gramsMin: bg.min,
+                gramsMax: bg.max,
+                modified: customDosages[item.id] !== undefined
+            });
+        });
     });
     
-    // Calcola totale effettivo
-    let total = formula.reduce((s, f) => s + f.percent, 0);
+    let hasCustom = formula.some(f => f.modified);
     
-    // Raccogli note di compatibilità 
+    // =========================================================
+    // CONVERSIONE INTERNA → percentuali relative (per motore proprietà)
+    // Il motore riceve le stesse percentuali proporzionali di prima
+    // =========================================================
+    const totalGrams = formula.reduce((s, f) => s + f.grams, 0);
+    formula.forEach(f => {
+        f.percent = totalGrams > 0 ? f.grams / totalGrams * 100 : 0;
+        f.basePercent = totalGrams > 0 ? f.baseGrams / totalGrams * 100 : 0;
+    });
+    
+    // total per smartMessages (somma percentuali, circa 100)
+    let total = Math.round(formula.reduce((s, f) => s + f.percent, 0));
+    
+    // Raccogli note di compatibilità
     let notes = [];
     for (let i = 0; i < selected.length; i++) {
         for (let j = i + 1; j < selected.length; j++) {
@@ -465,58 +526,80 @@ function calculateFormula() {
         }
     }
     
-    // Genera nome formula — tutte le matrici + modificatore principale
-    let formulaName = 'Formula';
+    // Genera nome ricetta
+    let formulaName = 'Ricetta';
     if (matrici.length > 0) {
         formulaName = matrici.slice(0, 2).map(m => m.ing.nome).join(' + ');
-        if (matrici.length > 2) formulaName += ' +…';
-        // Aggiungi modificatore principale (plastificante > reticolante > carica)
+        if (matrici.length > 2) formulaName += ' +\u2026';
         const mod = plastificanti[0] || reticolanti[0] || cariche[0] || lipidi[0];
-        if (mod) formulaName += ' · ' + mod.ing.nome;
+        if (mod) formulaName += ' \u00b7 ' + mod.ing.nome;
     }
     
-    // === v71: RENDER HTML CON +/- ===
+    // =========================================================
+    // RENDER HTML — grammi reali, solvente come prima riga
+    // =========================================================
     let html = '<table class="formula-table">';
-    html += '<thead><tr><th>Ingrediente</th><th>Ruolo</th><th style="text-align:right">Grammi</th><th style="text-align:right">%</th></tr></thead>';
+    html += '<thead><tr><th>Ingrediente</th><th>Ruolo</th><th style="text-align:right">Quantit\u00e0</th><th style="text-align:right">%</th></tr></thead>';
     html += '<tbody>';
+    
+    // Prima riga: solvente (fisso, non modificabile)
+    var solvLabel = solvente.label.charAt(0).toUpperCase() + solvente.label.slice(1);
+    html += '<tr class="formula-solvent-row">';
+    html += '<td><div class="ing-name"><span class="dot dot-solvente"></span>' + solvLabel + '</div></td>';
+    html += '<td>Solvente</td>';
+    html += '<td style="text-align:right"><span class="dose-val solvent-val">' + SOLVENTE_ML + ' ml</span></td>';
+    html += '<td style="text-align:right;color:#999">\u2014</td>';
+    html += '</tr>';
+    
+    // Ingredienti secchi
     formula.forEach(f => {
         const dotClass = getCategoryClass(f.ing.famiglia);
-        const rules = FAMILY_DOSE_RULES[f.ing.famiglia] || { min: 1, max: 50, step: 1 };
-        const atMin = f.percent <= rules.min;
-        const atMax = f.percent >= rules.max;
-        const delta = f.modified ? f.percent - f.basePercent : 0;
+        const step = _doseStep(f.ing.famiglia);
+        const atMin = f.grams <= f.gramsMin;
+        const atMax = f.grams >= f.gramsMax;
+        const delta = f.modified ? Math.round((f.grams - f.baseGrams) * 10) / 10 : 0;
         const deltaStr = delta > 0 ? '+' + delta : '' + delta;
-        const effectivePct = total > 0 ? Math.round(f.percent / total * 100) : 0;
+        const effectivePct = totalGrams > 0 ? Math.round(f.grams / totalGrams * 100) : 0;
+        // Formato grammi: decimale se < 5g
+        const gramsDisplay = f.grams < 5 ? f.grams.toFixed(1) : Math.round(f.grams);
         
         html += '<tr>';
         html += '<td><div class="ing-name"><span class="dot ' + dotClass + '"></span>' + f.ing.nome + '</div></td>';
         html += '<td>' + f.role + '</td>';
         html += '<td><div class="dose-controls">';
-        html += '<button class="dose-btn' + (atMin ? ' at-limit' : '') + '" onclick="adjustDosage(\'' + f.id + '\',-1)" title="\u22121g">\u2212</button>';
-        html += '<span class="dose-val' + (f.modified ? ' modified' : '') + '">' + f.percent + 'g</span>';
+        html += '<button class="dose-btn' + (atMin ? ' at-limit' : '') + '" onclick="adjustDosage(\'' + f.id + '\',' + (-step) + ')" title="\u2212' + step + 'g">\u2212</button>';
+        html += '<span class="dose-val' + (f.modified ? ' modified' : '') + '">' + gramsDisplay + ' g</span>';
         if (f.modified) html += '<span class="dose-delta">(' + deltaStr + ')</span>';
-        html += '<button class="dose-btn' + (atMax ? ' at-limit' : '') + '" onclick="adjustDosage(\'' + f.id + '\',1)" title="+1g">+</button>';
+        html += '<button class="dose-btn' + (atMax ? ' at-limit' : '') + '" onclick="adjustDosage(\'' + f.id + '\',' + step + ')" title="+' + step + 'g">+</button>';
         html += '</div></td>';
-        html += '<td class="grams' + (f.modified && effectivePct !== f.basePercent ? ' modified' : '') + '" style="text-align:right">' + effectivePct + '%</td>';
+        html += '<td class="grams' + (f.modified ? ' modified' : '') + '" style="text-align:right">' + effectivePct + '%</td>';
         html += '</tr>';
     });
     html += '</tbody>';
     
     // Riga totale
+    const totalDisplay = totalGrams < 5 ? totalGrams.toFixed(1) : Math.round(totalGrams * 10) / 10;
     html += '<tfoot><tr><td colspan="2"><strong>' + formulaName + '</strong>';
     if (hasCustom) html += ' <span class="formula-reset-link" onclick="resetDosages()">reset</span>';
-    html += '</td><td style="text-align:right;font-weight:600' + (total !== 100 ? ';color:#e65100' : '') + '">' + total + 'g</td>';
-    html += '<td style="text-align:right;font-weight:600">100%</td></tr></tfoot>';
+    html += '</td><td style="text-align:right;font-weight:600">' + totalDisplay + ' g</td>';
+    html += '<td style="text-align:right;font-weight:600;color:#999">in ' + SOLVENTE_ML + ' ml</td></tr></tfoot>';
     html += '</table>';
-
     
+    // Nota solvente speciale
+    if (solvente.id !== 'acqua' && solvente.note) {
+        html += '<div class="formula-total-msg info">\ud83d\udca7 ' + solvente.note + '</div>';
+    }
+    if (solventiDiversi) {
+        html += '<div class="formula-total-msg warn">\u26a0 Le matrici richiedono solventi diversi \u2014 sciogliere separatamente e combinare con cautela</div>';
+    }
+    
+    // Smart messages (riceve percent internamente — cascata intatta)
     const smartMsgs = getSmartMessages(formula, total);
     smartMsgs.forEach(msg => {
         html += '<div class="formula-total-msg ' + msg.type + '">' + msg.text + '</div>';
     });
     
     if (notes.length > 0) {
-        // Filtra note generiche/inutili — mostra solo quelle operative
         const skipNotes = ['Standard', 'Rinforzo', 'Rinforzo meccanico', 'Rinforzo strutturale',
             'Coating', 'Coating possibile', 'Blend comuni', 'Combinabili', 'Post-processing',
             'Miscele colori', 'Mix cariche possibile', 'Variabile', 'Possono combinarsi',
@@ -530,7 +613,7 @@ function calculateFormula() {
         );
         if (filteredNotes.length > 0) {
             html += '<div class="formula-notes"><div class="formula-notes-title">Note di processo</div>';
-            html += filteredNotes.map(n => '→ ' + n).join('<br>');
+            html += filteredNotes.map(n => '\u2192 ' + n).join('<br>');
             html += '</div>';
         }
     }
@@ -542,9 +625,10 @@ function calculateFormula() {
     
     contentEl.innerHTML = html;
     
+    // Calcolo proprietà — riceve f.percent (percentuali relative), cascata intatta
     const props = recalcPropsFromFormula(formula);
     
-    // Salva formula corrente per export (note GIÀ filtrate)
+    // Salva formula corrente per export
     const skipNotesExport = ['Standard', 'Rinforzo', 'Rinforzo meccanico', 'Rinforzo strutturale',
         'Coating', 'Coating possibile', 'Blend comuni', 'Combinabili', 'Post-processing',
         'Miscele colori', 'Mix cariche possibile', 'Variabile', 'Possono combinarsi',
@@ -556,7 +640,11 @@ function calculateFormula() {
     const filteredNotesForExport = [...new Set(notes)].filter(n =>
         !skipNotesExport.includes(n) && n.length > 22
     );
-    window.currentFormula = { name: formulaName, items: formula, notes: filteredNotesForExport, total, properties: props };
+    window.currentFormula = {
+        name: formulaName, items: formula, notes: filteredNotesForExport,
+        total, totalGrams, solventeML: SOLVENTE_ML, solvente: solvente,
+        properties: props
+    };
     
     updateBar('barTrasp', props.trasparenza);
     updateBar('barFlex', props.flessibilita);
@@ -595,17 +683,15 @@ function adjustDosage(ingId, delta) {
     const ing = ings[ingId];
     if (!ing) return;
     
-    const rules = FAMILY_DOSE_RULES[ing.famiglia] || { min: 1, max: 50, step: 5 };
-    
-    // Trova valore attuale
-    const current = customDosages[ingId] !== undefined ? customDosages[ingId] : getBasePercent(ingId);
-    const newVal = Math.max(rules.min, Math.min(rules.max, current + delta));
+    // Trova grammi attuali
+    const current = customDosages[ingId] !== undefined ? customDosages[ingId] : getBaseGrams(ingId);
+    const bg = _baseGrams(ing);
+    const newVal = Math.round(Math.max(bg.min, Math.min(bg.max, current + delta)) * 10) / 10;
     
     if (newVal === current) return;
     
     // Se torna al base, rimuovi custom
-    const base = getBasePercent(ingId);
-    if (newVal === base) {
+    if (Math.abs(newVal - bg.base) < 0.05) {
         delete customDosages[ingId];
     } else {
         customDosages[ingId] = newVal;
@@ -614,10 +700,19 @@ function adjustDosage(ingId, delta) {
     calculateFormula();
 }
 
+function getBaseGrams(ingId) {
+    if (window.currentFormula && window.currentFormula.items) {
+        const item = window.currentFormula.items.find(f => f.id === ingId);
+        if (item) return item.baseGrams;
+    }
+    return 0;
+}
+
+// Legacy alias per retrocompatibilità
 function getBasePercent(ingId) {
     if (window.currentFormula && window.currentFormula.items) {
         const item = window.currentFormula.items.find(f => f.id === ingId);
-        if (item) return item.basePercent;
+        if (item) return item.basePercent || item.percent;
     }
     return 0;
 }
@@ -627,6 +722,7 @@ function resetDosages() {
     calculateFormula();
     showToast('Dosaggi ripristinati', 'info');
 }
+
 
 
 function recalcPropsFromFormula(formula) {

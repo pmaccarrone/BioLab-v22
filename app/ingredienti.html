@@ -75,6 +75,56 @@
     .ing-compare-table tbody tr:hover .sem-green { background: #c8e6c9; }
     .ing-compare-table tbody tr:hover .sem-red { background: #ffcdd2; }
     .ing-compare-table tbody tr:hover .sem-amber { background: #ffecb3; }
+
+    /* ── Cross-links (navigazione filtrata) ── */
+    .ing-crosslinks {
+        background: #f9f7f2; border: 1px solid #e8e4dc; border-radius: 8px;
+        margin-bottom: 1rem; overflow: hidden;
+    }
+    .ing-crosslinks.collapsed .ing-crosslinks-body { display: none; }
+    .ing-crosslinks.collapsed .ing-crosslinks-toggle { transform: rotate(-90deg); }
+    .ing-crosslinks-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 14px; cursor: pointer; user-select: none;
+        transition: background 0.15s;
+    }
+    .ing-crosslinks-header:hover { background: #f0ede6; }
+    .ing-crosslinks-header h3 { margin: 0; font-size: 0.9rem; color: #2d5a3d; }
+    .ing-crosslinks-count { font-weight: 400; font-size: 0.78rem; color: #888; margin-left: 6px; }
+    .ing-crosslinks-toggle { font-size: 0.65rem; color: #aaa; transition: transform 0.2s; }
+    .ing-crosslinks-body { padding: 6px 14px 14px; }
+    .ing-crosslinks-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ing-crosslink-btn {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 8px 16px; border-radius: 6px; font-size: 0.82rem;
+        font-weight: 600; text-decoration: none; transition: all 0.15s;
+    }
+    .ing-crosslink-mat { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .ing-crosslink-mat:hover { background: #c8e6c9; color: #1b5e20; }
+    .ing-crosslink-app { background: #e3f2fd; color: #1565C0; border: 1px solid #bbdefb; }
+    .ing-crosslink-app:hover { background: #bbdefb; color: #0d47a1; }
+
+    /* ── Banner filtro esterno ── */
+    .ext-filter-banner {
+        display: flex; align-items: center; justify-content: space-between;
+        background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px;
+        padding: 8px 16px; margin-bottom: 10px; font-size: 0.85rem;
+        flex-wrap: wrap; gap: 6px;
+    }
+    .ext-filter-text { color: #f57f17; font-weight: 600; }
+    .ext-filter-actions { display: flex; gap: 6px; align-items: center; }
+    .ext-filter-back {
+        color: #1565C0; font-size: 0.8rem; text-decoration: none;
+        padding: 3px 10px; border-radius: 4px; background: #e3f2fd;
+        border: 1px solid #bbdefb; transition: all 0.15s; font-weight: 500;
+    }
+    .ext-filter-back:hover { background: #bbdefb; color: #0d47a1; }
+    .ext-filter-clear {
+        color: #666; font-size: 0.8rem; text-decoration: none;
+        padding: 3px 10px; border-radius: 4px; background: #fff;
+        border: 1px solid #ddd; transition: all 0.15s;
+    }
+    .ext-filter-clear:hover { background: #f5f5f5; color: #333; }
     </style>
 </head>
 <body>
@@ -179,6 +229,8 @@
             if (ingFilter === 'cart' && !BioLab.isInCart(id)) continue;
             // Filtro famiglia
             if (ingFilter && ingFilter !== 'cart' && !ing.famiglia.includes(ingFilter)) continue;
+            // ★ Filtro esterno (da URL param)
+            if (_externalFilterIds && _externalFilterIds.indexOf(id) < 0) continue;
 
             count++;
             const inCart = BioLab.isInCart(id);
@@ -346,6 +398,56 @@
         return h + '</div></div>';
     }
 
+    // ---- CROSS-LINK: conta materiali/applicazioni e genera bottoni navigazione filtrata ----
+    function renderCrossLinks(id) {
+        // Conta materiali che usano questo ingrediente
+        var nMat = 0;
+        if (typeof IN_PROGRESS_MAPPING !== 'undefined') {
+            Object.keys(IN_PROGRESS_MAPPING).forEach(function(matId) {
+                if ((IN_PROGRESS_MAPPING[matId] || []).indexOf(id) >= 0) nMat++;
+            });
+        }
+        // Fallback: anche ingredienti_correlati nei documentati
+        if (typeof MATERIALI_DATA !== 'undefined') {
+            (MATERIALI_DATA.materiali_documentati || []).forEach(function(m) {
+                if ((m.ingredienti_correlati || []).indexOf(id) >= 0) nMat++;
+            });
+        }
+
+        // Conta applicazioni (cascata via ESEMPI_REALI)
+        var nApp = 0;
+        if (typeof ESEMPI_REALI !== 'undefined') {
+            (ESEMPI_REALI.progetti || []).forEach(function(p) {
+                // Match diretto: ingredienti del progetto
+                var ings = (p.ingredienti || []).map(function(s) { return s.toLowerCase().trim(); });
+                var ingData = (typeof INGREDIENTI_DATA !== 'undefined') ? INGREDIENTI_DATA.ingredienti[id] : null;
+                var nomeIng = ingData ? ingData.nome.toLowerCase() : '';
+                if (ings.some(function(s) { return s.indexOf(id) >= 0 || s.indexOf(nomeIng) >= 0 || nomeIng.indexOf(s) >= 0; })) {
+                    nApp++;
+                }
+            });
+        }
+
+        if (nMat === 0 && nApp === 0) return '';
+
+        var h = '<div class="ing-detail-section ing-crosslinks">';
+        h += '<div class="ing-crosslinks-header" onclick="this.parentElement.classList.toggle(\'collapsed\')">';
+        h += '<h3>Usato in';
+        var counts = [];
+        if (nMat) counts.push(nMat + ' material' + (nMat > 1 ? 'i' : 'e'));
+        if (nApp) counts.push(nApp + ' applicazion' + (nApp > 1 ? 'i' : 'e'));
+        h += ' <span class="ing-crosslinks-count">' + counts.join(' · ') + '</span></h3>';
+        h += '<span class="ing-crosslinks-toggle">&#9660;</span></div>';
+        h += '<div class="ing-crosslinks-body">';
+        h += '<div class="ing-crosslinks-btns">';
+        if (nMat) h += '<a href="materiali.html?ing=' + id + '" class="ing-crosslink-btn ing-crosslink-mat">'
+            + 'Vedi ' + nMat + ' material' + (nMat > 1 ? 'i' : 'e') + ' &#8594;</a>';
+        if (nApp) h += '<a href="applicazioni.html?ing=' + id + '" class="ing-crosslink-btn ing-crosslink-app">'
+            + 'Vedi ' + nApp + ' applicazion' + (nApp > 1 ? 'i' : 'e') + ' &#8594;</a>';
+        h += '</div></div></div>';
+        return h;
+    }
+
     // ---- DETTAGLIO INGREDIENTE ----
     window.showIngredientDetail = function(id) {
         selectedIngredient = id;
@@ -433,6 +535,9 @@
         if (ing.ruolo) descExtra += '<br><strong>Ruolo:</strong> ' + ing.ruolo;
         if (ing.note_uso) descExtra += '<div class="ing-note-box">' + ing.note_uso + '</div>';
         h += makeSection('Descrizione', '<p class="ing-desc">' + desc + descExtra + '</p>');
+
+        // Cross-link: navigazione filtrata verso materiali/applicazioni
+        h += renderCrossLinks(id);
 
         // Proprieta fisiche
         h += makeSection('Proprieta', gridFromPairs([
@@ -655,7 +760,15 @@
             const nav = document.getElementById('navIngCount');
             if (nav) nav.textContent = n + ' schede';
         }
-        renderIngredientList();
+
+        // ★ Filtro da URL: ?mat=R12 → mostra solo ingredienti di quel materiale
+        const params = new URLSearchParams(window.location.search);
+        const matParam = params.get('mat');
+        if (matParam) {
+            _applyExternalFilter('mat', matParam);
+        } else {
+            renderIngredientList();
+        }
 
         // Se URL ha #ingrediente, aprilo
         const hash = window.location.hash.replace('#', '');
@@ -663,6 +776,54 @@
             showIngredientDetail(hash);
         }
     });
+
+    // ---- Filtro esterno (da URL param) ----
+    var _externalFilterIds = null;
+    var _externalFilterLabel = null;
+
+    function _applyExternalFilter(type, value) {
+        _externalFilterIds = null;
+        _externalFilterLabel = null;
+
+        if (type === 'mat') {
+            // Trova ingredienti del materiale
+            var ids = [];
+            // Via IN_PROGRESS_MAPPING
+            if (typeof IN_PROGRESS_MAPPING !== 'undefined' && IN_PROGRESS_MAPPING[value]) {
+                ids = IN_PROGRESS_MAPPING[value].slice();
+            }
+            // Fallback: ingredienti_correlati
+            if (!ids.length && typeof MATERIALI_DATA !== 'undefined') {
+                var allMats = [].concat(MATERIALI_DATA.materiali_in_progress || [], MATERIALI_DATA.materiali_documentati || []);
+                var mat = allMats.find(function(m) { return String(m.id) === value || m.ricetta_origine === value; });
+                if (mat && mat.ingredienti_correlati) ids = mat.ingredienti_correlati.slice();
+                if (mat) _externalFilterLabel = mat.nome || mat.name || value;
+            }
+            if (!_externalFilterLabel) _externalFilterLabel = value;
+            if (ids.length) {
+                _externalFilterIds = ids;
+                _showFilterBanner('Ingredienti di: ' + _externalFilterLabel, 'materiali.html', _externalFilterLabel);
+                renderIngredientList();
+                return;
+            }
+        }
+        // Fallback: nessun filtro
+        renderIngredientList();
+    }
+
+    function _showFilterBanner(text, backHref, backLabel) {
+        var existing = document.getElementById('extFilterBanner');
+        if (existing) existing.remove();
+        var banner = document.createElement('div');
+        banner.id = 'extFilterBanner';
+        banner.className = 'ext-filter-banner';
+        var h = '<span class="ext-filter-text">' + text + '</span><div class="ext-filter-actions">';
+        if (backHref) h += '<a href="' + backHref + '" class="ext-filter-back">&larr; Torna a ' + backLabel + '</a>';
+        h += '<a href="ingredienti.html" class="ext-filter-clear">Mostra tutti &times;</a></div>';
+        banner.innerHTML = h;
+        var topbar = document.querySelector('.ing-topbar');
+        if (topbar) topbar.parentNode.insertBefore(banner, topbar);
+    }
 
 })();
 </script>

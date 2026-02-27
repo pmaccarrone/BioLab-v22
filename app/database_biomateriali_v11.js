@@ -2068,7 +2068,7 @@ const MATERIALI_DATA = {
  "companies": "DIY",
  "description": "Caseina precipitata con acido (aceto o citrico). Modellare mentre calda, essiccare. Plastica rigida storica (Galalite). Può essere colorata.",
  "ingredienti_correlati": [
- "caseina",
+ "caseina","latte",
  "aceto",
  "acido_citrico"
  ],
@@ -2215,7 +2215,7 @@ const MATERIALI_DATA = {
  "colore_validazione": "rosa",
  "fonte": "Lab Accademia Albertina 2024-25",
  "ingredienti_descrizione": "Latte 1.5L + Aceto + Borace + Compressione a caldo 60°C + Stampo",
- "ingredienti_correlati": ["caseina", "aceto", "allume"],
+ "ingredienti_correlati": ["caseina","latte", "aceto", "allume"],
  "categoria_menu": "MATERIALI OPACHI RIGIDI/PLASTICI",
  "consistenza": "massa compatta rigida",
  "colore": "Bianco",
@@ -2345,7 +2345,7 @@ const MATERIALI_DATA = {
  "colore_validazione": "rosa",
  "fonte": "Lab Accademia Albertina 2024-25",
  "ingredienti_descrizione": "Caseina (1L latte) + Aceto + Borace + Ritagli tessuto cotone/lana (50g)",
- "ingredienti_correlati": ["caseina", "aceto", "allume", "fibre_cotone"],
+ "ingredienti_correlati": ["caseina","latte", "aceto", "allume", "fibre_cotone"],
  "categoria_menu": "BIOCOMPOSITI CON SCARTI/RINFORZ",
  "consistenza": "massa compatta rigida",
  "colore": "Bianco",
@@ -2371,7 +2371,7 @@ const MATERIALI_DATA = {
  "colore_validazione": "bianco",
  "fonte": "Lab Accademia Albertina 2024-25",
  "ingredienti_descrizione": "Latte (1L) + Aceto (60ml) + Borace (3g) + Fibra lino corta (20g)",
- "ingredienti_correlati": ["caseina", "aceto", "allume", "fibre_lino"],
+ "ingredienti_correlati": ["caseina","latte", "aceto", "allume", "fibre_lino"],
  "categoria_menu": "BIOCOMPOSITI CON SCARTI/RINFORZ",
  "consistenza": "massa compatta rigida",
  "colore": "Giallo chiaro",
@@ -2528,7 +2528,7 @@ const MATERIALI_DATA = {
  "colore_validazione": "bianco",
  "fonte": "Lab Accademia Albertina 2024-25",
  "ingredienti_descrizione": "Latte (750ml) + Aceto (60ml) + Borace (3g) + Pigmenti naturali (10g)",
- "ingredienti_correlati": ["caseina", "aceto", "allume"],
+ "ingredienti_correlati": ["caseina","latte", "aceto", "allume"],
  "categoria_menu": "MATERIALI OPACHI RIGIDI/PLASTICI",
  "consistenza": "massa compatta rigida",
  "colore": "Giallo chiaro",
@@ -2944,7 +2944,7 @@ const MATERIALI_DATA = {
  "colore_validazione": "rosa",
  "fonte": "Lab Accademia Albertina 2024-25",
  "ingredienti_descrizione": "Latte scremato (500ml) + Aceto (50ml) + Borace (2g)",
- "ingredienti_correlati": ["caseina", "aceto", "allume"],
+ "ingredienti_correlati": ["caseina","latte", "aceto", "allume"],
  "categoria_menu": "MATERIALI OPACHI RIGIDI/PLASTICI",
  "consistenza": "massa compatta rigida",
  "colore": "Crema",
@@ -2996,7 +2996,7 @@ const MATERIALI_DATA = {
  "colore_validazione": "bianco",
  "fonte": "Lab Accademia Albertina 2024-25",
  "ingredienti_descrizione": "Latte intero (500ml) + Aceto (30ml) + Gesso in polvere (40g) + Acqua per impasto",
- "ingredienti_correlati": ["caseina", "aceto", "gesso"],
+ "ingredienti_correlati": ["caseina","latte", "aceto", "gesso"],
  "categoria_menu": "COMPOSITI E CARICHE",
  "consistenza": "massa compatta rigida",
  "colore": "Giallo chiaro",
@@ -3130,21 +3130,24 @@ const MATERIALI_DATA = {
     {"id":"IED_Checkerboard_Gelatina","ricetta_origine":"IED_","nome":"Checkerboard Gelatina (IED)","categoria":"IN_PROGRESS","trl":1,"colore_validazione":"rosa","fonte":"CHECKERBOARD","ingredienti_descrizione":"Acqua 75% + gelatina 13% + glicerina 6% + aceto 6%","ingredienti_correlati":[],"categoria_menu":"rigido","consistenza":"","colore":"","trasparenza":"","spessore":"","test_flessione":"Da testare","test_flessione_ritorno":"Da testare","test_trazione":"Da testare","test_acqua":"Da testare","test_calore":"Da testare","aging_7giorni":"Da testare","forabile":true,"cucibile":false,"incollabile":"Da testare","problemi_realizzazione":""},
     {"id":"IED_Arabic_Sensation","ricetta_origine":"IED_","nome":"Arabic Sensation (IED)","categoria":"IN_PROGRESS","trl":1,"colore_validazione":"rosa","fonte":"ARABIC SENS.","ingredienti_descrizione":"Gomma arabica 10g + segatura 2g + profumo 2g","ingredienti_correlati":[],"categoria_menu":"composito","consistenza":"","colore":"","trasparenza":"","spessore":"","test_flessione":"Da testare","test_flessione_ritorno":"Da testare","test_trazione":"Da testare","test_acqua":"Da testare","test_calore":"Da testare","aging_7giorni":"Da testare","forabile":true,"cucibile":false,"incollabile":"Da testare","problemi_realizzazione":""},
     {"id":"IED_Seed_in","ricetta_origine":"IED_","nome":"Seed-in (IED)","categoria":"IN_PROGRESS","trl":1,"colore_validazione":"rosa","fonte":"SEED-IN","ingredienti_descrizione":"Acqua 90% + agar 6% + glicerina 4%","ingredienti_correlati":[],"categoria_menu":"film","consistenza":"","colore":"","trasparenza":"","spessore":"","test_flessione":"Da testare","test_flessione_ritorno":"Da testare","test_trazione":"Da testare","test_acqua":"Da testare","test_calore":"Da testare","aging_7giorni":"Da testare","forabile":true,"cucibile":false,"incollabile":"Da testare","problemi_realizzazione":""},
-    {"id":"IED_Oobleck_D","ricetta_origine":"IED_","nome":"Oobleck D (IED)","categoria":"IN_PROGRESS","trl":1,"colore_validazione":"rosa","fonte":"OOBLECK","ingredienti_descrizione":"Amido mais + glicerina + acqua","ingredienti_correlati":[],"categoria_menu":"gel","consistenza":"","colore":"","trasparenza":"","spessore":"","test_flessione":"Da testare","test_flessione_ritorno":"Da testare","test_trazione":"Da testare","test_acqua":"Da testare","test_calore":"Da testare","aging_7giorni":"Da testare","forabile":true,"cucibile":false,"incollabile":"Da testare","problemi_realizzazione":""}
+    {"id":"IED_Oobleck_D","ricetta_origine":"IED_","nome":"Oobleck D (IED)","categoria":"IN_PROGRESS","trl":1,"colore_validazione":"rosa","fonte":"OOBLECK","ingredienti_descrizione":"Amido mais + glicerina + acqua","ingredienti_correlati":[],"categoria_menu":"gel","consistenza":"","colore":"","trasparenza":"","spessore":"","test_flessione":"Da testare","test_flessione_ritorno":"Da testare","test_trazione":"Da testare","test_acqua":"Da testare","test_calore":"Da testare","aging_7giorni":"Da testare","forabile":true,"cucibile":false,"incollabile":"Da testare","problemi_realizzazione":""},
+    {"id":"MONO_colla_caseinica","ricetta_origine":"MONO","nome":"Colla caseinica","categoria":"IN_PROGRESS","trl":3,"colore_validazione":"bianco","fonte":"Tradizione falegnameria + BONELITH","ingredienti_descrizione":"Caseina + bicarbonato di sodio (+ calce opzionale)","ingredienti_correlati": ["caseina","latte","bicarbonato"],"categoria_menu":"coating","consistenza":"Pasta densa, si applica a spatola","colore":"Bianco-crema","trasparenza":"Opaco","spessore":"N/A (adesivo)","test_flessione":"N/A","test_flessione_ritorno":"N/A","test_trazione":"Buona adesione su legno e carta","test_acqua":"Discreta se essiccata bene, non impermeabile","test_calore":"Stabile fino a 60°C","aging_7giorni":"Indurisce progressivamente","forabile":false,"cucibile":false,"incollabile":"È una colla","problemi_realizzazione":"Dosaggio bicarbonato critico: troppo → schiuma e bolle. Pot life breve (30-60 min), preparare al momento. Odore pungente durante miscelazione.","nota_mono_ingrediente":"Materiale a ingrediente singolo + processo: la caseina diventa colla con aggiunta di base (bicarbonato/calce) che denatura e attiva il potere adesivo"},
+    {"id":"MONO_tempera_caseinica","ricetta_origine":"MONO","nome":"Pittura a tempera caseinica","categoria":"IN_PROGRESS","trl":3,"colore_validazione":"bianco","fonte":"Tradizione pittorica + BONELITH","ingredienti_descrizione":"Caseina + bicarbonato di sodio + pigmenti","ingredienti_correlati": ["caseina","latte","bicarbonato","curcuma"],"categoria_menu":"coating","consistenza":"Liquida-cremosa, si applica a pennello","colore":"Dipende dal pigmento","trasparenza":"Opaco-semicoprente","spessore":"N/A (pittura)","test_flessione":"N/A","test_flessione_ritorno":"N/A","test_trazione":"Buona adesione su superfici porose (legno, carta, intonaco)","test_acqua":"Parzialmente resistente dopo essiccazione, non lavabile","test_calore":"Stabile","aging_7giorni":"Si fissa bene, colore stabile","forabile":false,"cucibile":false,"incollabile":"N/A","problemi_realizzazione":"Stessi problemi della colla + dosaggio pigmento. Troppo pigmento → copre ma sfarina. Conservazione breve: usare entro 1-2 giorni (fermenta).","nota_mono_ingrediente":"Materiale a ingrediente singolo + processo: la caseina attivata con bicarbonato diventa legante pittorico, i pigmenti sono cariche colorate"},
+    {"id":"MONO_gommalacca_coating","ricetta_origine":"MONO","nome":"Gommalacca (vernice)","categoria":"IN_PROGRESS","trl":5,"colore_validazione":"verde","fonte":"Tradizione ebanisteria e restauro","ingredienti_descrizione":"Gommalacca in scaglie + alcool etilico","ingredienti_correlati":["gommalacca","alcool"],"categoria_menu":"coating","consistenza":"Liquida, si applica a pennello o tampone","colore":"Ambrato (scaglie arancio) a trasparente (scaglie bionde/bianche)","trasparenza":"Alta (varietà chiare)","spessore":"Film sottile multistrato","test_flessione":"N/A (coating)","test_flessione_ritorno":"N/A","test_trazione":"Buona adesione su legno, carta, ceramica","test_acqua":"Buona resistenza, sbianca con acqua prolungata","test_calore":"Sensibile al calore (rammollisce >70°C)","aging_7giorni":"Indurisce e lucida progressivamente","forabile":false,"cucibile":false,"incollabile":"Si incolla a se stessa con alcool","problemi_realizzazione":"Dissoluzione lenta (24-48h per scaglie). Strati troppo spessi → crepe. Soluzione ha pot life ~6 mesi. Infiammabile (alcool). Ambiente ventilato obbligatorio.","nota_mono_ingrediente":"Materiale a ingrediente singolo + processo: la resina naturale si scioglie in alcool e forma film per evaporazione del solvente"}
   ]
 };
 
 const INGREDIENTI_DATA = {
  "metadata": {
- "versione": "11.0",
- "data": "2026-02-10",
+ "versione": "11g",
+ "data": "2026-02-27",
  "fasi_completate": [
  "Fase1_42ingredienti",
  "Fase2_letteratura",
  "Fase3_maker",
  "Fase4_compatibilita"
  ],
- "totale_ingredienti": 70,
+ "totale_ingredienti": 81,
  "famiglie": [
  "PROTEINA",
  "POLISACCARIDE_NEUTRO",
@@ -3388,11 +3391,16 @@ const INGREDIENTI_DATA = {
  "famiglia": "PROTEINA",
  "categoria": "Matrice proteica",
  "fonte": "Latte (80% delle proteine del latte)",
- "reperibilita": "media",
+ "reperibilita": "facile-media (dipende dalla forma)",
  "vegano": false,
  "food_safe": true,
- "funzione": "Matrice per plastiche rigide (galalite), reticolabile",
- "descrizione": "Proteina del latte precipitabile con acidi. Forma plastiche dure e lucidabili. Storica: galalite usata per bottoni e penne fino agli anni '50.",
+ "funzione": "Matrice versatile: plastica rigida (galalite), colla, pittura a tempera",
+ "descrizione": "Proteina del latte precipitabile con acidi. Tre usi principali: (1) plastica dura reticolata tipo galalite, (2) colla caseinica con bicarbonato/calce, (3) pittura a tempera caseinica con bicarbonato e pigmenti. Storica: galalite usata per bottoni e penne fino agli anni '50. Disponibile in tre forme commerciali con caratteristiche diverse.",
+ "forme_reperibili": [
+ {"forma": "Caseina acida", "nome_commerciale": "caseina alimentare", "reperibilita": "media", "dove": "integratori sportivi, Amazon, caseifici", "note": "pH 4.6, precipitata con acido. Forma pura, migliore per plastica dura"},
+ {"forma": "Caseinato di sodio", "nome_commerciale": "sodium caseinate", "reperibilita": "media", "dove": "MSK, Sosa, fornitori food-tech", "note": "Solubile a pH neutro, più facile da lavorare in laboratorio"},
+ {"forma": "Latte scremato in polvere", "nome_commerciale": "latte scremato spray", "reperibilita": "facile", "dove": "supermercato", "note": "Non pura (contiene lattosio e sieroproteine), proxy economico per didattica. Resa inferiore"}
+ ],
  "proprieta": {
  "struttura": "Plastica rigida",
  "trasparenza": "Media-bassa",
@@ -3413,8 +3421,9 @@ const INGREDIENTI_DATA = {
  "lavorabilita": {
  "forma_tipica": [
  "plastica rigida",
+ "colla",
+ "pittura a tempera",
  "oggetti stampati a caldo",
- "bottoni",
  "fogli"
  ],
  "termosaldabile": false,
@@ -3455,9 +3464,9 @@ const INGREDIENTI_DATA = {
  "pH molto basico"
  ],
  "alternative": "Gelatina (più flessibile), proteine di soia (vegane)",
- "acquisto": "Si prepara dal latte fresco + acido. Caseina in polvere: Amazon, fornitori caseifici"
+ "acquisto": "Tre forme: (1) caseina acida in polvere — Amazon, integratori sportivi, caseifici; (2) caseinato di sodio — MSK, Sosa, fornitori food-tech; (3) latte scremato in polvere — supermercato (proxy economico, resa inferiore). Per laboratorio didattico il latte in polvere è il più accessibile"
  ,
-      "note_IED": ["RESA: ~130g caseina secca da 1.5L latte (~8.7%) [CASEO²]","ESTRAZIONE: 50°C con aceto di mele. Aceto >> limone come coagulante (limone → fragile) [CASEO², BONELITH]","TRE USI: plastica dura (con reticolante), colla (con bicarbonato), pittura a tempera (con bic.+pigmenti) [BONELITH]","DUREZZA: scala empirica silicone 1-2, caseina ~5-6, ABS 6-7, acciaio 9-10 [CASEO²]","ESSICCAZIONE: ottimale 45°C ventilato 72h + 48h all'aria. Strizzatura meccanica forte riduce restringimento [CASEO²]","RESISTENZA H₂O = NULLA senza reticolante (confermato) [BONELITH]","Resistenza caduta 4.5m con formulazione compatta [CASEO²]","Carteggiabile, forabile, tagliabile [CASEO²]","ZUCCHERO ~15% su peso caseina → plastifica, elimina vetrosità [BONELITH]"],
+      "note_IED": ["RESA: ~130g caseina secca da 1.5L latte (~8.7%) [CASEO²]","ESTRAZIONE: 50°C con aceto di mele. Aceto >> limone come coagulante (limone → fragile) [CASEO², BONELITH]","TRE USI: plastica dura (con reticolante), colla (con bicarbonato), pittura a tempera (con bic.+pigmenti) [BONELITH]","DUREZZA: scala empirica silicone 1-2, caseina ~5-6, ABS 6-7, acciaio 9-10 [CASEO²]","ESSICCAZIONE: ottimale 45°C ventilato 72h + 48h all'aria. Strizzatura meccanica forte riduce restringimento [CASEO²]","RESISTENZA H₂O = NULLA senza reticolante (confermato) [BONELITH]","Resistenza caduta 4.5m con formulazione compatta [CASEO²]","Carteggiabile, forabile, tagliabile [CASEO²]","ZUCCHERO ~15% su peso caseina → plastifica, elimina vetrosità [BONELITH]","FORME REPERIBILI: caseina acida (pura, integratori/Amazon), caseinato di sodio (MSK/Sosa, più facile in lab), latte scremato in polvere (supermercato, proxy economico ma resa inferiore)"],
       "parametri_IED": {"resa_estrazione":"~130g/1.5L latte","temp_estrazione":"50°C con aceto"}
     },
  "albumina": {
@@ -3537,12 +3546,12 @@ const INGREDIENTI_DATA = {
  "nome": "Chitosano",
  "famiglia": "POLICATIONE",
  "categoria": "Matrice polisaccaridica",
- "fonte": "Chitina (esoscheletri di crostacei, insetti)",
+ "fonte": "Chitina de-acetilata (da esoscheletri di crostacei o da funghi)",
  "reperibilita": "media",
  "vegano": false,
  "food_safe": true,
  "funzione": "Filmogeno antibatterico, policatione",
- "descrizione": "Unico polisaccaride naturale carico positivamente. Proprietà antibatteriche. Richiede pH acido per sciogliersi.",
+ "descrizione": "Chitina de-acetilata: unico polisaccaride naturale carico positivamente. Si lavora SEMPRE chitosano (de-acetilato), non chitina grezza (insolubile). Richiede dissoluzione obbligatoria in acido acetico diluito (1-2%). Proprietà antibatteriche documentate. Disponibile da crostacei (tradizionale) o da funghi (vegano). Il grado di de-acetilazione (>75% per buona solubilità) è il parametro chiave di qualità.",
  "proprieta": {
  "struttura": "Film resistente",
  "trasparenza": "Alta",
@@ -3605,9 +3614,10 @@ const INGREDIENTI_DATA = {
  "Polianioni (alginato) formano complessi"
  ],
  "alternative": "Nessuna con proprietà antibatteriche comparabili",
- "acquisto": "Amazon, fornitori chimici, fornitori cosmetici. In polvere"
+ "acquisto": "Integratori/cosmetica: Now Foods, Amazon (economico ma grado de-acetilazione variabile). Fornitori chimici: Sigma-Aldrich (costoso, grado certificato). Versione fungina: più rara, cercarne da fornitori specializzati. Chiedere sempre grado de-acetilazione (>75% per uso in film)"
  ,
-      "note_IED": ["Variante fungina disponibile: adatta a usi vegani, più sostenibile della versione da crostacei [ALISEA]","Processo completo: pulizia → demineralizzazione → deproteizzazione → triturazione → formatura [ALISEA]"]
+      "note_IED": ["Variante fungina disponibile: adatta a usi vegani, più sostenibile della versione da crostacei [ALISEA]","Processo completo: pulizia → demineralizzazione → deproteizzazione → triturazione → formatura [ALISEA]","ATTENZIONE: in laboratorio si usa sempre CHITOSANO (de-acetilato), non chitina grezza. La chitina è insolubile e non lavorabile direttamente","GRADO DE-ACETILAZIONE: >75% per buona solubilità in acido. Parametro da chiedere al fornitore","DISSOLUZIONE OBBLIGATORIA: acido acetico 1-2% (aceto diluito). Senza acido non si scioglie. Può richiedere ore di agitazione","NON VEGANO da crostacei, VEGANO da funghi (Aspergillus niger)"],
+      "parametri_IED": {"grado_deacetilazione_min":"75%","solvente_obbligatorio":"acido acetico 1-2%","fonti":"crostacei (tradizionale) o funghi (vegano)"}
     },
  "cheratina": {
  "nome": "Cheratina",
@@ -5009,7 +5019,11 @@ const INGREDIENTI_DATA = {
  "vegano": false,
  "food_safe": true,
  "funzione": "Vernice naturale, barriera eccellente, lucidante",
- "descrizione": "Resina naturale che forma film duri, lucidi, resistenti. Si scioglie in alcol. Usata su mobili, alimenti, farmaci.",
+ "descrizione": "Resina naturale secretata dall'insetto Kerria lacca. Forma film duri, lucidi, resistenti. Due forme commerciali: (1) scaglie (shellac flakes) da sciogliere in alcool etilico, processo lento 24-48h; (2) soluzione pronta (gommalacca liquida) già in alcool, più accessibile per studenti. Usata storicamente su mobili, alimenti (E904), farmaci.",
+ "forme_commerciali": [
+ {"forma": "Scaglie (shellac flakes)", "reperibilita": "media", "dove": "Amazon, belle arti, fornitori cosmetici", "note": "Varie tonalità: arancio (standard), bionda (decolorata), bianca (più raffinata). Dissoluzione in alcool etilico 24-48h"},
+ {"forma": "Gommalacca liquida (soluzione pronta)", "reperibilita": "facile", "dove": "ferramenta, bricolage", "note": "Già in soluzione alcolica, pronta all'uso. Più pratica per laboratorio didattico. Odore forte, infiammabile"}
+ ],
  "proprieta": {
  "struttura": "Film duro",
  "trasparenza": "Alta (varietà chiare)",
@@ -5067,7 +5081,7 @@ const INGREDIENTI_DATA = {
  "Alcali (si degrada)"
  ],
  "alternative": "Dammar, colofonia",
- "acquisto": "Ferramenta, negozi belle arti, Amazon. In scaglie da sciogliere"
+ "acquisto": "Scaglie: Amazon, negozi belle arti, fornitori cosmetici. Soluzione pronta: ferramenta, bricolage. NON vegana (prodotta da insetti Kerria lacca). Per laboratorio la soluzione pronta è più pratica"
  },
  "colofonia": {
  "nome": "Colofonia (Pece Greca)",
@@ -5740,7 +5754,8 @@ const INGREDIENTI_DATA = {
             "Ossidanti (sbianca)"
         ],
  "alternative": "Ficocianina estratta (blu puro), clorofilla, butterfly pea flower",
- "acquisto": "Erboristerie, negozi bio, Amazon. Polvere"
+ "acquisto": "Erboristerie, negozi bio, Amazon. Polvere",
+ "nota_doppia_identita": "La spirulina ha una doppia identità: come COLORANTE (questa scheda) si usa in polvere essiccata per colorare biomateriali; come COLTURA (cianobatterio vivo) si coltiva in acqua con luce e nutrienti per produrre biomassa. La sezione crescite del BioGame tratterà la spirulina come coltura."
  },
  "paprika": {
  "nome": "Paprika",
@@ -6303,6 +6318,100 @@ const INGREDIENTI_DATA = {
         ],
  "alternative": "Acqua distillata, demineralizzata, filtrata",
  "acquisto": "Rubinetto (filtrata), distillata in farmacia"
+ },
+ "latte": {
+ "nome": "Latte (vaccino)",
+ "famiglia": "ADDITIVO",
+ "categoria": "Materia prima / Solvente",
+ "fonte": "Allevamento bovino",
+ "reperibilita": "facile",
+ "vegano": false,
+ "food_safe": true,
+ "funzione": "Materia prima per estrazione caseina, solvente/veicolo nel processo di precipitazione proteica",
+ "descrizione": "Il latte vaccino è la materia prima da cui si estrae la caseina per precipitazione acida. Composizione media: ~87% acqua, ~3.4% proteine (80% caseina, 20% sieroproteine), ~3.6% grassi, ~4.6% lattosio. Nel contesto BioLab il latte non è una matrice strutturante — è il punto di partenza del processo: scaldare → acidificare → filtrare i grumi di caseina → lavorare. Il latte intero funziona ma il grasso residuo riduce la resa e può dare problemi di irrancidimento; il latte scremato è preferibile per risultati più puliti.",
+ "nota_ruolo_nel_lab": "Il latte non appare nel materiale finale — viene consumato nel processo di estrazione della caseina. È analogo all'acqua per la gelatina: un veicolo necessario che evapora/viene scartato. Lo studente deve capire che 'fare la plastica dal latte' significa estrarre la caseina dal latte.",
+ "proprieta": {
+ "struttura": null,
+ "trasparenza": null,
+ "flessibilita": null,
+ "barriera_O2": null,
+ "barriera_H2O": null
+ },
+ "parametri": {
+ "range_percent_min": null,
+ "range_percent_max": null,
+ "temp_dissoluzione_min": null,
+ "temp_dissoluzione_max": null,
+ "temp_gelificazione": null,
+ "temp_fusione_gel": null,
+ "pH_min": 6.5,
+ "pH_max": 6.7,
+ "volume_tipico_ml": 500,
+ "nota_parametri": "Non si dosa in grammi su 100ml solvente — il latte È il solvente. Volume tipico di partenza: 250-1000 ml. Da 500ml latte intero si ottengono ~40-50g di caseina umida (~15-20g secca)."
+ },
+ "composizione": {
+ "acqua_percent": 87.4,
+ "proteine_percent": 3.4,
+ "di_cui_caseina_percent": 2.7,
+ "di_cui_sieroproteine_percent": 0.7,
+ "grassi_percent": 3.6,
+ "lattosio_percent": 4.6,
+ "minerali_percent": 0.7,
+ "pH_naturale": "6.5-6.7",
+ "nota": "Composizione media latte vaccino intero. Varia per razza, alimentazione, stagione."
+ },
+ "forme_disponibili": [
+ {"forma": "Latte intero fresco", "grasso": "~3.5%", "reperibilita": "facile", "dove": "supermercato", "note": "Funziona ma il grasso residuo riduce purezza della caseina e può causare irrancidimento nel materiale finale"},
+ {"forma": "Latte scremato fresco", "grasso": "<0.5%", "reperibilita": "facile", "dove": "supermercato", "note": "PREFERIBILE per biomateriali: meno grasso = caseina più pura, materiale più stabile"},
+ {"forma": "Latte scremato in polvere", "grasso": "<1.5%", "reperibilita": "facile", "dove": "supermercato", "note": "Ricostituire con acqua calda (100g/L). Comodo per stoccaggio, risultato equivalente al fresco scremato"},
+ {"forma": "Latte UHT", "grasso": "variabile", "reperibilita": "facile", "dove": "supermercato", "note": "Funziona. La sterilizzazione denatura parzialmente le sieroproteine ma la caseina precipita comunque con acido"}
+ ],
+ "lavorabilita": {
+ "forma_tipica": null,
+ "note_forma": "Materia prima — non forma materiali direttamente. Viene trasformato in caseina tramite precipitazione acida.",
+ "termosaldabile": null,
+ "incollabile_con": null,
+ "cucibile": null,
+ "colorabile": null,
+ "reversibile": null,
+ "stampabile_3D": null,
+ "effetto_su_matrice": "Fonte di caseina: scaldare a 50-80°C, aggiungere acido (aceto ~10% del volume), filtrare i grumi"
+ },
+ "durabilita": {
+ "durata_stimata": "Deperibile (2-7 giorni fresco)",
+ "fattori_degradazione": ["batteri", "temperatura", "tempo"],
+ "condizioni_conservazione": "Frigorifero 4°C. Latte in polvere: ambiente secco, mesi.",
+ "biodegradabile": true,
+ "compostabile": true
+ },
+ "processo": [
+ "Versare 250-500 ml di latte in un pentolino",
+ "Scaldare a 50-80°C (NON bollire — la bollitura denatura troppe proteine e dà risultato gommoso)",
+ "Aggiungere acido: aceto bianco (~1 cucchiaio per 250ml) o succo di limone. Mescolare lentamente",
+ "Il latte caglia: si formano grumi bianchi (caseina) e liquido giallastro (siero/whey)",
+ "Filtrare con colino fine o garza. Strizzare bene per eliminare il siero",
+ "I grumi filtrati SONO la caseina grezza — da qui si procede con impasto, reticolazione o essiccazione",
+ "Il siero (liquido) può essere scartato o usato come fertilizzante"
+ ],
+ "resa_estrazione": {
+ "da_500ml_intero": "~40-50g caseina umida, ~15-20g secca",
+ "da_500ml_scremato": "~35-45g caseina umida, ~13-18g secca (meno grasso residuo)",
+ "da_1500ml_intero": "~130g secca (dato IED confermato)",
+ "nota": "Resa variabile. Latte scremato dà caseina più pura ma leggermente meno in peso."
+ },
+ "incompatibilita": [
+ "NON bollire: sopra 80°C le sieroproteine denaturano e si mescolano alla caseina, dando materiale gommoso e impuro",
+ "NON usare latte vegetale (soia, avena, mandorla): non contengono caseina, non funziona"
+ ],
+ "alternative": "Caseina in polvere (salta il processo di estrazione), caseinato di sodio (già solubile)",
+ "acquisto": "Supermercato. Preferire latte scremato fresco o UHT. In alternativa latte scremato in polvere (più pratico per stoccaggio). NON usare latte vegetale.",
+ "note_IED": [
+ "RESA CONFERMATA: ~130g caseina secca da 1.5L latte intero (~8.7%) [CASEO²]",
+ "TEMPERATURA ESTRAZIONE: 50°C con aceto di mele. Aceto >> limone come coagulante (limone → materiale fragile) [CASEO², BONELITH]",
+ "LATTE SCREMATO PREFERIBILE: meno grasso residuo = materiale più stabile e meno soggetto a irrancidimento [BONELITH]",
+ "Il SIERO (whey) scartato contiene lattosio e sieroproteine — non riutilizzabile nel processo biomateriali",
+ "ATTENZIONE: il latte non è il materiale finale — è il punto di partenza. Lo studente deve capire il processo di estrazione."
+ ]
  },
  "zeina": {
  "nome": "Zeina",
@@ -9671,7 +9780,9 @@ const INGREDIENTI_DATA = {
     {"coppia":["miele","gelatina"],"tipo":"SINERGIA","descrizione":"Il miele agisce come plastificante blando e umettante nei film di gelatina, con il vantaggio aggiuntivo di proprietà antimicrobiche. Film ambrati e profumati.","risultato":"Film flessibile, antimicrobico, ambrato","fonte":"Journal of Food Science — edible films"},
     {"coppia":["alcool_isopropilico","gelatina"],"tipo":"INCOMPATIBILITA","descrizione":"L'isopropanolo denatura e precipita le proteine. Non usare come solvente per matrici proteiche.","risultato":"Precipitazione della proteina","fonte":"Chimica delle proteine"},
     {"coppia":["alcool_isopropilico","gommalacca"],"tipo":"SINERGIA","descrizione":"L'alcool isopropilico è solvente alternativo all'etanolo per la gommalacca, con evaporazione più rapida. Risultato simile ma asciugatura più veloce.","risultato":"Coating gommalacca ad asciugatura rapida","fonte":"Pratica artigianale — finitura legno"},
-    {"coppia":["ammoniaca_dolci","chitosano"],"tipo":"ATTENZIONE","descrizione":"L'ammoniaca rilasciata dal bicarbonato d'ammonio alza il pH, rischiando di far precipitare il chitosano (insolubile sopra pH 6.5).","risultato":"Possibile precipitazione del chitosano","fonte":"Chimica del chitosano — solubilità pH-dipendente"}
+    {"coppia":["ammoniaca_dolci","chitosano"],"tipo":"ATTENZIONE","descrizione":"L'ammoniaca rilasciata dal bicarbonato d'ammonio alza il pH, rischiando di far precipitare il chitosano (insolubile sopra pH 6.5).","risultato":"Possibile precipitazione del chitosano","fonte":"Chimica del chitosano — solubilità pH-dipendente"},
+    {"coppia":["latte","caseina"],"tipo":"SINERGIA","descrizione":"Il latte è la materia prima da cui si estrae la caseina per precipitazione acida. Processo: scaldare latte a 50-80°C, aggiungere aceto o limone, filtrare i grumi. Il latte non appare nel materiale finale — viene consumato nel processo.","risultato":"Estrazione caseina (~130g secca da 1.5L latte)","fonte":"Chimica alimentare — precipitazione isoelettrica della caseina"},
+    {"coppia":["latte","aceto"],"tipo":"SINERGIA","descrizione":"L'aceto (acido acetico) è l'acidificante preferito per precipitare la caseina dal latte caldo. Più efficace del limone che tende a dare materiale più fragile.","risultato":"Cagliatura del latte — separazione caseina/siero","fonte":"[CASEO², BONELITH]"}
   ],
  "regole_compatibilita_famiglie": {
  "_descrizione": "Matrice compatibilità tra le 11 famiglie. Valori: eccellente/buona/neutra/attenzione/incompatibile",
@@ -10282,266 +10393,450 @@ const INGREDIENTI_DATA = {
 // Progetti reali per pagina Applicazioni
 // v11.1 — migrato da applicazioni.html inline, arricchito con dettaglio/ingredienti/img/note
 const ESEMPI_REALI = {
-  categorie: {
-    packaging:       { label: 'Packaging',                  color: '#1565C0', bg: '#E3F2FD' },
-    gioiello:        { label: 'Gioiello / Oggetto decorativo', color: '#6A1B9A', bg: '#F3E5F5' },
-    tessuto:         { label: 'Tessuto / Pelle vegetale',   color: '#C62828', bg: '#FCE4EC' },
-    pannello:        { label: 'Pannello / Composito',       color: '#E65100', bg: '#FFF3E0' },
-    design_scultura: { label: 'Design / Scultura / Installazione', color: '#2E7D32', bg: '#E8F5E9' },
-    didattica:       { label: 'Didattica / Kit',            color: '#00695C', bg: '#E0F2F1' }
+  "categorie": {
+    "packaging": {
+      "label": "Packaging",
+      "color": "#1565C0",
+      "bg": "#E3F2FD"
+    },
+    "gioiello": {
+      "label": "Gioiello / Oggetto decorativo",
+      "color": "#6A1B9A",
+      "bg": "#F3E5F5"
+    },
+    "tessuto": {
+      "label": "Tessuto / Pelle vegetale",
+      "color": "#C62828",
+      "bg": "#FCE4EC"
+    },
+    "pannello": {
+      "label": "Pannello / Composito",
+      "color": "#E65100",
+      "bg": "#FFF3E0"
+    },
+    "design_scultura": {
+      "label": "Design / Scultura / Installazione",
+      "color": "#2E7D32",
+      "bg": "#E8F5E9"
+    },
+    "didattica": {
+      "label": "Didattica / Kit",
+      "color": "#00695C",
+      "bg": "#E0F2F1"
+    }
   },
-  progetti: [
-
-    // === PACKAGING ===
+  "progetti": [
     {
-      cat: 'packaging', nome: 'Notpla (Ooho)',
-      desc: 'Capsule commestibili e film solubili da alghe',
-      base: 'Alginato di sodio',
-      link: 'https://notpla.com',
-      img: 'notpla.jpg',
-      ingredienti: ['Alginato', 'Cloruro di calcio'],
-      dettaglio: 'Notpla (contrazione di "Not Plastic") \u00e8 stata fondata a Londra nel 2014 da Pierre Paslier e Rodrigo Garcia Gonzalez. Il loro prodotto iconico, Ooho, \u00e8 una capsula commestibile per liquidi realizzata con alginato estratto da alghe marine. Il materiale si forma per gelificazione ionica: una soluzione di alginato viene immersa in un bagno di cloruro di calcio, creando una membrana trasparente e resistente che si biodegrada in 4-6 settimane. Notpla ha ricevuto finanziamenti per oltre 20 milioni di sterline e collabora con eventi sportivi globali (Maratona di Londra) e catene di ristorazione. Oltre alle capsule, producono packaging rigido per takeaway e rivestimenti per scatole di cartone che sostituiscono il film plastico. Il processo \u00e8 replicabile in laboratorio con attrezzatura minima: basta alginato alimentare, CaCl\u2082 e stampi.',
-      note: ''
+      "cat": "packaging",
+      "nome": "Notpla (Ooho)",
+      "desc": "Capsule commestibili e film solubili da alghe",
+      "base": "Alginato di sodio",
+      "link": "https://notpla.com",
+      "img": "notpla.jpg",
+      "ingredienti": [
+        "Alginato",
+        "Cloruro di calcio"
+      ],
+      "dettaglio": "Notpla (contrazione di \"Not Plastic\") è stata fondata a Londra nel 2014 da Pierre Paslier e Rodrigo Garcia Gonzalez. Il loro prodotto iconico, Ooho, è una capsula commestibile per liquidi realizzata con alginato estratto da alghe marine. Il materiale si forma per gelificazione ionica: una soluzione di alginato viene immersa in un bagno di cloruro di calcio, creando una membrana trasparente e resistente che si biodegrada in 4-6 settimane. Notpla ha ricevuto finanziamenti per oltre 20 milioni di sterline e collabora con eventi sportivi globali (Maratona di Londra) e catene di ristorazione. Oltre alle capsule, producono packaging rigido per takeaway e rivestimenti per scatole di cartone che sostituiscono il film plastico. Il processo è replicabile in laboratorio con attrezzatura minima: basta alginato alimentare, CaCl₂ e stampi.",
+      "note": "",
+      "materiali_correlati": [
+        "33"
+      ]
     },
     {
-      cat: 'packaging', nome: 'Shellworks',
-      desc: 'Packaging compostabile da scarti di crostacei',
-      base: 'Chitosano / Chitina',
-      link: 'https://www.theshellworks.com',
-      img: 'shellworks.jpg',
-      ingredienti: ['Chitosano', 'Acido acetico'],
-      dettaglio: 'The Shellworks \u00e8 uno studio londinese fondato nel 2018 da un team di designer del Royal College of Art. Trasformano i gusci di gamberi e granchi, normalmente destinati alla discarica, in bioplastica compostabile a base di chitina e chitosano. Il processo prevede la demineralizzazione con acido e la deproteinizzazione, ottenendo chitosano puro che viene sciolto in soluzione acida e colato in stampi. Il materiale risultante \u00e8 traslucido, resistente e si biodegrada in pochi mesi nel compost domestico. Shellworks ha sviluppato una macchina desktop chiamata "Shelly" che automatizza il processo di formatura per piccoli lotti, pensata per designer e maker. I loro prodotti includono vasetti per cosmetici, capsule e film. La chitina \u00e8 il secondo biopolimero pi\u00f9 abbondante sulla Terra dopo la cellulosa.',
-      note: ''
+      "cat": "packaging",
+      "nome": "Shellworks",
+      "desc": "Packaging compostabile da scarti di crostacei",
+      "base": "Chitosano / Chitina",
+      "link": "https://www.theshellworks.com",
+      "img": "shellworks.jpg",
+      "ingredienti": [
+        "Chitosano",
+        "Acido acetico"
+      ],
+      "dettaglio": "The Shellworks è uno studio londinese fondato nel 2018 da un team di designer del Royal College of Art. Trasformano i gusci di gamberi e granchi, normalmente destinati alla discarica, in bioplastica compostabile a base di chitina e chitosano. Il processo prevede la demineralizzazione con acido e la deproteinizzazione, ottenendo chitosano puro che viene sciolto in soluzione acida e colato in stampi. Il materiale risultante è traslucido, resistente e si biodegrada in pochi mesi nel compost domestico. Shellworks ha sviluppato una macchina desktop chiamata \"Shelly\" che automatizza il processo di formatura per piccoli lotti, pensata per designer e maker. I loro prodotti includono vasetti per cosmetici, capsule e film. La chitina è il secondo biopolimero più abbondante sulla Terra dopo la cellulosa.",
+      "note": "",
+      "materiali_correlati": [
+        "2"
+      ]
     },
     {
-      cat: 'packaging', nome: 'Ecovative Mushroom Packaging',
-      desc: 'Packaging protettivo per Dell, Puma, IKEA',
-      base: 'Micelio + substrato agricolo',
-      link: 'https://mushroompackaging.com',
-      img: 'ecovative-packaging.jpg',
-      ingredienti: ['Micelio fungino', 'Scarti agricoli (canapa, steli di mais)'],
-      dettaglio: 'Ecovative Design, fondata nel 2007 da Eben Bayer e Gavin McIntyre al Rensselaer Polytechnic Institute, \u00e8 pioniera dei materiali a base di micelio. Il loro packaging funziona in modo radicalmente diverso dalla plastica: scarti agricoli (steli di mais, lolla di riso, canapa) vengono sterilizzati, inoculati con micelio fungino e lasciati crescere in stampi per 5-7 giorni. Il micelio funge da collante biologico, creando un materiale leggero, resistente agli urti e completamente compostabile. Dell, IKEA e Puma lo hanno adottato come alternativa al polistirolo espanso. Il processo richiede sterilit\u00e0, temperatura controllata (24-28\u00b0C) e un forno per disattivare la crescita. Ecovative ha anche lanciato Grow.bio, una piattaforma che vende kit per far crescere materiali in micelio a casa o in laboratorio.',
-      note: ''
-    },
-
-    // === GIOIELLO ===
-    {
-      cat: 'gioiello', nome: 'Galalite (storica)',
-      desc: 'Plastica da caseina, bottoni e gioielli dal 1900',
-      base: 'Caseina',
-      link: 'https://it.wikipedia.org/wiki/Galalite',
-      img: 'galalite2.jpg',
-      ingredienti: ['Caseina (da latte)', 'Formaldeide (storica) o borace'],
-      dettaglio: 'La Galalite ("pietra di latte") \u00e8 stata inventata nel 1897 e brevettata nel 1899 dal chimico tedesco Adolf Spitteler. Per quasi un secolo \u00e8 stata una delle plastiche pi\u00f9 diffuse al mondo, usata per bottoni, pettini, gioielli, manici di ombrelli e penne stilografiche. Il processo originale prevede la precipitazione della caseina dal latte con acido (aceto o acido lattico), seguita da essiccazione e indurimento in formaldeide. Il materiale risultante \u00e8 duro, lucidabile, colorabile e sorprendentemente simile all\'avorio, alla tartaruga o al corno. Ancora oggi artigiani in Italia e Francia producono bottoni in Galalite. In laboratorio si pu\u00f2 replicare il processo usando borace al posto della formaldeide come reticolante, ottenendo un materiale simile ma pi\u00f9 sicuro. La caseina plastica \u00e8 un eccellente esercizio didattico: economico, veloce e con risultati tangibili in poche ore.',
-      note: ''
+      "cat": "packaging",
+      "nome": "Ecovative Mushroom Packaging",
+      "desc": "Packaging protettivo per Dell, Puma, IKEA",
+      "base": "Micelio + substrato agricolo",
+      "link": "https://mushroompackaging.com",
+      "img": "ecovative-packaging.jpg",
+      "ingredienti": [
+        "Micelio fungino",
+        "Scarti agricoli (canapa, steli di mais)"
+      ],
+      "dettaglio": "Ecovative Design, fondata nel 2007 da Eben Bayer e Gavin McIntyre al Rensselaer Polytechnic Institute, è pioniera dei materiali a base di micelio. Il loro packaging funziona in modo radicalmente diverso dalla plastica: scarti agricoli (steli di mais, lolla di riso, canapa) vengono sterilizzati, inoculati con micelio fungino e lasciati crescere in stampi per 5-7 giorni. Il micelio funge da collante biologico, creando un materiale leggero, resistente agli urti e completamente compostabile. Dell, IKEA e Puma lo hanno adottato come alternativa al polistirolo espanso. Il processo richiede sterilità, temperatura controllata (24-28°C) e un forno per disattivare la crescita. Ecovative ha anche lanciato Grow.bio, una piattaforma che vende kit per far crescere materiali in micelio a casa o in laboratorio.",
+      "note": "",
+      "materiali_correlati": [
+        "9",
+        "mycocomposite_base"
+      ]
     },
     {
-      cat: 'gioiello', nome: 'Shell Homage (Billie van Katwijk)',
-      desc: 'Oggetti decorativi da conchiglie macinate + bioresina',
-      base: 'Scarti di conchiglie',
-      link: 'https://www.billievankatwijk.com',
-      img: 'shell-homage.jpg',
-      ingredienti: ['Polvere di conchiglie', 'Bioresina'],
-      dettaglio: 'Billie van Katwijk \u00e8 una designer olandese che trasforma scarti dell\'industria ittica in materiali preziosi. Il suo progetto "Shell Homage" utilizza conchiglie di cozze e ostriche macinate finemente, mescolate con bioresine per creare un materiale composito che ricorda il marmo o la pietra naturale. Le conchiglie sono composte principalmente da carbonato di calcio (la stessa sostanza del gesso e del marmo), il che conferisce al materiale durezza e una finitura naturalmente setosa. Van Katwijk realizza vasi, piatti decorativi e oggetti per la casa, ciascuno con pattern unici determinati dalla granulometria e dal tipo di conchiglia. Il progetto affronta un problema reale: tonnellate di gusci vengono scartate ogni anno. In laboratorio, si pu\u00f2 sperimentare con gusci d\'uovo o conchiglie polverizzati mescolati a biopolimeri come la gelatina o l\'amido.',
-      note: ''
+      "cat": "gioiello",
+      "nome": "Galalite (storica)",
+      "desc": "Plastica da caseina, bottoni e gioielli dal 1900",
+      "base": "Caseina",
+      "link": "https://it.wikipedia.org/wiki/Galalite",
+      "img": "galalite2.jpg",
+      "ingredienti": [
+        "Caseina (da latte)",
+        "Formaldeide (storica) o borace"
+      ],
+      "dettaglio": "La Galalite (\"pietra di latte\") è stata inventata nel 1897 e brevettata nel 1899 dal chimico tedesco Adolf Spitteler. Per quasi un secolo è stata una delle plastiche più diffuse al mondo, usata per bottoni, pettini, gioielli, manici di ombrelli e penne stilografiche. Il processo originale prevede la precipitazione della caseina dal latte con acido (aceto o acido lattico), seguita da essiccazione e indurimento in formaldeide. Il materiale risultante è duro, lucidabile, colorabile e sorprendentemente simile all'avorio, alla tartaruga o al corno. Ancora oggi artigiani in Italia e Francia producono bottoni in Galalite. In laboratorio si può replicare il processo usando borace al posto della formaldeide come reticolante, ottenendo un materiale simile ma più sicuro. La caseina plastica è un eccellente esercizio didattico: economico, veloce e con risultati tangibili in poche ore.",
+      "note": "",
+      "materiali_correlati": [
+        "32",
+        "MONO_colla_caseinica",
+        "MONO_tempera_caseinica"
+      ]
     },
     {
-      cat: 'gioiello', nome: 'Margarita Talep',
-      desc: 'Bioplastiche da estratti di alghe',
-      base: 'Agar / Alginato',
-      link: 'https://www.margaritatalep.com',
-      img: 'margarita-talep.jpg',
-      ingredienti: ['Agar', 'Alginato', 'Coloranti naturali'],
-      dettaglio: 'Margarita Talep \u00e8 una designer cilena che esplora le alghe come materia prima per bioplastiche esteticamente sorprendenti. I suoi materiali sono realizzati con agar e alginato estratti da alghe marine, combinati con coloranti naturali e plastificanti come la glicerina. Il risultato sono fogli traslucidi, colorati, che ricordano il vetro soffiato o le pietre preziose. Talep lavora con processi semplici e replicabili: sciogliere, colare, essiccare. I suoi oggetti includono packaging decorativo, contenitori e sculture che si biodegradano completamente. Il lavoro di Talep \u00e8 particolarmente interessante per la didattica perch\u00e9 dimostra come ingredienti da laboratorio base (agar, glicerina, coloranti alimentari) possano produrre oggetti di grande impatto visivo senza attrezzature costose.',
-      note: ''
-    },
-
-    // === TESSUTO / PELLE ===
-    {
-      cat: 'tessuto', nome: 'VEGEA',
-      desc: 'Pelle vegetale da vinaccia (scarti vinicoli)',
-      base: 'Scarti uva (vinaccia)',
-      link: 'https://www.vegeacompany.com',
-      img: 'vegea.jpg',
-      ingredienti: ['Fibre da vinaccia', 'Oli da semi d\'uva'],
-      dettaglio: 'VEGEA \u00e8 un\'azienda italiana fondata nel 2016 a Milano da Gianpiero Tessitore. Il nome combina VEG (vegano) e GEA (Madre Terra). Il materiale \u00e8 prodotto dalla vinaccia, lo scarto della vinificazione composto da bucce, semi e raspi. Da 100 kg di uva si ottengono 9-10 kg di bucce e 3-4 kg di semi, ricchi di cellulosa e oli vegetali. Le fibre estratte vengono combinate con un supporto tessile per creare un materiale simile alla pelle, morbido e resistente. VEGEA contiene circa il 90% di materiale organico e il 10% di poliuretano per le finiture. Marchi come H&M, Le Coq Sportif, Diadora e persino Bentley per gli interni auto hanno adottato il materiale. Il progetto \u00e8 un esempio perfetto di economia circolare applicata alla filiera vinicola italiana, particolarmente rilevante per il Piemonte.',
-      note: ''
+      "cat": "gioiello",
+      "nome": "Shell Homage (Billie van Katwijk)",
+      "desc": "Oggetti decorativi da conchiglie macinate + bioresina",
+      "base": "Scarti di conchiglie",
+      "link": "https://www.billievankatwijk.com",
+      "img": "shell-homage.jpg",
+      "ingredienti": [
+        "Polvere di conchiglie",
+        "Bioresina"
+      ],
+      "dettaglio": "Billie van Katwijk è una designer olandese che trasforma scarti dell'industria ittica in materiali preziosi. Il suo progetto \"Shell Homage\" utilizza conchiglie di cozze e ostriche macinate finemente, mescolate con bioresine per creare un materiale composito che ricorda il marmo o la pietra naturale. Le conchiglie sono composte principalmente da carbonato di calcio (la stessa sostanza del gesso e del marmo), il che conferisce al materiale durezza e una finitura naturalmente setosa. Van Katwijk realizza vasi, piatti decorativi e oggetti per la casa, ciascuno con pattern unici determinati dalla granulometria e dal tipo di conchiglia. Il progetto affronta un problema reale: tonnellate di gusci vengono scartate ogni anno. In laboratorio, si può sperimentare con gusci d'uovo o conchiglie polverizzati mescolati a biopolimeri come la gelatina o l'amido.",
+      "note": "",
+      "materiali_correlati": []
     },
     {
-      cat: 'tessuto', nome: 'Pinatex (Ananas Anam)',
-      desc: 'Pelle da foglie di ananas',
-      base: 'Fibra di foglie di ananas',
-      link: 'https://www.ananas-anam.com',
-      img: 'pinatex.jpg',
-      ingredienti: ['Fibre di foglie di ananas', 'PLA (acido polilattico)'],
-      dettaglio: 'Pinatex \u00e8 stato sviluppato dalla designer spagnola Carmen Hijosa, che ha trascorso anni nelle Filippine studiando la tradizione tessile locale basata sulle foglie di ananas. Dopo la raccolta del frutto, le foglie vengono normalmente scartate o bruciate. Pinatex estrae le fibre lunghe dalle foglie tramite un processo chiamato decorticazione, le trasforma in un tessuto non tessuto (feltro) e le rifinisce con una resina a base di PLA. Il materiale risultante \u00e8 resistente, flessibile e pu\u00f2 essere stampato, cucito e colorato. Nike, Hugo Boss, H&M e molti brand di accessori lo utilizzano per scarpe, borse e portafogli. La produzione genera un sottoprodotto (biomassa) utilizzabile come fertilizzante, chiudendo il ciclo. Pinatex dimostra come uno scarto agricolo tropicale possa diventare un tessuto tecnico di alta gamma.',
-      note: ''
+      "cat": "gioiello",
+      "nome": "Margarita Talep",
+      "desc": "Bioplastiche da estratti di alghe",
+      "base": "Agar / Alginato",
+      "link": "https://www.margaritatalep.com",
+      "img": "margarita-talep.jpg",
+      "ingredienti": [
+        "Agar",
+        "Alginato",
+        "Coloranti naturali"
+      ],
+      "dettaglio": "Margarita Talep è una designer cilena che esplora le alghe come materia prima per bioplastiche esteticamente sorprendenti. I suoi materiali sono realizzati con agar e alginato estratti da alghe marine, combinati con coloranti naturali e plastificanti come la glicerina. Il risultato sono fogli traslucidi, colorati, che ricordano il vetro soffiato o le pietre preziose. Talep lavora con processi semplici e replicabili: sciogliere, colare, essiccare. I suoi oggetti includono packaging decorativo, contenitori e sculture che si biodegradano completamente. Il lavoro di Talep è particolarmente interessante per la didattica perché dimostra come ingredienti da laboratorio base (agar, glicerina, coloranti alimentari) possano produrre oggetti di grande impatto visivo senza attrezzature costose.",
+      "note": "",
+      "materiali_correlati": [
+        "15",
+        "12"
+      ]
     },
     {
-      cat: 'tessuto', nome: 'Desserto',
-      desc: 'Pelle da cactus nopal messicano',
-      base: 'Fibra di cactus (Opuntia)',
-      link: 'https://desserto.com.mx',
-      img: 'desserto.jpg',
-      ingredienti: ['Polvere di cactus nopal', 'Supporto tessile'],
-      dettaglio: 'Desserto \u00e8 un\'azienda messicana fondata nel 2019 da Adrian Lopez Velarde e Marte Cazarez. Producono una pelle vegetale dal cactus nopal (Opuntia ficus-indica), pianta che cresce abbondantemente in Messico senza irrigazione, pesticidi o deforestazione. Le pale mature del cactus vengono raccolte (senza uccidere la pianta, che ricresce), essiccate al sole per tre giorni, macinate in polvere fine e combinate con un supporto tessile. Il materiale \u00e8 morbido, resistente, parzialmente biodegradabile e disponibile in vari colori e texture. Desserto ha vinto numerosi premi per l\'innovazione sostenibile e collabora con brand di moda e automotive. Il cactus nopal richiede pochissima acqua (solo pioggia) e assorbe CO\u2082, rendendo il processo a bassissimo impatto ambientale.',
-      note: ''
+      "cat": "tessuto",
+      "nome": "VEGEA",
+      "desc": "Pelle vegetale da vinaccia (scarti vinicoli)",
+      "base": "Scarti uva (vinaccia)",
+      "link": "https://www.vegeacompany.com",
+      "img": "vegea.jpg",
+      "ingredienti": [
+        "Fibre da vinaccia",
+        "Oli da semi d'uva"
+      ],
+      "dettaglio": "VEGEA è un'azienda italiana fondata nel 2016 a Milano da Gianpiero Tessitore. Il nome combina VEG (vegano) e GEA (Madre Terra). Il materiale è prodotto dalla vinaccia, lo scarto della vinificazione composto da bucce, semi e raspi. Da 100 kg di uva si ottengono 9-10 kg di bucce e 3-4 kg di semi, ricchi di cellulosa e oli vegetali. Le fibre estratte vengono combinate con un supporto tessile per creare un materiale simile alla pelle, morbido e resistente. VEGEA contiene circa il 90% di materiale organico e il 10% di poliuretano per le finiture. Marchi come H&M, Le Coq Sportif, Diadora e persino Bentley per gli interni auto hanno adottato il materiale. Il progetto è un esempio perfetto di economia circolare applicata alla filiera vinicola italiana, particolarmente rilevante per il Piemonte.",
+      "note": "",
+      "materiali_correlati": []
     },
     {
-      cat: 'tessuto', nome: 'TomTex',
-      desc: 'Materiale da scarti di conchiglie + fondi di caff\u00e8',
-      base: 'Chitina + caff\u00e8',
-      link: 'https://tomtex.co',
-      img: 'tomtex.jpg',
-      ingredienti: ['Chitina (da gusci di crostacei)', 'Fondi di caff\u00e8'],
-      dettaglio: 'TomTex \u00e8 una startup fondata nel 2020 dalla designer vietnamita-americana Uyen Tran. Il materiale combina due flussi di rifiuti abbondanti: i gusci dei crostacei (ricchi di chitina) e i fondi di caff\u00e8. La chitina viene estratta chimicamente dai gusci, sciolta e combinata con fibre di caff\u00e8 per creare un tessuto non tessuto che replica l\'aspetto e la sensazione della pelle. Il processo non richiede prodotti chimici tossici ed \u00e8 a basse emissioni. Il materiale \u00e8 traspirante, resistente e si biodegrada naturalmente. TomTex ha ricevuto il supporto di acceleratori come Fashion for Good e ha presentato il materiale a brand di lusso. Il progetto \u00e8 interessante perch\u00e9 dimostra come la chitina (disponibile dai mercati ittici) possa essere combinata con un ingrediente quotidiano come il caff\u00e8.',
-      note: ''
+      "cat": "tessuto",
+      "nome": "Pinatex (Ananas Anam)",
+      "desc": "Pelle da foglie di ananas",
+      "base": "Fibra di foglie di ananas",
+      "link": "https://www.ananas-anam.com",
+      "img": "pinatex.jpg",
+      "ingredienti": [
+        "Fibre di foglie di ananas",
+        "PLA (acido polilattico)"
+      ],
+      "dettaglio": "Pinatex è stato sviluppato dalla designer spagnola Carmen Hijosa, che ha trascorso anni nelle Filippine studiando la tradizione tessile locale basata sulle foglie di ananas. Dopo la raccolta del frutto, le foglie vengono normalmente scartate o bruciate. Pinatex estrae le fibre lunghe dalle foglie tramite un processo chiamato decorticazione, le trasforma in un tessuto non tessuto (feltro) e le rifinisce con una resina a base di PLA. Il materiale risultante è resistente, flessibile e può essere stampato, cucito e colorato. Nike, Hugo Boss, H&M e molti brand di accessori lo utilizzano per scarpe, borse e portafogli. La produzione genera un sottoprodotto (biomassa) utilizzabile come fertilizzante, chiudendo il ciclo. Pinatex dimostra come uno scarto agricolo tropicale possa diventare un tessuto tecnico di alta gamma.",
+      "note": "",
+      "materiali_correlati": []
     },
     {
-      cat: 'tessuto', nome: 'Mylo (Bolt Threads)',
-      desc: 'Pelle di micelio per Stella McCartney, Adidas',
-      base: 'Micelio fungino',
-      link: 'https://boltthreads.com/technology/mylo',
-      img: 'mylo.jpg',
-      ingredienti: ['Micelio (radici fungine)', 'Substrato agricolo'],
-      dettaglio: 'Mylo \u00e8 un materiale simile alla pelle sviluppato da Bolt Threads, startup californiana fondata nel 2009 da Dan Widmaier. Il micelio viene fatto crescere in camere climatizzate su substrato agricolo per meno di due settimane, poi raccolto, pressato e rifinito con tecniche simili alla concia tradizionale. Il risultato \u00e8 un materiale morbido, resistente e con la texture della pelle animale. Stella McCartney, Adidas, Kering e Lululemon hanno formato il "Mylo Consortium" per portare il materiale su scala commerciale. Tuttavia, nel 2023 Bolt Threads ha annunciato la sospensione della produzione di Mylo a causa di difficolt\u00e0 nel reperire finanziamenti, un caso emblematico delle sfide economiche che i biomateriali innovativi affrontano nel passaggio dal laboratorio alla produzione industriale. Il materiale conteneva circa il 60-85% di materiale bio-based.',
-      note: 'Produzione sospesa dal 2023 per difficolt\u00e0 di finanziamento'
+      "cat": "tessuto",
+      "nome": "Desserto",
+      "desc": "Pelle da cactus nopal messicano",
+      "base": "Fibra di cactus (Opuntia)",
+      "link": "https://desserto.com.mx",
+      "img": "desserto.jpg",
+      "ingredienti": [
+        "Polvere di cactus nopal",
+        "Supporto tessile"
+      ],
+      "dettaglio": "Desserto è un'azienda messicana fondata nel 2019 da Adrian Lopez Velarde e Marte Cazarez. Producono una pelle vegetale dal cactus nopal (Opuntia ficus-indica), pianta che cresce abbondantemente in Messico senza irrigazione, pesticidi o deforestazione. Le pale mature del cactus vengono raccolte (senza uccidere la pianta, che ricresce), essiccate al sole per tre giorni, macinate in polvere fine e combinate con un supporto tessile. Il materiale è morbido, resistente, parzialmente biodegradabile e disponibile in vari colori e texture. Desserto ha vinto numerosi premi per l'innovazione sostenibile e collabora con brand di moda e automotive. Il cactus nopal richiede pochissima acqua (solo pioggia) e assorbe CO₂, rendendo il processo a bassissimo impatto ambientale.",
+      "note": "",
+      "materiali_correlati": []
     },
     {
-      cat: 'tessuto', nome: 'Reishi (MycoWorks)',
-      desc: 'Fine Mycelium per Herm\u00e8s (Victoria bag)',
-      base: 'Micelio ingegnerizzato',
-      link: 'https://www.mycoworks.com',
-      img: 'reishi.jpg',
-      ingredienti: ['Micelio (Ganoderma)', 'Substrato controllato'],
-      dettaglio: 'MycoWorks, fondata nel 2013 dall\'artista Philip Ross a San Francisco, ha sviluppato Reishi, un materiale di lusso basato sul micelio del fungo Ganoderma (il "reishi" della medicina tradizionale). A differenza di altri materiali a base di micelio, la tecnologia Fine Mycelium di MycoWorks guida la crescita delle cellule fungine per creare strutture intrecciate dense e resistenti, simili alla pelle conciata. La collaborazione con Herm\u00e8s ha portato alla creazione della borsa Victoria in Sylvania (il nome commerciale del materiale), presentata nel 2021. MycoWorks ha raccolto oltre 180 milioni di dollari e costruito uno stabilimento produttivo in South Carolina. Il materiale \u00e8 personalizzabile in spessore, texture e colore durante la fase di crescita, offrendo possibilit\u00e0 impossibili con la pelle tradizionale.',
-      note: ''
+      "cat": "tessuto",
+      "nome": "TomTex",
+      "desc": "Materiale da scarti di conchiglie + fondi di caffè",
+      "base": "Chitina + caffè",
+      "link": "https://tomtex.co",
+      "img": "tomtex.jpg",
+      "ingredienti": [
+        "Chitina (da gusci di crostacei)",
+        "Fondi di caffè"
+      ],
+      "dettaglio": "TomTex è una startup fondata nel 2020 dalla designer vietnamita-americana Uyen Tran. Il materiale combina due flussi di rifiuti abbondanti: i gusci dei crostacei (ricchi di chitina) e i fondi di caffè. La chitina viene estratta chimicamente dai gusci, sciolta e combinata con fibre di caffè per creare un tessuto non tessuto che replica l'aspetto e la sensazione della pelle. Il processo non richiede prodotti chimici tossici ed è a basse emissioni. Il materiale è traspirante, resistente e si biodegrada naturalmente. TomTex ha ricevuto il supporto di acceleratori come Fashion for Good e ha presentato il materiale a brand di lusso. Il progetto è interessante perché dimostra come la chitina (disponibile dai mercati ittici) possa essere combinata con un ingrediente quotidiano come il caffè.",
+      "note": "",
+      "materiali_correlati": [
+        "2",
+        "13"
+      ]
     },
     {
-      cat: 'tessuto', nome: 'Celium (Polybion)',
-      desc: 'Pelle da cellulosa batterica industriale',
-      base: 'Cellulosa batterica',
-      link: 'https://polybion.bio',
-      img: 'celium2.jpg',
-      ingredienti: ['Cellulosa batterica', 'Scarti di frutta (mango, agave)'],
-      dettaglio: 'Polybion \u00e8 un\'azienda messicana fondata nel 2015 che produce Celium, un materiale simile alla pelle ottenuto dalla cellulosa batterica. A differenza della cellulosa da SCOBY fatta in casa (piccola scala, lenta), Polybion utilizza bioreattori industriali dove batteri Acetobacter vengono nutriti con scarti dell\'industria agro-alimentare (polpa di mango, residui di agave). I batteri producono nanofibbre di cellulosa pura che formano un foglio denso e uniforme in 10-14 giorni. Il materiale viene poi essiccato, trattato e rifinito per ottenere le propriet\u00e0 desiderate. Celium \u00e8 stato adottato da brand di moda e accessori per la sua texture naturale e la possibilit\u00e0 di personalizzazione. Il processo scala molto meglio della fermentazione SCOBY casalinga e rappresenta il futuro industriale della cellulosa batterica.',
-      note: ''
+      "cat": "tessuto",
+      "nome": "Mylo (Bolt Threads)",
+      "desc": "Pelle di micelio per Stella McCartney, Adidas",
+      "base": "Micelio fungino",
+      "link": "https://boltthreads.com/technology/mylo",
+      "img": "mylo.jpg",
+      "ingredienti": [
+        "Micelio (radici fungine)",
+        "Substrato agricolo"
+      ],
+      "dettaglio": "Mylo è un materiale simile alla pelle sviluppato da Bolt Threads, startup californiana fondata nel 2009 da Dan Widmaier. Il micelio viene fatto crescere in camere climatizzate su substrato agricolo per meno di due settimane, poi raccolto, pressato e rifinito con tecniche simili alla concia tradizionale. Il risultato è un materiale morbido, resistente e con la texture della pelle animale. Stella McCartney, Adidas, Kering e Lululemon hanno formato il \"Mylo Consortium\" per portare il materiale su scala commerciale. Tuttavia, nel 2023 Bolt Threads ha annunciato la sospensione della produzione di Mylo a causa di difficoltà nel reperire finanziamenti, un caso emblematico delle sfide economiche che i biomateriali innovativi affrontano nel passaggio dal laboratorio alla produzione industriale. Il materiale conteneva circa il 60-85% di materiale bio-based.",
+      "note": "Produzione sospesa dal 2023 per difficoltà di finanziamento",
+      "materiali_correlati": [
+        "mycocomposite_base"
+      ]
     },
     {
-      cat: 'tessuto', nome: 'BioCouture / Biofabricate (Suzanne Lee)',
-      desc: 'Pioniera tessuto da SCOBY kombucha',
-      base: 'SCOBY (cellulosa batterica)',
-      link: 'https://www.biofabricate.co',
-      img: 'biocouture.jpg',
-      ingredienti: ['SCOBY', 'T\u00e8 zuccherato'],
-      dettaglio: 'Suzanne Lee \u00e8 la pioniera assoluta del tessuto da cellulosa batterica. Nel 2003, come ricercatrice al Central Saint Martins di Londra, ha iniziato a far crescere "tessuto" dalla coltura di kombucha (SCOBY) in vasche di t\u00e8 zuccherato. Il progetto BioCouture ha dimostrato che i batteri possono "tessere" fogli di cellulosa pura che, una volta essiccati e trattati, somigliano alla pelle vegetale. Il materiale grezzo \u00e8 fragile e idrofilo, ma con plastificanti (glicerina) e coating (cera, acido stearico) diventa flessibile e parzialmente impermeabile. Lee ha successivamente fondato Biofabricate, la piattaforma di riferimento globale per i biomateriali nella moda, organizzando conferenze annuali che riuniscono scienziati, designer e investitori. Il suo lavoro originale resta il punto di partenza per qualsiasi esperimento con la cellulosa batterica in laboratorio.',
-      note: 'Il sito originale biocouture.co.uk non \u00e8 pi\u00f9 attivo. Lee dirige ora Biofabricate.'
-    },
-
-    // === PANNELLO ===
-    {
-      cat: 'pannello', nome: 'Chip[s] Board',
-      desc: 'Pannelli e oggetti da scarti di patate',
-      base: 'Amido + fibra di patata',
-      link: '',
-      img: 'chips-board.jpg',
-      ingredienti: ['Amido di patata', 'Fibra di patata', 'Bucce'],
-      dettaglio: 'Chip[s] Board \u00e8 un progetto fondato nel 2017 da Rowan Minkley e Robert Nicoll nel Regno Unito. L\'idea \u00e8 semplice ma potente: trasformare gli scarti dell\'industria delle patatine fritte in pannelli e oggetti rigidi. Le bucce e la polpa scartata, ricche di amido e fibre, vengono essiccate, macinate e pressate a caldo per creare un materiale composito simile all\'MDF ma completamente compostabile. Chip[s] Board ha realizzato occhiali, posate monouso, contenitori e pannelli decorativi. Il progetto \u00e8 nato come tesi di laurea in design ed \u00e8 diventato una piccola azienda che lavora con catene di fast food per il recupero degli scarti. Per il laboratorio didattico \u00e8 particolarmente interessante: dimostra che amido e fibre vegetali, pressati con calore, creano un materiale strutturale senza bisogno di leganti chimici.',
-      note: 'Il sito web originale chipsboard.com non \u00e8 pi\u00f9 attivo. Il progetto resta un riferimento importante nella letteratura sui biomateriali.'
+      "cat": "tessuto",
+      "nome": "Reishi (MycoWorks)",
+      "desc": "Fine Mycelium per Hermès (Victoria bag)",
+      "base": "Micelio ingegnerizzato",
+      "link": "https://www.mycoworks.com",
+      "img": "reishi.jpg",
+      "ingredienti": [
+        "Micelio (Ganoderma)",
+        "Substrato controllato"
+      ],
+      "dettaglio": "MycoWorks, fondata nel 2013 dall'artista Philip Ross a San Francisco, ha sviluppato Reishi, un materiale di lusso basato sul micelio del fungo Ganoderma (il \"reishi\" della medicina tradizionale). A differenza di altri materiali a base di micelio, la tecnologia Fine Mycelium di MycoWorks guida la crescita delle cellule fungine per creare strutture intrecciate dense e resistenti, simili alla pelle conciata. La collaborazione con Hermès ha portato alla creazione della borsa Victoria in Sylvania (il nome commerciale del materiale), presentata nel 2021. MycoWorks ha raccolto oltre 180 milioni di dollari e costruito uno stabilimento produttivo in South Carolina. Il materiale è personalizzabile in spessore, texture e colore durante la fase di crescita, offrendo possibilità impossibili con la pelle tradizionale.",
+      "note": "",
+      "materiali_correlati": [
+        "mycocomposite_base"
+      ]
     },
     {
-      cat: 'pannello', nome: 'Natural Fiber Welding',
-      desc: 'Compositi da fibre naturali saldate',
-      base: 'Fibre naturali (cotone, lino, canapa)',
-      link: 'https://www.naturalfiberwelding.com',
-      img: 'nfw.jpg',
-      ingredienti: ['Fibre di cotone riciclato', 'Gomma naturale'],
-      dettaglio: 'Natural Fiber Welding (NFW), fondata nel 2015 da Luke Haverhals nell\'Illinois, ha sviluppato una tecnologia brevettata per "saldare" fibre naturali tra loro senza adesivi sintetici. Il processo utilizza liquidi ionici per ammorbidire temporaneamente la superficie delle fibre vegetali, che vengono poi pressate insieme. Quando il liquido evapora, le fibre si legano permanentemente. NFW produce due linee principali: MIRUM, una pelle vegetale 100% naturale (senza plastica) da gomma naturale e fibre, e CLARUS, un filato di cotone riciclato ad alte prestazioni. Ralph Lauren, BMW, Allbirds e New Balance utilizzano i loro materiali. NFW ha raccolto oltre 100 milioni di dollari. Il principio di saldatura delle fibre \u00e8 applicabile anche in laboratorio didattico con processi semplificati di pressatura a caldo.',
-      note: ''
-    },
-
-    // === DESIGN / SCULTURA ===
-    {
-      cat: 'design_scultura', nome: 'Neri Oxman \u2014 Vespers',
-      desc: 'Maschere mortuarie stampate 3D con biomateriali',
-      base: 'Chitosano, pectina, cellulosa',
-      link: 'https://oxman.com/projects/vespers',
-      img: 'oxman-vespers3.jpg',
-      ingredienti: ['Chitosano', 'Pectina', 'Cellulosa', 'Pigmenti biologici'],
-      dettaglio: 'Vespers \u00e8 una serie di maschere mortuarie progettate da Neri Oxman e il Mediated Matter Group al MIT Media Lab nel 2016. Le maschere esplorano il confine tra vita e morte attraverso tre serie: le prime ispirate alle maschere funebri storiche, le seconde contenenti microorganismi vivi intrappolati in canali interni, le terze completamente "biologiche" e capaci di decomporsi. Il materiale base combina chitosano, pectina e cellulosa in formulazioni variabili, stampate con una piattaforma multi-materiale sviluppata dal team. I pigmenti biologici (melanina, carotene) creano gradienti di colore. Il progetto dimostra come i biomateriali possano essere usati per creare oggetti di grande complessit\u00e0 formale e concettuale, ben oltre le semplici bioplastiche piatte.',
-      note: ''
+      "cat": "tessuto",
+      "nome": "Celium (Polybion)",
+      "desc": "Pelle da cellulosa batterica industriale",
+      "base": "Cellulosa batterica",
+      "link": "https://polybion.bio",
+      "img": "celium2.jpg",
+      "ingredienti": [
+        "Cellulosa batterica",
+        "Scarti di frutta (mango, agave)"
+      ],
+      "dettaglio": "Polybion è un'azienda messicana fondata nel 2015 che produce Celium, un materiale simile alla pelle ottenuto dalla cellulosa batterica. A differenza della cellulosa da SCOBY fatta in casa (piccola scala, lenta), Polybion utilizza bioreattori industriali dove batteri Acetobacter vengono nutriti con scarti dell'industria agro-alimentare (polpa di mango, residui di agave). I batteri producono nanofibbre di cellulosa pura che formano un foglio denso e uniforme in 10-14 giorni. Il materiale viene poi essiccato, trattato e rifinito per ottenere le proprietà desiderate. Celium è stato adottato da brand di moda e accessori per la sua texture naturale e la possibilità di personalizzazione. Il processo scala molto meglio della fermentazione SCOBY casalinga e rappresenta il futuro industriale della cellulosa batterica.",
+      "note": "",
+      "materiali_correlati": [
+        "scoby_cellulosa_batterica"
+      ]
     },
     {
-      cat: 'design_scultura', nome: 'Neri Oxman \u2014 Aguahoja',
-      desc: 'Padiglione biodegradabile MIT Media Lab',
-      base: 'Chitosano, cellulosa, pectina',
-      link: 'https://oxman.com/projects/aguahoja',
-      img: 'oxman-aguahoja.jpg',
-      ingredienti: ['Chitosano', 'Cellulosa', 'Pectina', 'Carbonato di calcio'],
-      dettaglio: 'Aguahoja (2018) \u00e8 un padiglione architettonico alto 5 metri, interamente costruito con biomateriali e progettato per decomporsi nell\'acqua piovana alla fine della sua vita. Neri Oxman e il Mediated Matter Group hanno sviluppato un processo robotico per depositare strati di chitosano, cellulosa e pectina con composizioni variabili, creando zone rigide e flessibili nello stesso oggetto. Le parti strutturali contengono pi\u00f9 chitosano e carbonato di calcio, quelle trasparenti pi\u00f9 cellulosa pura. Quando esposto alla pioggia, il padiglione si dissolve gradualmente, restituendo nutrienti al suolo. Aguahoja \u00e8 un manifesto per l\'architettura del futuro: strutture che nascono dalla natura e ritornano alla natura. Per la didattica, dimostra il principio della composizione a gradiente in un unico oggetto.',
-      note: ''
+      "cat": "tessuto",
+      "nome": "BioCouture / Biofabricate (Suzanne Lee)",
+      "desc": "Pioniera tessuto da SCOBY kombucha",
+      "base": "SCOBY (cellulosa batterica)",
+      "link": "https://www.biofabricate.co",
+      "img": "biocouture.jpg",
+      "ingredienti": [
+        "SCOBY",
+        "Tè zuccherato"
+      ],
+      "dettaglio": "Suzanne Lee è la pioniera assoluta del tessuto da cellulosa batterica. Nel 2003, come ricercatrice al Central Saint Martins di Londra, ha iniziato a far crescere \"tessuto\" dalla coltura di kombucha (SCOBY) in vasche di tè zuccherato. Il progetto BioCouture ha dimostrato che i batteri possono \"tessere\" fogli di cellulosa pura che, una volta essiccati e trattati, somigliano alla pelle vegetale. Il materiale grezzo è fragile e idrofilo, ma con plastificanti (glicerina) e coating (cera, acido stearico) diventa flessibile e parzialmente impermeabile. Lee ha successivamente fondato Biofabricate, la piattaforma di riferimento globale per i biomateriali nella moda, organizzando conferenze annuali che riuniscono scienziati, designer e investitori. Il suo lavoro originale resta il punto di partenza per qualsiasi esperimento con la cellulosa batterica in laboratorio.",
+      "note": "Il sito originale biocouture.co.uk non è più attivo. Lee dirige ora Biofabricate.",
+      "materiali_correlati": [
+        "scoby_cellulosa_batterica",
+        "5"
+      ]
     },
     {
-      cat: 'design_scultura', nome: 'Ponto Biodesign',
-      desc: 'Lampade e oggetti da cellulosa batterica',
-      base: 'SCOBY (cellulosa batterica)',
-      link: 'https://www.pontobiodesign.com',
-      img: 'Ponto-Biodesign.jpg',
-      ingredienti: ['SCOBY', 'T\u00e8 zuccherato', 'Stampi in legno/ceramica'],
-      dettaglio: 'Ponto Biodesign \u00e8 uno studio brasiliano fondato da Anielle Hernandez che crea lampade, paralumi e oggetti decorativi interamente in cellulosa batterica. Il processo prevede la crescita di pellicole SCOBY in vasche di t\u00e8 zuccherato, seguite da essiccazione su stampi tridimensionali in legno o ceramica. Il materiale essiccato \u00e8 traslucido con una texture simile alla pergamena, che filtra la luce in modo caldo e organico. Le lampade di Ponto sono un esempio eccellente di come la cellulosa batterica possa trovare applicazioni reali nel design di prodotto. Il processo \u00e8 lento (2-3 settimane di crescita) ma non richiede attrezzature costose, ed \u00e8 perfettamente replicabile in un laboratorio didattico con pazienza e controllo della temperatura.',
-      note: ''
+      "cat": "pannello",
+      "nome": "Chip[s] Board",
+      "desc": "Pannelli e oggetti da scarti di patate",
+      "base": "Amido + fibra di patata",
+      "link": "",
+      "img": "chips-board.jpg",
+      "ingredienti": [
+        "Amido di patata",
+        "Fibra di patata",
+        "Bucce"
+      ],
+      "dettaglio": "Chip[s] Board è un progetto fondato nel 2017 da Rowan Minkley e Robert Nicoll nel Regno Unito. L'idea è semplice ma potente: trasformare gli scarti dell'industria delle patatine fritte in pannelli e oggetti rigidi. Le bucce e la polpa scartata, ricche di amido e fibre, vengono essiccate, macinate e pressate a caldo per creare un materiale composito simile all'MDF ma completamente compostabile. Chip[s] Board ha realizzato occhiali, posate monouso, contenitori e pannelli decorativi. Il progetto è nato come tesi di laurea in design ed è diventato una piccola azienda che lavora con catene di fast food per il recupero degli scarti. Per il laboratorio didattico è particolarmente interessante: dimostra che amido e fibre vegetali, pressati con calore, creano un materiale strutturale senza bisogno di leganti chimici.",
+      "note": "Il sito web originale chipsboard.com non è più attivo. Il progetto resta un riferimento importante nella letteratura sui biomateriali.",
+      "materiali_correlati": [
+        "4"
+      ]
     },
     {
-      cat: 'design_scultura', nome: 'Hy-Fi Tower (The Living)',
-      desc: 'Struttura 40 piedi, 10.000 mattoni in micelio, MoMA PS1',
-      base: 'Micelio + steli di mais',
-      link: 'https://www.dezeen.com/2014/07/01/tower-of-grown-bio-bricks-by-the-living-opens-at-moma-ps1/',
-      img: 'hyfi.jpg',
-      ingredienti: ['Micelio fungino', 'Steli di mais'],
-      dettaglio: 'Hy-Fi \u00e8 una torre temporanea alta circa 12 metri costruita nel 2014 nel cortile del MoMA PS1 a New York dallo studio di architettura The Living (David Benjamin). La struttura era composta da circa 10.000 mattoni di micelio prodotti da Ecovative, coltivati in stampi usando steli di mais come substrato. I mattoni, una volta cresciuti ed essiccati, erano leggeri, isolanti e strutturalmente sufficienti per una costruzione temporanea. La torre combinava mattoni di micelio con mattoni riflettenti che creavano effetti di luce durante il giorno. Alla fine dell\'estate, l\'intera struttura \u00e8 stata smontata e compostata. Hy-Fi ha dimostrato per la prima volta che i materiali viventi possono essere usati su scala architettonica, aprendo un campo di ricerca oggi in piena espansione.',
-      note: ''
+      "cat": "pannello",
+      "nome": "Natural Fiber Welding",
+      "desc": "Compositi da fibre naturali saldate",
+      "base": "Fibre naturali (cotone, lino, canapa)",
+      "link": "https://www.naturalfiberwelding.com",
+      "img": "nfw.jpg",
+      "ingredienti": [
+        "Fibre di cotone riciclato",
+        "Gomma naturale"
+      ],
+      "dettaglio": "Natural Fiber Welding (NFW), fondata nel 2015 da Luke Haverhals nell'Illinois, ha sviluppato una tecnologia brevettata per \"saldare\" fibre naturali tra loro senza adesivi sintetici. Il processo utilizza liquidi ionici per ammorbidire temporaneamente la superficie delle fibre vegetali, che vengono poi pressate insieme. Quando il liquido evapora, le fibre si legano permanentemente. NFW produce due linee principali: MIRUM, una pelle vegetale 100% naturale (senza plastica) da gomma naturale e fibre, e CLARUS, un filato di cotone riciclato ad alte prestazioni. Ralph Lauren, BMW, Allbirds e New Balance utilizzano i loro materiali. NFW ha raccolto oltre 100 milioni di dollari. Il principio di saldatura delle fibre è applicabile anche in laboratorio didattico con processi semplificati di pressatura a caldo.",
+      "note": "",
+      "materiali_correlati": []
     },
     {
-      cat: 'design_scultura', nome: 'Myco-Type (RISD)',
-      desc: 'Blocchi da segatura, fogli da caff\u00e8, pasta stampabile 3D',
-      base: 'Micelio + scarti diversi',
-      link: 'https://www.designboom.com/design/myco-type-mycelium-blocks-sheets-sawdust-coffee-grounds-local-waste-08-01-2025/',
-      img: 'myco-type.jpg',
-      ingredienti: ['Micelio', 'Segatura', 'Fondi di caff\u00e8'],
-      dettaglio: 'Myco-Type \u00e8 un progetto di ricerca sviluppato alla Rhode Island School of Design (RISD) che esplora il micelio come materiale per il design in tre forme distinte: blocchi strutturali da segatura colonizzata, fogli sottili da fondi di caff\u00e8, e una pasta stampabile in 3D. L\'aspetto pi\u00f9 innovativo \u00e8 la versatilit\u00e0: lo stesso organismo (il micelio) produce materiali completamente diversi a seconda del substrato e del processo. I blocchi sono rigidi e isolanti, i fogli sono flessibili e simili al cuoio, la pasta permette forme complesse. Il progetto dimostra che il micelio non \u00e8 un materiale unico ma una piattaforma tecnologica. Per la didattica, \u00e8 un esempio eccellente di come variare substrato e processo possa cambiare radicalmente le propriet\u00e0 del materiale finale.',
-      note: ''
-    },
-
-    // === DIDATTICA ===
-    {
-      cat: 'didattica', nome: 'Fabricademy',
-      desc: 'Programma educativo tessuti e materiali bio-based (Fab Lab Network)',
-      base: 'Vari biomateriali',
-      link: 'https://textile-academy.org',
-      img: 'fabricademy.jpg',
-      ingredienti: ['Vari: agar, gelatina, alginato, micelio, SCOBY'],
-      dettaglio: 'Fabricademy \u00e8 un programma educativo internazionale di 6 mesi, parte del Fab Lab Network, che insegna la produzione tessile avanzata includendo biomateriali, e-textiles, stampa 3D su tessuto e biofabbricazione. Gli studenti lavorano in Fab Lab locali seguendo lezioni settimanali dal vivo e documentando ogni esperimento. Il modulo sui biomateriali \u00e8 particolarmente ricco: si producono bioplastiche da agar e gelatina, film da alginato, tessuti da SCOBY e compositi da micelio. Tutta la documentazione degli studenti \u00e8 pubblica e consultabile online, costituendo una risorsa preziosa di ricette testate e risultati reali. Fabricademy ha sedi in oltre 20 paesi e rappresenta la pi\u00f9 importante rete educativa globale sui biomateriali tessili.',
-      note: ''
+      "cat": "design_scultura",
+      "nome": "Neri Oxman — Vespers",
+      "desc": "Maschere mortuarie stampate 3D con biomateriali",
+      "base": "Chitosano, pectina, cellulosa",
+      "link": "https://oxman.com/projects/vespers",
+      "img": "oxman-vespers3.jpg",
+      "ingredienti": [
+        "Chitosano",
+        "Pectina",
+        "Cellulosa",
+        "Pigmenti biologici"
+      ],
+      "dettaglio": "Vespers è una serie di maschere mortuarie progettate da Neri Oxman e il Mediated Matter Group al MIT Media Lab nel 2016. Le maschere esplorano il confine tra vita e morte attraverso tre serie: le prime ispirate alle maschere funebri storiche, le seconde contenenti microorganismi vivi intrappolati in canali interni, le terze completamente \"biologiche\" e capaci di decomporsi. Il materiale base combina chitosano, pectina e cellulosa in formulazioni variabili, stampate con una piattaforma multi-materiale sviluppata dal team. I pigmenti biologici (melanina, carotene) creano gradienti di colore. Il progetto dimostra come i biomateriali possano essere usati per creare oggetti di grande complessità formale e concettuale, ben oltre le semplici bioplastiche piatte.",
+      "note": "",
+      "materiali_correlati": [
+        "2"
+      ]
     },
     {
-      cat: 'didattica', nome: 'Grow.bio (Ecovative)',
-      desc: 'Kit GIY micelio, ~$10-15, USA',
-      base: 'Micelio + canapa',
-      link: 'https://grow.bio',
-      img: 'grow-bio(ecovative).jpg',
-      ingredienti: ['Micelio pre-inoculato', 'Substrato di canapa'],
-      dettaglio: 'Grow.bio \u00e8 la piattaforma consumer di Ecovative Design, pensata per rendere il micelio accessibile a designer, maker, educatori e curiosi. I kit "Grow It Yourself" (GIY) contengono substrato di canapa gi\u00e0 inoculato con micelio: basta romperlo, metterlo in uno stampo, spruzzare acqua e aspettare 5-7 giorni. Il micelio cresce e lega il substrato nella forma desiderata. Dopo la crescita si cuoce in forno per fermare il processo. I kit costano circa 10-15 dollari e permettono di creare oggetti fino a circa 20x20x10 cm. Grow.bio fornisce anche stampi, istruzioni dettagliate e una community online. \u00c8 il modo pi\u00f9 semplice e veloce per sperimentare con il micelio senza dover gestire sterilizzazione e inoculazione. Ideale per workshop di poche ore in classe.',
-      note: ''
+      "cat": "design_scultura",
+      "nome": "Neri Oxman — Aguahoja",
+      "desc": "Padiglione biodegradabile MIT Media Lab",
+      "base": "Chitosano, cellulosa, pectina",
+      "link": "https://oxman.com/projects/aguahoja",
+      "img": "oxman-aguahoja.jpg",
+      "ingredienti": [
+        "Chitosano",
+        "Cellulosa",
+        "Pectina",
+        "Carbonato di calcio"
+      ],
+      "dettaglio": "Aguahoja (2018) è un padiglione architettonico alto 5 metri, interamente costruito con biomateriali e progettato per decomporsi nell'acqua piovana alla fine della sua vita. Neri Oxman e il Mediated Matter Group hanno sviluppato un processo robotico per depositare strati di chitosano, cellulosa e pectina con composizioni variabili, creando zone rigide e flessibili nello stesso oggetto. Le parti strutturali contengono più chitosano e carbonato di calcio, quelle trasparenti più cellulosa pura. Quando esposto alla pioggia, il padiglione si dissolve gradualmente, restituendo nutrienti al suolo. Aguahoja è un manifesto per l'architettura del futuro: strutture che nascono dalla natura e ritornano alla natura. Per la didattica, dimostra il principio della composizione a gradiente in un unico oggetto.",
+      "note": "",
+      "materiali_correlati": [
+        "2"
+      ]
     },
     {
-      cat: 'didattica', nome: 'Grown.bio',
-      desc: 'Kit GIY micelio, Europa (Paesi Bassi)',
-      base: 'Micelio',
-      link: 'https://www.grown.bio/grow-it-yourself/',
-      img: 'grow-bio.jpg',
-      ingredienti: ['Micelio pre-inoculato', 'Substrato'],
-      dettaglio: 'Grown.bio \u00e8 l\'equivalente europeo di Grow.bio, con sede nei Paesi Bassi. Offre kit GIY (Grow It Yourself) per far crescere materiali in micelio a casa o in laboratorio, con spedizione in tutta Europa e quindi senza i costi doganali dei kit americani. I kit includono substrato pre-inoculato, sacchetti di crescita e istruzioni passo-passo. Grown.bio offre anche stampi personalizzabili e kit pi\u00f9 grandi per progetti architettonici o di design. Il processo \u00e8 simile a Grow.bio: si idrata il substrato, si inserisce nello stampo, si lascia crescere al buio per 5-7 giorni e si cuoce per disattivare. L\'azienda collabora con universit\u00e0 e scuole di design europee per workshop didattici. Per un laboratorio in Italia, ordinare da Grown.bio \u00e8 l\'opzione pi\u00f9 pratica e conveniente per sperimentare con il micelio.',
-      note: ''
+      "cat": "design_scultura",
+      "nome": "Ponto Biodesign",
+      "desc": "Lampade e oggetti da cellulosa batterica",
+      "base": "SCOBY (cellulosa batterica)",
+      "link": "https://www.pontobiodesign.com",
+      "img": "Ponto-Biodesign.jpg",
+      "ingredienti": [
+        "SCOBY",
+        "Tè zuccherato",
+        "Stampi in legno/ceramica"
+      ],
+      "dettaglio": "Ponto Biodesign è uno studio brasiliano fondato da Anielle Hernandez che crea lampade, paralumi e oggetti decorativi interamente in cellulosa batterica. Il processo prevede la crescita di pellicole SCOBY in vasche di tè zuccherato, seguite da essiccazione su stampi tridimensionali in legno o ceramica. Il materiale essiccato è traslucido con una texture simile alla pergamena, che filtra la luce in modo caldo e organico. Le lampade di Ponto sono un esempio eccellente di come la cellulosa batterica possa trovare applicazioni reali nel design di prodotto. Il processo è lento (2-3 settimane di crescita) ma non richiede attrezzature costose, ed è perfettamente replicabile in un laboratorio didattico con pazienza e controllo della temperatura.",
+      "note": "",
+      "materiali_correlati": [
+        "scoby_cellulosa_batterica"
+      ]
+    },
+    {
+      "cat": "design_scultura",
+      "nome": "Hy-Fi Tower (The Living)",
+      "desc": "Struttura 40 piedi, 10.000 mattoni in micelio, MoMA PS1",
+      "base": "Micelio + steli di mais",
+      "link": "https://www.dezeen.com/2014/07/01/tower-of-grown-bio-bricks-by-the-living-opens-at-moma-ps1/",
+      "img": "hyfi.jpg",
+      "ingredienti": [
+        "Micelio fungino",
+        "Steli di mais"
+      ],
+      "dettaglio": "Hy-Fi è una torre temporanea alta circa 12 metri costruita nel 2014 nel cortile del MoMA PS1 a New York dallo studio di architettura The Living (David Benjamin). La struttura era composta da circa 10.000 mattoni di micelio prodotti da Ecovative, coltivati in stampi usando steli di mais come substrato. I mattoni, una volta cresciuti ed essiccati, erano leggeri, isolanti e strutturalmente sufficienti per una costruzione temporanea. La torre combinava mattoni di micelio con mattoni riflettenti che creavano effetti di luce durante il giorno. Alla fine dell'estate, l'intera struttura è stata smontata e compostata. Hy-Fi ha dimostrato per la prima volta che i materiali viventi possono essere usati su scala architettonica, aprendo un campo di ricerca oggi in piena espansione.",
+      "note": "",
+      "materiali_correlati": [
+        "9",
+        "mycocomposite_base"
+      ]
+    },
+    {
+      "cat": "design_scultura",
+      "nome": "Myco-Type (RISD)",
+      "desc": "Blocchi da segatura, fogli da caffè, pasta stampabile 3D",
+      "base": "Micelio + scarti diversi",
+      "link": "https://www.designboom.com/design/myco-type-mycelium-blocks-sheets-sawdust-coffee-grounds-local-waste-08-01-2025/",
+      "img": "myco-type.jpg",
+      "ingredienti": [
+        "Micelio",
+        "Segatura",
+        "Fondi di caffè"
+      ],
+      "dettaglio": "Myco-Type è un progetto di ricerca sviluppato alla Rhode Island School of Design (RISD) che esplora il micelio come materiale per il design in tre forme distinte: blocchi strutturali da segatura colonizzata, fogli sottili da fondi di caffè, e una pasta stampabile in 3D. L'aspetto più innovativo è la versatilità: lo stesso organismo (il micelio) produce materiali completamente diversi a seconda del substrato e del processo. I blocchi sono rigidi e isolanti, i fogli sono flessibili e simili al cuoio, la pasta permette forme complesse. Il progetto dimostra che il micelio non è un materiale unico ma una piattaforma tecnologica. Per la didattica, è un esempio eccellente di come variare substrato e processo possa cambiare radicalmente le proprietà del materiale finale.",
+      "note": "",
+      "materiali_correlati": [
+        "9",
+        "mycocomposite_base"
+      ]
+    },
+    {
+      "cat": "didattica",
+      "nome": "Fabricademy",
+      "desc": "Programma educativo tessuti e materiali bio-based (Fab Lab Network)",
+      "base": "Vari biomateriali",
+      "link": "https://textile-academy.org",
+      "img": "fabricademy.jpg",
+      "ingredienti": [
+        "Vari: agar, gelatina, alginato, micelio, SCOBY"
+      ],
+      "dettaglio": "Fabricademy è un programma educativo internazionale di 6 mesi, parte del Fab Lab Network, che insegna la produzione tessile avanzata includendo biomateriali, e-textiles, stampa 3D su tessuto e biofabbricazione. Gli studenti lavorano in Fab Lab locali seguendo lezioni settimanali dal vivo e documentando ogni esperimento. Il modulo sui biomateriali è particolarmente ricco: si producono bioplastiche da agar e gelatina, film da alginato, tessuti da SCOBY e compositi da micelio. Tutta la documentazione degli studenti è pubblica e consultabile online, costituendo una risorsa preziosa di ricette testate e risultati reali. Fabricademy ha sedi in oltre 20 paesi e rappresenta la più importante rete educativa globale sui biomateriali tessili.",
+      "note": "",
+      "materiali_correlati": []
+    },
+    {
+      "cat": "didattica",
+      "nome": "Grow.bio (Ecovative)",
+      "desc": "Kit GIY micelio, ~$10-15, USA",
+      "base": "Micelio + canapa",
+      "link": "https://grow.bio",
+      "img": "grow-bio(ecovative).jpg",
+      "ingredienti": [
+        "Micelio pre-inoculato",
+        "Substrato di canapa"
+      ],
+      "dettaglio": "Grow.bio è la piattaforma consumer di Ecovative Design, pensata per rendere il micelio accessibile a designer, maker, educatori e curiosi. I kit \"Grow It Yourself\" (GIY) contengono substrato di canapa già inoculato con micelio: basta romperlo, metterlo in uno stampo, spruzzare acqua e aspettare 5-7 giorni. Il micelio cresce e lega il substrato nella forma desiderata. Dopo la crescita si cuoce in forno per fermare il processo. I kit costano circa 10-15 dollari e permettono di creare oggetti fino a circa 20x20x10 cm. Grow.bio fornisce anche stampi, istruzioni dettagliate e una community online. È il modo più semplice e veloce per sperimentare con il micelio senza dover gestire sterilizzazione e inoculazione. Ideale per workshop di poche ore in classe.",
+      "note": "",
+      "materiali_correlati": [
+        "9",
+        "mycocomposite_base"
+      ]
+    },
+    {
+      "cat": "didattica",
+      "nome": "Grown.bio",
+      "desc": "Kit GIY micelio, Europa (Paesi Bassi)",
+      "base": "Micelio",
+      "link": "https://www.grown.bio/grow-it-yourself/",
+      "img": "grow-bio.jpg",
+      "ingredienti": [
+        "Micelio pre-inoculato",
+        "Substrato"
+      ],
+      "dettaglio": "Grown.bio è l'equivalente europeo di Grow.bio, con sede nei Paesi Bassi. Offre kit GIY (Grow It Yourself) per far crescere materiali in micelio a casa o in laboratorio, con spedizione in tutta Europa e quindi senza i costi doganali dei kit americani. I kit includono substrato pre-inoculato, sacchetti di crescita e istruzioni passo-passo. Grown.bio offre anche stampi personalizzabili e kit più grandi per progetti architettonici o di design. Il processo è simile a Grow.bio: si idrata il substrato, si inserisce nello stampo, si lascia crescere al buio per 5-7 giorni e si cuoce per disattivare. L'azienda collabora con università e scuole di design europee per workshop didattici. Per un laboratorio in Italia, ordinare da Grown.bio è l'opzione più pratica e conveniente per sperimentare con il micelio.",
+      "note": "",
+      "materiali_correlati": [
+        "mycocomposite_base"
+      ]
     }
   ]
 };
@@ -10581,19 +10876,19 @@ const OUTPUT_INFO = {
 
 // --- IN_PROGRESS_MAPPING ---
 const IN_PROGRESS_MAPPING = {
- "R36": ["caseina", "borace", "aceto"],
+ "R36": ["caseina","latte", "borace", "aceto"],
  "R11": ["carragenina", "glicerina", "cacl2"],
  "R21B": ["gelatina", "glicerina"],
  "R50": ["alginato", "agar", "amido_mais"],
  "R37": ["agar", "glicerina", "cellulosa_carta"],
- "R42": ["caseina", "borace", "fibre_cotone", "aceto"],
- "R24": ["caseina", "borace", "fibre_lino", "aceto"],
+ "R42": ["caseina","latte", "borace", "fibre_cotone", "aceto"],
+ "R24": ["caseina","latte", "borace", "fibre_lino", "aceto"],
  "R14": ["gelatina", "glicerina", "tannini"],
  "R40": ["gelatina", "amido_mais", "glicerina"],
  "R2": ["agar", "glicerina"],
  "R46": ["gelatina", "glicerina", "aceto"],
  "R7": ["gelatina", "glicerina", "curcuma"],
- "R17": ["caseina", "borace", "aceto"],
+ "R17": ["caseina","latte", "borace", "aceto"],
  "R34B": ["pectina", "glicerina"],
  "R19": ["albumina", "agar", "glicerina"],
  "R45": ["cellulosa_carta", "amido_mais"],
@@ -10609,9 +10904,9 @@ const IN_PROGRESS_MAPPING = {
  "R30": ["gelatina", "glicerina", "gusci_uovo"],
  "R38": ["alginato", "cacl2"],
  "R43": ["albumina", "glicerina", "aceto"],
- "R10": ["caseina", "borace", "aceto"],
+ "R10": ["caseina","latte", "borace", "aceto"],
  "R6": ["pectina", "glicerina"],
- "R28B": ["caseina", "borace"],
+ "R28B": ["caseina","latte", "borace"],
  "R4": ["amido_mais", "glicerina", "aceto"],
  "R5": ["amido_patata", "glicerina"],
  "R13": ["amido_patata", "glicerina"],
@@ -10629,6 +10924,9 @@ const IN_PROGRESS_MAPPING = {
   "IED_Arabic_Sensation": [],
   "IED_Seed_in": [],
   "IED_Oobleck_D": [],
+  "MONO_colla_caseinica": ["caseina","latte", "bicarbonato"],
+  "MONO_tempera_caseinica": ["caseina","latte", "bicarbonato", "curcuma"],
+  "MONO_gommalacca_coating": ["gommalacca", "alcool"]
 };
 
 const IMPLICAZIONI_MATRICE = {
@@ -11096,6 +11394,7 @@ const FAMIGLIA_INFO = {
  "oli_essenziali": "Antimicrobici (timo, tea tree), profumanti"
  ,
  "acqua": "SOLVENTE primario — mezzo di dissoluzione per tutti i biopolimeri",
+ "latte": "Materia prima per caseina — scaldare + acidificare → filtrare grumi proteici",
  "alcool": "Solvente volatile — diluente, disinfettante, per gommalacca",
  "alcool_isopropilico": "Solvente — sgrassante, diluente gommalacca, evapora veloce",
  "zucchero": "Nutriente per colture, plastificante per caseina (~15%)",

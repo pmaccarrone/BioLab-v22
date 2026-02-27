@@ -26,7 +26,7 @@ function saveFormula() {
         autoName = nomi.join('+');
         if (tavolo.length > 3) autoName += '+…';
     } else {
-        autoName = 'Formula ' + new Date().toLocaleDateString('it-IT');
+        autoName = 'Ricetta ' + new Date().toLocaleDateString('it-IT');
     }
     
     // Mostra modal per confermare/modificare nome
@@ -42,10 +42,10 @@ function showSaveNameModal(suggestedName) {
     var overlay = document.createElement('div');
     overlay.className = 'confirm-modal-overlay';
     overlay.innerHTML = '<div class="confirm-modal">' +
-        '<div class="confirm-modal-header">' + (isEditing ? 'Aggiorna Formula' : 'Salva Formula') + '</div>' +
+        '<div class="confirm-modal-header">' + (isEditing ? 'Aggiorna Ricetta' : 'Salva Ricetta') + '</div>' +
         '<div class="confirm-modal-body">' +
             (isEditing ? '<div style="font-size:0.75rem;color:#888;margin-bottom:0.5rem;">Caricata da: "' + editName + '"</div>' : '') +
-            '<label style="display:block;margin-bottom:0.5rem;font-size:0.8rem;color:#555;">Nome della formula:</label>' +
+            '<label style="display:block;margin-bottom:0.5rem;font-size:0.8rem;color:#555;">Nome della ricetta:</label>' +
             '<input type="text" id="formulaNameInput" value="' + (isEditing ? editName : suggestedName) + '" ' +
                    'style="width:100%;padding:0.5rem;border:1px solid #ddd;border-radius:4px;font-size:0.85rem;" ' +
                    'onkeydown="if(event.key===\'Enter\'){doSaveFormula(true);event.preventDefault();}">' +
@@ -99,7 +99,7 @@ function doSaveFormula(overwrite) {
             // Aggiorna tracking
             window._editingFormulaName = name;
             loadSavedFormulas();
-            showToast('Formula "' + name + '" aggiornata!', 'success');
+            showToast('Ricetta "' + name + '" aggiornata!', 'success');
             return;
         }
     }
@@ -111,7 +111,7 @@ function doSaveFormula(overwrite) {
     window._editingFormulaId = formula.id;
     window._editingFormulaName = name;
     loadSavedFormulas();
-    showToast('Formula "' + name + '" salvata!', 'success');
+    showToast('Ricetta "' + name + '" salvata!', 'success');
 }
 
 function loadSavedFormulas() {
@@ -125,7 +125,7 @@ function loadSavedFormulas() {
     countEl.style.background = saved.length > 0 ? '#4caf50' : '#aaa';
     
     if (saved.length === 0) {
-        listEl.innerHTML = '<div class="saved-empty">Nessuna formula salvata</div>';
+        listEl.innerHTML = '<div class="saved-empty">Nessuna ricetta salvata</div>';
         return;
     }
     
@@ -211,14 +211,14 @@ function doLoadFormula(formula) {
 
 function deleteFormula(id) {
     showConfirmModal(
-        'Elimina formula',
-        'Eliminare questa formula salvata?',
+        'Elimina ricetta',
+        'Eliminare questa ricetta salvata?',
         function() {
             let saved = BioLab.getArchiveByOrigine('lab');
             saved = saved.filter(f => String(f.id) !== String(id));
             _writeLabFormulas(saved);
             loadSavedFormulas();
-            showToast('Formula eliminata', 'info');
+            showToast('Ricetta eliminata', 'info');
         }
     );
 }
@@ -245,12 +245,22 @@ function printFormula() {
     
     // Build formula rows
     var formulaRows = '';
+    // Solvent row
+    if (f.solvente) {
+        var solvLabel = f.solvente.label ? f.solvente.label.charAt(0).toUpperCase() + f.solvente.label.slice(1) : 'Acqua';
+        formulaRows += '<tr style="background:#f0f7ff;color:#1565C0;"><td><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#64b5f6;margin-right:6px;vertical-align:middle;"></span>' + solvLabel + '</td>';
+        formulaRows += '<td>Solvente</td>';
+        formulaRows += '<td class="r">' + (f.solventeML || 100) + ' ml</td>';
+        formulaRows += '<td class="r">\u2014</td></tr>';
+    }
+    var totalG = f.totalGrams || 0;
     (f.items || []).forEach(function(item) {
-        var effPct = f.total > 0 ? Math.round(item.percent / f.total * 100) : 0;
+        var effPct = totalG > 0 ? Math.round(item.grams / totalG * 100) : 0;
         var color = roleColors[item.role] || '#888';
+        var gDisp = item.grams < 5 ? item.grams.toFixed(1) : Math.round(item.grams);
         formulaRows += '<tr><td><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:' + color + ';margin-right:6px;vertical-align:middle;"></span>' + item.ing.nome + '</td>';
         formulaRows += '<td>' + (item.role || '-') + '</td>';
-        formulaRows += '<td class="r">' + item.percent + 'g</td>';
+        formulaRows += '<td class="r">' + gDisp + ' g</td>';
         formulaRows += '<td class="r">' + effPct + '%</td></tr>';
     });
     
@@ -485,7 +495,7 @@ function printFormula() {
     
     // FOOTER
     html += '<div class="ftr"><span>BioLab v22 · Accademia Albertina di Belle Arti · Tipologia dei Nuovi Materiali</span>';
-    html += '<span>Formula sperimentale — verificare sempre in laboratorio</span></div>';
+    html += '<span>Ricetta sperimentale — verificare sempre in laboratorio</span></div>';
     
     html += '</body></html>';
     
@@ -679,7 +689,7 @@ function importLabData(input) {
 function printPortfolio() {
     var saved = BioLab.getArchiveByOrigine('lab');
     if (saved.length === 0) {
-        showToast('Nessuna formula salvata da stampare', 'info');
+        showToast('Nessuna ricetta salvata da stampare', 'info');
         return;
     }
     
@@ -797,7 +807,7 @@ function printPortfolio() {
         
         // Reconstruct name from ingredients if generic
         var displayName = f.name || 'Formula';
-        if (displayName === 'Formula' && items.length > 0) {
+        if (displayName === 'Ricetta' && items.length > 0) {
             displayName = items.filter(function(it) { return it.role === 'Matrice'; })
                 .map(function(it) { return it.ing?.nome || it.id; }).join(' + ');
             var mods = items.filter(function(it) { return it.role !== 'Matrice'; });
@@ -894,7 +904,7 @@ function askClaude() {
     var selected = tavolo.filter(function(id) { return formulaSelection.has(id); });
     
     if (selected.length === 0) {
-        showToast('Seleziona almeno un ingrediente nella formula', 'warning');
+        showToast('Seleziona almeno un ingrediente nella ricetta', 'warning');
         return;
     }
     

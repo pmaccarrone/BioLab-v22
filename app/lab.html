@@ -6,6 +6,12 @@
 <title>BioLab — Laboratorio</title>
 <link rel="stylesheet" href="biolab.css">
 
+<style>
+.formula-solvent-row { background: #f0f7ff; }
+.formula-solvent-row td { color: #1565C0; }
+.dot-solvente { background: #64b5f6; width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.solvent-val { font-weight: 600; color: #1565C0; }
+</style>
 </head>
 <body>
 
@@ -110,7 +116,7 @@
                 <!-- ACCORDION: FORMULA (stub per Pezzo 2) -->
                 <div class="acc-section acc-formula acc-open" id="accFormula">
                     <div class="acc-header" onclick="toggleAccordion('accFormula')">
-                        <span>Ipotesi di Formula <small style="font-weight:normal;color:#888;font-size:0.65rem;">formulazioni variabili da verificare</small></span>
+                        <span>Ipotesi Ricetta <small style="font-weight:normal;color:#888;font-size:0.65rem;">dosaggi per 100 ml di solvente, da verificare</small></span>
                         <span class="acc-chevron">&#9654;</span>
                     </div>
                     <div class="acc-body">
@@ -131,7 +137,7 @@
                     </div>
                     <div class="acc-body">
                         <div class="acc-body-inner">
-                            <textarea id="formulaAnnotations" class="annotations-textarea" placeholder="Scrivi qui le tue note sulla formula: osservazioni, varianti da provare, risultati dei test..."></textarea>
+                            <textarea id="formulaAnnotations" class="annotations-textarea" placeholder="Scrivi qui le tue note sulla ricetta: osservazioni, varianti da provare, risultati dei test..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -145,7 +151,7 @@
                     <div class="acc-body">
                         <div class="acc-body-inner">
                             <div class="saved-formulas-list" id="savedFormulasList">
-                                <div class="saved-empty">Nessuna formula salvata</div>
+                                <div class="saved-empty">Nessuna ricetta salvata</div>
                             </div>
                             <div style="display:none;">
                                 <input type="file" id="importFile" accept=".json" onchange="importLabData(this)">
@@ -190,7 +196,7 @@
                 <button onclick="printPortfolio()" class="lab-act-btn act-port" title="Stampa riepilogo di tutte le formule salvate">Portfolio</button>
                 <button onclick="exportLabData()" class="lab-act-btn act-exp" title="Scarica backup dati">Esporta</button>
                 <button onclick="document.getElementById('importFile').click()" class="lab-act-btn act-imp" title="Ripristina dati da backup">Importa</button>
-                <button onclick="askClaude()" class="lab-act-btn act-claude" title="Chiedi consiglio a Claude AI sulla formula">Chiedi a Claude</button>
+                <button onclick="askClaude()" class="lab-act-btn act-claude" title="Chiedi consiglio a Claude AI sulla ricetta">Chiedi a Claude</button>
             </div>
 
         </div>
@@ -419,7 +425,7 @@ function updateTavolo() {
                 '<span class="dot ' + dotClass + '"></span>' + nome +
                 '<span class="remove" onclick="removeFromTavolo(\'' + id + '\')">&times;</span></div>';
         }).join('') + '</div>' +
-        '<div class="tavolo-select-hint">Seleziona ingredienti per la formula</div>';
+        '<div class="tavolo-select-hint">Seleziona ingredienti per la ricetta</div>';
     }
     
     // Recipe reference box

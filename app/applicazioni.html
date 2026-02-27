@@ -155,6 +155,39 @@
         .des-modal-images .des-modal-img-box:last-child:not(:first-child){display:none}
     }
     @media(max-width:380px){.des-grid{grid-template-columns:1fr}}
+
+    /* ── Cross-link buttons ── */
+    .app-crosslink-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .app-crosslink-btn {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 8px 16px; border-radius: 6px; font-size: 0.82rem;
+        font-weight: 600; text-decoration: none; transition: all 0.15s;
+    }
+    .app-cl-mat { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .app-cl-mat:hover { background: #c8e6c9; color: #1b5e20; }
+    .app-cl-ing { background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8; }
+    .app-cl-ing:hover { background: #e1bee7; color: #4a148c; }
+
+    .ext-filter-banner {
+        display: flex; align-items: center; justify-content: space-between;
+        background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px;
+        padding: 8px 16px; margin-bottom: 10px; font-size: 0.85rem;
+        flex-wrap: wrap; gap: 6px;
+    }
+    .ext-filter-text { color: #f57f17; font-weight: 600; }
+    .ext-filter-actions { display: flex; gap: 6px; align-items: center; }
+    .ext-filter-back {
+        color: #1565C0; font-size: 0.8rem; text-decoration: none;
+        padding: 3px 10px; border-radius: 4px; background: #e3f2fd;
+        border: 1px solid #bbdefb; transition: all 0.15s; font-weight: 500;
+    }
+    .ext-filter-back:hover { background: #bbdefb; color: #0d47a1; }
+    .ext-filter-clear {
+        color: #666; font-size: 0.8rem; text-decoration: none;
+        padding: 3px 10px; border-radius: 4px; background: #fff;
+        border: 1px solid #ddd; transition: all 0.15s;
+    }
+    .ext-filter-clear:hover { background: #f5f5f5; color: #333; }
     </style>
 </head>
 <body>
@@ -203,6 +236,7 @@
                 <div class="app-modal-base" id="modalBase"></div>
                 <div class="app-modal-body" id="modalBody"></div>
                 <div class="app-modal-ingredienti" id="modalIng"></div>
+                <div class="app-modal-crosslinks" id="modalCrosslinks" style="display:none"></div>
                 <div class="app-modal-note" id="modalNote"></div>
                 <div class="app-modal-actions">
                     <a class="app-modal-link" id="modalLink" href="#" target="_blank" rel="noopener">
@@ -218,6 +252,9 @@
 
 <!-- ===== CONTENUTO PAGINA ===== -->
 <div class="bl-page-content">
+
+    <!-- Banner filtro esterno (inserito qui da JS) -->
+    <div id="filterBannerAnchor"></div>
 
     <!-- DESIGNER -->
     <div class="bl-section-title des-section-header">
@@ -242,10 +279,10 @@
             <span class="ing-filter" data-cat="design_scultura" onclick="filterApps('design_scultura')">Design / Scultura</span>
             <span class="ing-filter" data-cat="didattica"       onclick="filterApps('didattica')">Didattica / Kit</span>
         </div>
-        <input type="text" class="mat-search" id="appSearch" placeholder="Cerca progetto, materiale..." oninput="renderApps()">
+        <input type="text" class="mat-search" id="appSearch" placeholder="Cerca applicazione, materiale..." oninput="renderApps()">
     </div>
 
-    <div class="app-count" id="appCount">0 progetti</div>
+    <div class="app-count" id="appCount">0 applicazioni</div>
     <div class="app-grid" id="appGrid"></div>
 </div>
 
@@ -257,6 +294,15 @@
 
 <script src="database_biomateriali_v11.js"></script>
 <script src="biolab-core.js"></script>
+
+<!-- ★ Set filter state from URL params before any DOMContentLoaded -->
+<script>
+(function() {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('ing')) window._appFilterIngId = p.get('ing');
+    if (p.get('mat')) window._appFilterMatId = p.get('mat');
+})();
+</script>
 
 <!-- ===== DESIGNER JS ===== -->
 <script>
@@ -403,7 +449,51 @@
 
     function renderDesigner() {
         var html = '';
+        // Check if external filter is active (set by Progetti script)
+        var filterIngId = window._appFilterIngId || null;
+        var filterMatId = window._appFilterMatId || null;
+        var visibleCount = 0;
+
         DESIGNER.forEach(function(d, i) {
+            // Apply ingredient filter: match by ingredient name or famiglia
+            if (filterIngId) {
+                var ingData = (typeof INGREDIENTI_DATA !== 'undefined' && INGREDIENTI_DATA.ingredienti) ? INGREDIENTI_DATA.ingredienti[filterIngId] : null;
+                var ingNome = ingData ? ingData.nome.toLowerCase() : filterIngId.toLowerCase();
+                var ingFamiglia = ingData ? ingData.famiglia : '';
+                var famStr = (d.famiglie || []).join(' ').toLowerCase();
+                var bioStr = (d.biomateriali || '').toLowerCase();
+                var match = famStr.indexOf(filterIngId) >= 0
+                    || famStr.indexOf(ingNome) >= 0
+                    || bioStr.indexOf(filterIngId) >= 0
+                    || bioStr.indexOf(ingNome) >= 0;
+                // Match by famiglia key (e.g. COLTURA, POLICATIONE)
+                if (!match && ingFamiglia) {
+                    match = famStr.indexOf(ingFamiglia.toLowerCase()) >= 0;
+                }
+                if (!match) return;
+            }
+
+            // Apply material filter: match by material name in biomateriali text
+            if (filterMatId) {
+                var allMats = (typeof MATERIALI_DATA !== 'undefined') ?
+                    [].concat(MATERIALI_DATA.materiali_in_progress || [], MATERIALI_DATA.materiali_documentati || []) : [];
+                var mat = allMats.find(function(m) { return String(m.id) === filterMatId; });
+                if (mat) {
+                    // Check if any ingredient of that material appears in this designer's context
+                    var matIngs = (typeof IN_PROGRESS_MAPPING !== 'undefined' && IN_PROGRESS_MAPPING[filterMatId]) || mat.ingredienti_correlati || [];
+                    var famStr = (d.famiglie || []).join(' ').toLowerCase();
+                    var bioStr = (d.biomateriali || '').toLowerCase();
+                    var match = matIngs.some(function(ingId) {
+                        var ingData = (typeof INGREDIENTI_DATA !== 'undefined' && INGREDIENTI_DATA.ingredienti) ? INGREDIENTI_DATA.ingredienti[ingId] : null;
+                        var ingNome = ingData ? ingData.nome.toLowerCase() : ingId.toLowerCase();
+                        return famStr.indexOf(ingId) >= 0 || famStr.indexOf(ingNome) >= 0
+                            || bioStr.indexOf(ingId) >= 0 || bioStr.indexOf(ingNome) >= 0;
+                    });
+                    if (!match) return;
+                }
+            }
+
+            visibleCount++;
             var pImg = projImg(d.slug);
             var rImg = portImg(d.slug);
             var famTags = d.famiglie.map(function(f) {
@@ -434,6 +524,17 @@
             html += '</div></div>';
         });
         document.getElementById('desGrid').innerHTML = html;
+
+        // Hide designer section if filter active and no matches
+        var desHeader = document.querySelector('.des-section-header');
+        var desGrid = document.getElementById('desGrid');
+        if ((filterIngId || filterMatId) && visibleCount === 0) {
+            if (desHeader) desHeader.style.display = 'none';
+            desGrid.style.display = 'none';
+        } else {
+            if (desHeader) desHeader.style.display = '';
+            desGrid.style.display = '';
+        }
     }
 
     window.openDesModal = function(i) {
@@ -514,7 +615,8 @@
         return {
             nome: p.nome||'', desc: p.desc||'', base: p.base||'', link: p.link||'',
             cat: p.cat||p.categoria||'', img: p.img||null,
-            ingredienti: p.ingredienti||[], dettaglio: p.dettaglio||p.desc||'', note: p.note||''
+            ingredienti: p.ingredienti||[], dettaglio: p.dettaglio||p.desc||'', note: p.note||'',
+            materiali_correlati: p.materiali_correlati||[]
         };
     });
 
@@ -561,12 +663,109 @@
 
     var IMG_BASE = '../asset/imm_applicazioni/';
     var currentCat = null;
+    var _extFilterIndices = null;
+    var _extFilterLabel = '';
+
+    // ING_MAP must be defined before DOMContentLoaded uses _matchIngrediente
+    var ING_MAP = {
+        'alginato':'alginato','agar':'agar','chitosano':'chitosano',
+        'cloruro di calcio':'cacl2','cacl2':'cacl2',
+        'caseina (da latte)':'caseina','caseina':'caseina',
+        'acido acetico':'aceto','amido di patata':'amido_patata',
+        'scoby':'scoby','cellulosa batterica':'scoby',
+        'micelio fungino':'micelio','micelio (radici fungine)':'micelio',
+        'micelio (ganoderma)':'micelio','micelio':'micelio',
+        'fondi di caff\u00e8':'fondi_caffe','fondi di caffe':'fondi_caffe',
+        't\u00e8 zuccherato':'te_nero','te zuccherato':'te_nero',
+        'formaldeide (storica) o borace':'borace','borace':'borace',
+        'chitina (da gusci di crostacei)':'chitosano','chitina':'chitosano',
+        'fibre di cotone riciclato':'fibre_cotone',
+        'bucce':'bucce_agrumi','coloranti naturali':'curcuma',
+        'pectina':'pectina','glicerina':'glicerina'
+    };
+
+    window._matchIngrediente = function(nome) {
+        if (!nome) return null;
+        var low=nome.toLowerCase().trim();
+        if (ING_MAP[low]) return ING_MAP[low];
+        for (var key in ING_MAP) {
+            if (low.indexOf(key)>=0||key.indexOf(low)>=0) return ING_MAP[key];
+        }
+        return null;
+    };
 
     document.addEventListener('DOMContentLoaded', function() {
         var allBtn = document.getElementById('appFilterAll');
         if (allBtn) allBtn.textContent = 'Tutti (' + PROGETTI.length + ')';
+
+        // ★ Filtro da URL
+        var ingParam = window._appFilterIngId || null;
+        var matParam = window._appFilterMatId || null;
+
+        if (ingParam) {
+            // Filtra progetti che usano questo ingrediente
+            var ingNome = ingParam;
+            if (typeof INGREDIENTI_DATA !== 'undefined' && INGREDIENTI_DATA.ingredienti[ingParam]) {
+                ingNome = INGREDIENTI_DATA.ingredienti[ingParam].nome;
+            }
+            var indices = [];
+            PROGETTI.forEach(function(p, i) {
+                // Match via _matchIngrediente (nome display → DB id)
+                var found = (p.ingredienti || []).some(function(nome) {
+                    var dbId = _matchIngrediente(nome);
+                    return dbId === ingParam;
+                });
+                // Fallback: match via materiali_correlati → IN_PROGRESS_MAPPING
+                if (!found && typeof IN_PROGRESS_MAPPING !== 'undefined' && p.materiali_correlati) {
+                    found = p.materiali_correlati.some(function(matId) {
+                        var ings = IN_PROGRESS_MAPPING[String(matId)] || [];
+                        return ings.indexOf(ingParam) >= 0;
+                    });
+                }
+                if (found) indices.push(i);
+            });
+            if (indices.length) {
+                _extFilterIndices = indices;
+                _extFilterLabel = ingNome;
+                _showAppFilterBanner('Progetti con: ' + ingNome, 'ingredienti.html#' + ingParam, ingNome);
+            }
+        } else if (matParam) {
+            // Filtra progetti correlati a un materiale
+            var indices = [];
+            PROGETTI.forEach(function(p, i) {
+                if ((p.materiali_correlati || []).some(function(mid) { return String(mid) === matParam; })) {
+                    indices.push(i);
+                }
+            });
+            if (indices.length) {
+                _extFilterIndices = indices;
+                var matNome = matParam;
+                if (typeof MATERIALI_DATA !== 'undefined') {
+                    var allMats = [].concat(MATERIALI_DATA.materiali_in_progress || [], MATERIALI_DATA.materiali_documentati || []);
+                    var mat = allMats.find(function(m) { return String(m.id) === matParam; });
+                    if (mat) matNome = mat.nome || mat.name || matParam;
+                }
+                _extFilterLabel = matNome;
+                _showAppFilterBanner('Progetti con: ' + matNome, 'materiali.html', matNome);
+            }
+        }
+
         renderApps();
     });
+
+    function _showAppFilterBanner(text, backHref, backLabel) {
+        var existing = document.getElementById('extFilterBanner');
+        if (existing) existing.remove();
+        var banner = document.createElement('div');
+        banner.id = 'extFilterBanner';
+        banner.className = 'ext-filter-banner';
+        var h = '<span class="ext-filter-text">' + text + '</span><div class="ext-filter-actions">';
+        if (backHref) h += '<a href="' + backHref + '" class="ext-filter-back">&larr; Torna a ' + esc(backLabel) + '</a>';
+        h += '<a href="applicazioni.html" class="ext-filter-clear">Mostra tutti &times;</a></div>';
+        banner.innerHTML = h;
+        var anchor = document.getElementById('filterBannerAnchor');
+        if (anchor) anchor.appendChild(banner);
+    }
 
     window.filterApps = function(cat) {
         currentCat = cat;
@@ -583,6 +782,8 @@
         var indices = [];
         PROGETTI.forEach(function(p,i) {
             if (currentCat && p.cat!==currentCat) return;
+            // ★ External filter
+            if (_extFilterIndices && _extFilterIndices.indexOf(i) < 0) return;
             if (search) {
                 var hay = (p.nome+' '+p.desc+' '+p.base+' '+p.cat+' '+(p.ingredienti||[]).join(' ')).toLowerCase();
                 if (hay.indexOf(search)===-1) return;
@@ -592,8 +793,8 @@
 
         var grid = document.getElementById('appGrid');
         if (indices.length===0) {
-            grid.innerHTML='<div class="mat-empty">Nessun progetto corrisponde ai filtri</div>';
-            document.getElementById('appCount').textContent='0 progetti';
+            grid.innerHTML='<div class="mat-empty">Nessuna applicazione corrisponde ai filtri</div>';
+            document.getElementById('appCount').textContent='0 applicazioni';
             return;
         }
 
@@ -623,7 +824,7 @@
             html+='</div></div>';
         });
         grid.innerHTML=html;
-        document.getElementById('appCount').textContent=indices.length+' progetti';
+        document.getElementById('appCount').textContent=indices.length+' applicazioni';
     };
 
     window.openModal = function(idx) {
@@ -663,6 +864,27 @@
             ingEl.innerHTML=ingHtml; ingEl.style.display='block';
         } else { ingEl.style.display='none'; }
 
+        // ★ Cross-link: materiali correlati
+        var clEl=document.getElementById('modalCrosslinks');
+        var clBtns=[];
+        if (p.materiali_correlati && p.materiali_correlati.length) {
+            clBtns.push('<a href="materiali.html?app='+idx+'" class="app-crosslink-btn app-cl-mat">Vedi '
+                +p.materiali_correlati.length+' material'+(p.materiali_correlati.length>1?'i':'e')+' &#8594;</a>');
+        }
+        // Ingredienti matchati nel DB
+        var dbIngs=[];
+        if (p.ingredienti) {
+            p.ingredienti.forEach(function(ing) { var d=_matchIngrediente(ing); if(d && dbIngs.indexOf(d)<0) dbIngs.push(d); });
+        }
+        if (dbIngs.length) {
+            // Link generico verso ingredienti (non filtrato specifico — troppo complesso per multi-ingredient)
+            clBtns.push('<a href="ingredienti.html" class="app-crosslink-btn app-cl-ing">Esplora ingredienti &#8594;</a>');
+        }
+        if (clBtns.length) {
+            clEl.innerHTML='<div class="app-crosslink-btns">'+clBtns.join('')+'</div>';
+            clEl.style.display='block';
+        } else { clEl.style.display='none'; }
+
         var noteEl=document.getElementById('modalNote');
         if (p.note){noteEl.style.display='block';noteEl.textContent=p.note;}
         else noteEl.style.display='none';
@@ -682,33 +904,6 @@
         if (ev&&ev.target!==ev.currentTarget) return;
         document.getElementById('appModal').classList.remove('active');
         document.body.style.overflow='';
-    };
-
-    var ING_MAP = {
-        'alginato':'alginato','agar':'agar','chitosano':'chitosano',
-        'cloruro di calcio':'cacl2','cacl2':'cacl2',
-        'caseina (da latte)':'caseina','caseina':'caseina',
-        'acido acetico':'aceto','amido di patata':'amido_patata',
-        'scoby':'scoby','cellulosa batterica':'scoby',
-        'micelio fungino':'micelio','micelio (radici fungine)':'micelio',
-        'micelio (ganoderma)':'micelio','micelio':'micelio',
-        'fondi di caff\u00e8':'fondi_caffe','fondi di caffe':'fondi_caffe',
-        't\u00e8 zuccherato':'te_nero','te zuccherato':'te_nero',
-        'formaldeide (storica) o borace':'borace','borace':'borace',
-        'chitina (da gusci di crostacei)':'chitosano','chitina':'chitosano',
-        'fibre di cotone riciclato':'fibre_cotone',
-        'bucce':'bucce_agrumi','coloranti naturali':'curcuma',
-        'pectina':'pectina','glicerina':'glicerina'
-    };
-
-    window._matchIngrediente = function(nome) {
-        if (!nome) return null;
-        var low=nome.toLowerCase().trim();
-        if (ING_MAP[low]) return ING_MAP[low];
-        for (var key in ING_MAP) {
-            if (low.indexOf(key)>=0||key.indexOf(low)>=0) return ING_MAP[key];
-        }
-        return null;
     };
 
     window._addIngFromApp = function(dbId,modalIdx) {

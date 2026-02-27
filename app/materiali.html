@@ -17,6 +17,40 @@
         font-size: 0.78rem; color: #555; margin-top: 6px;
         min-height: 18px; transition: opacity 0.4s;
     }
+
+    /* ── Cross-link buttons ── */
+    .mat-d-crosslinks { border-top: 1px solid #eee; padding-top: 12px; margin-top: 8px; }
+    .mat-crosslink-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mat-crosslink-btn {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 8px 16px; border-radius: 6px; font-size: 0.82rem;
+        font-weight: 600; text-decoration: none; transition: all 0.15s;
+    }
+    .mat-cl-ing { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .mat-cl-ing:hover { background: #c8e6c9; color: #1b5e20; }
+    .mat-cl-app { background: #e3f2fd; color: #1565C0; border: 1px solid #bbdefb; }
+    .mat-cl-app:hover { background: #bbdefb; color: #0d47a1; }
+
+    .ext-filter-banner {
+        display: flex; align-items: center; justify-content: space-between;
+        background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px;
+        padding: 8px 16px; margin-bottom: 10px; font-size: 0.85rem;
+        flex-wrap: wrap; gap: 6px;
+    }
+    .ext-filter-text { color: #f57f17; font-weight: 600; }
+    .ext-filter-actions { display: flex; gap: 6px; align-items: center; }
+    .ext-filter-back {
+        color: #1565C0; font-size: 0.8rem; text-decoration: none;
+        padding: 3px 10px; border-radius: 4px; background: #e3f2fd;
+        border: 1px solid #bbdefb; transition: all 0.15s; font-weight: 500;
+    }
+    .ext-filter-back:hover { background: #bbdefb; color: #0d47a1; }
+    .ext-filter-clear {
+        color: #666; font-size: 0.8rem; text-decoration: none;
+        padding: 3px 10px; border-radius: 4px; background: #fff;
+        border: 1px solid #ddd; transition: all 0.15s;
+    }
+    .ext-filter-clear:hover { background: #f5f5f5; color: #333; }
     </style>
 </head>
 <body>
@@ -94,6 +128,10 @@
     // Reverse map: doc material id -> [output type strings]
     var docOutputMap = {};
 
+    // ---- External filter state ----
+    var _extFilterIds = null; // array of material IDs to show, or null
+    var _extFilterLabel = '';
+
     // ---- INIT ----
     document.addEventListener('DOMContentLoaded', function() {
         buildDocOutputMap();
@@ -105,8 +143,61 @@
             document.getElementById('countProg').textContent = nProg;
             document.getElementById('countAll').textContent = nDoc + nProg;
         }
+
+        // ★ Filtro da URL
+        var params = new URLSearchParams(window.location.search);
+        var ingParam = params.get('ing');
+        var appParam = params.get('app');
+
+        if (ingParam) {
+            // Mostra materiali che contengono questo ingrediente
+            var matIds = [];
+            if (typeof IN_PROGRESS_MAPPING !== 'undefined') {
+                Object.keys(IN_PROGRESS_MAPPING).forEach(function(matId) {
+                    if ((IN_PROGRESS_MAPPING[matId] || []).indexOf(ingParam) >= 0) matIds.push(matId);
+                });
+            }
+            // Anche documentati con ingredienti_correlati
+            (MATERIALI_DATA.materiali_documentati || []).forEach(function(m, idx) {
+                if ((m.ingredienti_correlati || []).indexOf(ingParam) >= 0) matIds.push('d' + idx);
+            });
+            if (matIds.length) {
+                var ingNome = ingParam;
+                if (typeof INGREDIENTI_DATA !== 'undefined' && INGREDIENTI_DATA.ingredienti[ingParam]) {
+                    ingNome = INGREDIENTI_DATA.ingredienti[ingParam].nome;
+                }
+                _extFilterIds = matIds;
+                _extFilterLabel = ingNome;
+                _showMatFilterBanner('Materiali con: ' + ingNome, 'ingredienti.html#' + ingParam, ingNome);
+            }
+        } else if (appParam) {
+            // Mostra materiali correlati a un progetto
+            if (typeof ESEMPI_REALI !== 'undefined') {
+                var proj = (ESEMPI_REALI.progetti || [])[parseInt(appParam)];
+                if (proj && proj.materiali_correlati && proj.materiali_correlati.length) {
+                    _extFilterIds = proj.materiali_correlati.map(String);
+                    _extFilterLabel = proj.nome;
+                    _showMatFilterBanner('Materiali di: ' + proj.nome, 'applicazioni.html', proj.nome);
+                }
+            }
+        }
+
         renderGrid();
     });
+
+    function _showMatFilterBanner(text, backHref, backLabel) {
+        var existing = document.getElementById('extFilterBanner');
+        if (existing) existing.remove();
+        var banner = document.createElement('div');
+        banner.id = 'extFilterBanner';
+        banner.className = 'ext-filter-banner';
+        var h = '<span class="ext-filter-text">' + text + '</span><div class="ext-filter-actions">';
+        if (backHref) h += '<a href="' + backHref + '" class="ext-filter-back">&larr; Torna a ' + backLabel + '</a>';
+        h += '<a href="materiali.html" class="ext-filter-clear">Mostra tutti &times;</a></div>';
+        banner.innerHTML = h;
+        var toolbar = document.querySelector('.mat-toolbar');
+        if (toolbar) toolbar.parentNode.insertBefore(banner, toolbar);
+    }
 
     function buildDocOutputMap() {
         docOutputMap = {};
@@ -244,6 +335,12 @@
                 if (!match) return;
             }
 
+            // ★ External filter
+            if (_extFilterIds) {
+                var docId = String(mat.id || idx);
+                if (!_extFilterIds.some(function(fid) { return fid === docId || fid === mapKey; })) return;
+            }
+
             // Search
             if (search) {
                 var hay = (name + ' ' + (mat.subtitle || '') + ' ' + cat + ' ' + (mat.companies || '') + ' ' + (mat.applications || '') + ' ' + (mat.description || '')).toLowerCase();
@@ -312,6 +409,13 @@
             var outType = getProgOutputType(catMenu, name);
 
             if (outputFilter && outType !== outputFilter) return;
+
+            // ★ External filter
+            if (_extFilterIds) {
+                var matId = String(mat.id || '');
+                var ricetta = mat.ricetta_origine || '';
+                if (!_extFilterIds.some(function(fid) { return fid === matId || fid === ricetta || fid === ('p' + idx); })) return;
+            }
 
             if (search) {
                 var hay = (name + ' ' + catMenu + ' ' + (mat.ingredienti_descrizione || '') + ' ' + (mat.consistenza || '') + ' ' + (mat.colore || '')).toLowerCase();
@@ -418,6 +522,10 @@
                 });
             h += sec('Fonti', fl);
         }
+
+        // ★ Cross-link
+        h += _matCrossLinks(mat);
+
         h += '</div></div>';
 
         panel.innerHTML = h;
@@ -485,12 +593,51 @@
             h += sec('Ingredienti', ingTags(mat.ingredienti_correlati) + addAllBtn(mat.ingredienti_correlati));
         }
         if (mat.fonte) h += sec('Fonte', '<p class="mat-d-text" style="font-size:0.78rem">' + esc(fix(mat.fonte)) + '</p>');
+
+        // ★ Cross-link: navigazione filtrata
+        h += _matCrossLinks(mat);
+
         h += '</div></div>';
 
         panel.innerHTML = h;
     }
 
     window.goToIngredient = function(id) { window.location.href = 'ingredienti.html#' + id; };
+
+    // ---- Cross-link buttons for material detail ----
+    function _matCrossLinks(mat) {
+        var matId = String(mat.id || mat.ricetta_origine || '');
+        var h = '';
+        var btns = [];
+
+        // Ingredienti: link filtrato
+        var ingIds = mat.ingredienti_correlati || [];
+        if (!ingIds.length && typeof IN_PROGRESS_MAPPING !== 'undefined') {
+            ingIds = IN_PROGRESS_MAPPING[matId] || [];
+        }
+        if (ingIds.length) {
+            btns.push('<a href="ingredienti.html?mat=' + matId + '" class="mat-crosslink-btn mat-cl-ing">'
+                + 'Vedi ' + ingIds.length + ' ingredient' + (ingIds.length > 1 ? 'i' : 'e') + ' &#8594;</a>');
+        }
+
+        // Applicazioni correlate
+        if (typeof ESEMPI_REALI !== 'undefined') {
+            var nApp = 0;
+            (ESEMPI_REALI.progetti || []).forEach(function(p) {
+                if ((p.materiali_correlati || []).some(function(mid) { return String(mid) === matId; })) nApp++;
+            });
+            if (nApp) {
+                btns.push('<a href="applicazioni.html?mat=' + matId + '" class="mat-crosslink-btn mat-cl-app">'
+                    + 'Vedi ' + nApp + ' applicazion' + (nApp > 1 ? 'i' : 'e') + ' &#8594;</a>');
+            }
+        }
+
+        if (btns.length) {
+            h = '<div class="mat-d-sect mat-d-crosslinks"><h3>Esplora</h3>'
+                + '<div class="mat-crosslink-btns">' + btns.join('') + '</div></div>';
+        }
+        return h;
+    }
 
     // ---- AGGIUNGI TUTTI AL CARRELLO ----
     function addAllBtn(ids) {
