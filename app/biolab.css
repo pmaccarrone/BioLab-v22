@@ -70,9 +70,52 @@ body {
 .bl-nav-sep {
     width: 1px;
     align-self: stretch;
-    margin: 8px 6px;
-    background: linear-gradient(to bottom, transparent, #c0bbb3 30%, #c0bbb3 70%, transparent);
+    margin: 4px 0;
+    background: rgba(0,0,0,0.1);
 }
+
+/* ═══ Zone pedagogiche — fasce continue ═══ */
+.bl-zone-scoperta,
+.bl-nav-dropdown.bl-zone-scoperta { background: #FFF9C4; }
+.bl-zone-scoperta .bl-nav-link-name,
+.bl-zone-scoperta.bl-nav-link .bl-nav-link-name { color: #7A6000; }
+.bl-zone-scoperta .bl-nav-link-sub,
+.bl-zone-scoperta.bl-nav-link .bl-nav-link-sub { color: #a89440; }
+.bl-zone-scoperta:hover,
+.bl-zone-scoperta.bl-nav-link:hover { background: #FFF59D !important; }
+.bl-zone-scoperta.bl-nav-link.active,
+.bl-zone-scoperta .bl-nav-link.active { border-bottom-color: #9E7B00; color: #5C4800; }
+.bl-zone-scoperta.bl-nav-link.active .bl-nav-link-name,
+.bl-zone-scoperta .bl-nav-link.active .bl-nav-link-name { color: #5C4800; }
+.bl-zone-scoperta.bl-nav-link.active .bl-nav-link-sub,
+.bl-zone-scoperta .bl-nav-link.active .bl-nav-link-sub { color: #7A6000; }
+
+.bl-zone-cerniera,
+.bl-nav-dropdown.bl-zone-cerniera { background: #E5EDDF; }
+.bl-zone-cerniera .bl-nav-link-name,
+.bl-zone-cerniera.bl-nav-link .bl-nav-link-name { color: #4A6B3C; }
+.bl-zone-cerniera .bl-nav-link-sub,
+.bl-zone-cerniera.bl-nav-link .bl-nav-link-sub { color: #7a9a6c; }
+.bl-zone-cerniera:hover,
+.bl-zone-cerniera.bl-nav-link:hover { background: #D5E4CC !important; }
+.bl-zone-cerniera .bl-nav-link.active { border-bottom-color: #5A7A4A; }
+.bl-zone-cerniera .bl-nav-link.active .bl-nav-link-name { color: #33522A; }
+.bl-zone-cerniera .bl-nav-link.active .bl-nav-link-sub { color: #4A6B3C; }
+
+.bl-zone-esperto,
+.bl-nav-dropdown.bl-zone-esperto { background: #C8DFE5; }
+.bl-zone-esperto .bl-nav-link-name,
+.bl-zone-esperto.bl-nav-link .bl-nav-link-name { color: #24515E; }
+.bl-zone-esperto .bl-nav-link-sub,
+.bl-zone-esperto.bl-nav-link .bl-nav-link-sub { color: #5a8a96; }
+.bl-zone-esperto:hover,
+.bl-zone-esperto.bl-nav-link:hover { background: #B4D1DA !important; }
+.bl-zone-esperto.bl-nav-link.active,
+.bl-zone-esperto .bl-nav-link.active { border-bottom-color: #2C5F6E; }
+.bl-zone-esperto.bl-nav-link.active .bl-nav-link-name,
+.bl-zone-esperto .bl-nav-link.active .bl-nav-link-name { color: #1A3E4A; }
+.bl-zone-esperto.bl-nav-link.active .bl-nav-link-sub,
+.bl-zone-esperto .bl-nav-link.active .bl-nav-link-sub { color: #24515E; }
 .bl-nav-arrow {
     font-size: 0.6rem;
     margin-left: 0.2rem;

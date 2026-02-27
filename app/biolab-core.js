@@ -287,17 +287,17 @@ const BioLab = {
     // Definizione nav — UNICO PUNTO da aggiornare per aggiungere/rinominare pagine
     // Gerarchia pedagogica: Studio | BioGame | Esperta
     navLinks: [
-        // — Sezione Studio —
-        { href: 'ingredienti.html',name: 'Ingredienti',  sub: 'Schede' },
-        { href: 'materiali.html',  name: 'Materiali',    sub: 'Catalogo' },
-        { href: 'applicazioni.html',name:'Applicazioni', sub: 'Progetti reali' },
+        // — Sezione Studio (scoperta) —
+        { href: 'ingredienti.html',name: 'Ingredienti',  sub: 'Schede',           zone: 'scoperta' },
+        { href: 'materiali.html',  name: 'Materiali',    sub: 'Catalogo',         zone: 'scoperta' },
+        { href: 'applicazioni.html',name:'Applicazioni', sub: 'Progetti reali',   zone: 'scoperta' },
         // — Cerniera —
         { type: 'separator' },
-        { href: 'biogame.html',    name: 'BioGame',      sub: 'Ricette & Crescite', dropdown: 'biogame' },
+        { href: 'biogame.html',    name: 'BioGame',      sub: 'Ricette & Crescite', dropdown: 'biogame', zone: 'cerniera' },
         { type: 'separator' },
         // — Sezione Esperta —
-        { href: 'lab.html',        name: 'Laboratorio',  sub: 'Sperimenta & Tutor', dropdown: true },
-        { href: 'criticita.html',  name: 'Criticità',    sub: 'Diagnostica' },
+        { href: 'lab.html',        name: 'Laboratorio',  sub: 'Sperimenta & Tutor', dropdown: true, zone: 'esperto' },
+        { href: 'criticita.html',  name: 'Criticità',    sub: 'Diagnostica',      zone: 'esperto' },
         { href: '#guide',          name: 'Guide',        sub: 'PDF scaricabili', action: 'guide' },
     ],
 
@@ -337,13 +337,14 @@ const BioLab = {
                 }
                 const page = link.href.replace('.html', '').replace(/#.*/, '');
                 const active = (page === this.currentPage) ? ' active' : '';
+                const zc = link.zone ? ' bl-zone-' + link.zone : '';
                 if (link.action === 'guide') {
                     h += '<a href="#" class="bl-nav-link bl-nav-guide" onclick="event.preventDefault();BioLab.showGuideModal()">'
                       + '<span class="bl-nav-link-name">' + link.name + '</span>'
                       + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>';
                 } else if (link.dropdown === 'biogame') {
                     const bgActive = (this.currentPage === 'biogame' || this.currentPage === 'biogame_crescite') ? ' active' : '';
-                    h += '<div class="bl-nav-dropdown">'
+                    h += '<div class="bl-nav-dropdown' + zc + '">'
                       + '<a href="biogame.html" class="bl-nav-link' + bgActive + '">'
                       + '<span class="bl-nav-link-name">' + link.name + '<span class="bl-nav-arrow"> &#9662;</span></span>'
                       + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>'
@@ -352,7 +353,7 @@ const BioLab = {
                       + '<a href="biogame_crescite.html" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9752;</span> Crescite<span class="bl-dropdown-desc">SCOBY, Micelio, Spirulina</span></a>'
                       + '</div></div>';
                 } else if (link.dropdown) {
-                    h += '<div class="bl-nav-dropdown">'
+                    h += '<div class="bl-nav-dropdown' + zc + '">'
                       + '<a href="' + link.href + '#sperimenta" class="bl-nav-link' + active + '">'
                       + '<span class="bl-nav-link-name">' + link.name + '<span class="bl-nav-arrow"> &#9662;</span></span>'
                       + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>'
@@ -361,7 +362,7 @@ const BioLab = {
                       + '<a href="lab.html#tutor" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9998;</span> Tutor guidato<span class="bl-dropdown-desc">Percorso passo-passo</span></a>'
                       + '</div></div>';
                 } else {
-                    h += '<a href="' + link.href + '" class="bl-nav-link' + active + '">'
+                    h += '<a href="' + link.href + '" class="bl-nav-link' + active + zc + '">'
                       + '<span class="bl-nav-link-name">' + link.name + '</span>'
                       + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>';
                 }
