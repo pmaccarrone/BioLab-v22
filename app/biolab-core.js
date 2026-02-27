@@ -296,7 +296,7 @@ const BioLab = {
         { href: 'biogame.html',    name: 'BioGame',      sub: 'Ricette & Crescite', dropdown: 'biogame', zone: 'cerniera' },
         { type: 'separator' },
         // — Sezione Esperta —
-        { href: 'lab.html',        name: 'Laboratorio',  sub: 'Sperimenta & Tutor', dropdown: true, zone: 'esperto' },
+        { href: 'lab.html',        name: 'Laboratorio',  sub: 'Sperimenta',       zone: 'esperto' },
         { href: 'criticita.html',  name: 'Criticità',    sub: 'Diagnostica',      zone: 'esperto' },
         { href: '#guide',          name: 'Guide',        sub: 'PDF scaricabili', action: 'guide' },
     ],
@@ -352,15 +352,6 @@ const BioLab = {
                       + '<a href="biogame.html" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9881;</span> Ricette<span class="bl-dropdown-desc">Costruisci il tuo biomateriale</span></a>'
                       + '<a href="biogame_crescite.html" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9752;</span> Crescite<span class="bl-dropdown-desc">SCOBY, Micelio, Spirulina</span></a>'
                       + '</div></div>';
-                } else if (link.dropdown) {
-                    h += '<div class="bl-nav-dropdown' + zc + '">'
-                      + '<a href="' + link.href + '#sperimenta" class="bl-nav-link' + active + '">'
-                      + '<span class="bl-nav-link-name">' + link.name + '<span class="bl-nav-arrow"> &#9662;</span></span>'
-                      + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>'
-                      + '<div class="bl-nav-dropdown-menu">'
-                      + '<a href="lab.html#sperimenta" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9874;</span> Sperimenta<span class="bl-dropdown-desc">Tavolo ingredienti e predizioni</span></a>'
-                      + '<a href="lab.html#tutor" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9998;</span> Tutor guidato<span class="bl-dropdown-desc">Percorso passo-passo</span></a>'
-                      + '</div></div>';
                 } else {
                     h += '<a href="' + link.href + '" class="bl-nav-link' + active + zc + '">'
                       + '<span class="bl-nav-link-name">' + link.name + '</span>'
@@ -371,30 +362,7 @@ const BioLab = {
             header.innerHTML = h;
         } else {
             // Fallback: header già nell'HTML (retrocompatibilità)
-            // Applica dropdown al link Lab e active state come prima
-            document.querySelectorAll('.bl-nav-link').forEach(link => {
-                const href = link.getAttribute('href') || '';
-                if (href.indexOf('lab.html') !== -1 && !link.closest('.bl-nav-dropdown')) {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'bl-nav-dropdown';
-                    link.parentNode.insertBefore(wrapper, link);
-                    wrapper.appendChild(link);
-                    const sub = link.querySelector('.bl-nav-link-sub');
-                    if (sub) sub.textContent = 'Sperimenta & Tutor';
-                    const arrow = document.createElement('span');
-                    arrow.className = 'bl-nav-arrow';
-                    arrow.innerHTML = ' &#9662;';
-                    const name = link.querySelector('.bl-nav-link-name');
-                    if (name) name.appendChild(arrow);
-                    link.setAttribute('href', 'lab.html#sperimenta');
-                    const menu = document.createElement('div');
-                    menu.className = 'bl-nav-dropdown-menu';
-                    menu.innerHTML =
-                        '<a href="lab.html#sperimenta" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9874;</span> Sperimenta<span class="bl-dropdown-desc">Tavolo ingredienti e predizioni</span></a>' +
-                        '<a href="lab.html#tutor" class="bl-nav-dropdown-item"><span class="bl-dropdown-icon">&#9998;</span> Tutor guidato<span class="bl-dropdown-desc">Percorso passo-passo</span></a>';
-                    wrapper.appendChild(menu);
-                }
-            });
+            // Active state
             document.querySelectorAll('.bl-nav-link').forEach(link => {
                 const href = link.getAttribute('href') || '';
                 const linkPage = href.replace('.html', '').replace(/#.*/, '');
@@ -511,6 +479,19 @@ const BioLab = {
         h += '<li><a href="https://www.instructables.com/From-Waste-to-Material-Used-Coffee-Grounds-BioPlas/" target="_blank">Instructables</a> — Coffee grounds bioplastic</li>';
         h += '</ul>';
 
+        h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Colture e crescite (SCOBY, Micelio)</h4><ul>';
+        h += '<li>Huang, Y. et al. — Bacterial cellulose nanofibers for food packaging, <em>J. Fungi / Biofabrication</em></li>';
+        h += '<li>Hestrin, S. &amp; Schramm, M. — Synthesis of cellulose by <em>Acetobacter xylinum</em>, <em>Biochemical Journal</em>, 1954</li>';
+        h += '<li>Jones, M. et al. — Mycelium Composites: A Review of Engineering Characteristics, <em>MDPI Materials</em></li>';
+        h += '<li>Elsacker, E. et al. — Growing Living and Multifunctional Mycelium Composites, <em>Biofabrication</em></li>';
+        h += '<li>Cao, N. &amp; He, Y. — Tannin crosslinking of gelatin: mechanical and water resistance, 2007</li>';
+        h += '<li><a href="https://grow.bio/" target="_blank">Grow.bio</a> — GIY (Grow It Yourself) kits didattici micelio (Ecovative)</li>';
+        h += '<li><a href="https://www.grown.bio/grow-it-yourself/" target="_blank">Grown.bio</a> — GIY kits micelio (Europa)</li>';
+        h += '<li><a href="https://mushroompackaging.com/" target="_blank">Ecovative Mushroom Packaging</a> — Packaging micelio (Dell, Puma)</li>';
+        h += '<li><a href="https://www.mycoworks.com" target="_blank">MycoWorks</a> — Fine Mycelium per pelle alternativa</li>';
+        h += '<li>Make Magazine, Instructables — Kombucha leather DIY, substrati micelio</li>';
+        h += '</ul>';
+
         h += '<h4 style="color:#2E7D32;margin:12px 0 6px;font-size:0.95em;">Comunità</h4><ul>';
         h += '<li>Instructables — Bioplastics (tutorial maker)</li>';
         h += '<li>Reddit r/Bioplastics — Discussioni biomateriali</li>';
@@ -524,7 +505,7 @@ const BioLab = {
         h += '<p>Ideazione: Prof. Paolo Maccarrone — Corso "Tipologia dei Nuovi Materiali", Accademia Albertina di Torino</p>';
         h += '<p>Sviluppo database e interfaccia con assistenza AI (Claude, Anthropic)</p>';
         h += '<p>Dati sperimentali: studenti Accademia Albertina e IED Torino, 2025-2026</p>';
-        h += '<p style="margin-top:0.5rem;font-size:0.75rem;color:#999;">BioLab v22 · Database v11f · Nav v2 · Licenza: CC BY-NC-SA (proposta)</p>';
+        h += '<p style="margin-top:0.5rem;font-size:0.75rem;color:#999;">BioLab v22 · Database v11g · Nav v3 · Licenza: CC BY-NC-SA (proposta)</p>';
         h += '</div>';
 
         h += '</div>';
