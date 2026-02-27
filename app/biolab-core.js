@@ -285,10 +285,17 @@ const BioLab = {
     currentPage: '',
 
     // Definizione nav — UNICO PUNTO da aggiornare per aggiungere/rinominare pagine
+    // Gerarchia pedagogica: Studio | BioGame | Esperta
     navLinks: [
-        { href: 'materiali.html',  name: 'Materiali',    sub: 'Catalogo' },
+        // — Sezione Studio —
         { href: 'ingredienti.html',name: 'Ingredienti',  sub: 'Schede' },
+        { href: 'materiali.html',  name: 'Materiali',    sub: 'Catalogo' },
         { href: 'applicazioni.html',name:'Applicazioni', sub: 'Progetti reali' },
+        // — Cerniera —
+        { type: 'separator' },
+        { href: '#',               name: 'BioGame',      sub: 'Configuratore', action: 'biogame' },
+        { type: 'separator' },
+        // — Sezione Esperta —
         { href: 'lab.html',        name: 'Laboratorio',  sub: 'Sperimenta & Tutor', dropdown: true },
         { href: 'criticita.html',  name: 'Criticità',    sub: 'Diagnostica' },
         { href: '#guide',          name: 'Guide',        sub: 'PDF scaricabili', action: 'guide' },
@@ -323,9 +330,18 @@ const BioLab = {
             // Nav tab bar
             h += '<nav class="bl-tab-bar">';
             this.navLinks.forEach(link => {
+                // Separator
+                if (link.type === 'separator') {
+                    h += '<div class="bl-nav-sep" title="Sezione esperta"></div>';
+                    return;
+                }
                 const page = link.href.replace('.html', '').replace(/#.*/, '');
                 const active = (page === this.currentPage) ? ' active' : '';
-                if (link.action === 'guide') {
+                if (link.action === 'biogame') {
+                    h += '<a href="#" class="bl-nav-link bl-nav-biogame" onclick="event.preventDefault();BioLab.showToast(\'BioGame in arrivo — stay tuned!\',\'info\')">'
+                      + '<span class="bl-nav-link-name">' + link.name + '</span>'
+                      + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>';
+                } else if (link.action === 'guide') {
                     h += '<a href="#" class="bl-nav-link bl-nav-guide" onclick="event.preventDefault();BioLab.showGuideModal()">'
                       + '<span class="bl-nav-link-name">' + link.name + '</span>'
                       + '<span class="bl-nav-link-sub">' + link.sub + '</span></a>';
@@ -501,7 +517,7 @@ const BioLab = {
         h += '<p>Ideazione: Prof. Paolo Maccarrone — Corso "Tipologia dei Nuovi Materiali", Accademia Albertina di Torino</p>';
         h += '<p>Sviluppo database e interfaccia con assistenza AI (Claude, Anthropic)</p>';
         h += '<p>Dati sperimentali: studenti Accademia Albertina e IED Torino, 2025-2026</p>';
-        h += '<p style="margin-top:0.5rem;font-size:0.75rem;color:#999;">BioLab v22 · Database v11f · Licenza: CC BY-NC-SA (proposta)</p>';
+        h += '<p style="margin-top:0.5rem;font-size:0.75rem;color:#999;">BioLab v22 · Database v11f · Nav v2 · Licenza: CC BY-NC-SA (proposta)</p>';
         h += '</div>';
 
         h += '</div>';

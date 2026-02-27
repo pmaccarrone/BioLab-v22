@@ -66,6 +66,13 @@ body {
     display: flex;
     align-items: stretch;
 }
+/* Separatore tra sezioni nav */
+.bl-nav-sep {
+    width: 1px;
+    align-self: stretch;
+    margin: 8px 6px;
+    background: linear-gradient(to bottom, transparent, #c0bbb3 30%, #c0bbb3 70%, transparent);
+}
 .bl-nav-arrow {
     font-size: 0.6rem;
     margin-left: 0.2rem;
