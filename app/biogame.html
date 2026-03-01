@@ -226,6 +226,146 @@ body { height:auto; overflow:auto; display:block; font-family:'DM Mono',monospac
 header { display:none !important; }
 .bg-wrapper { height: calc(100vh - 140px); overflow: hidden; display: flex; flex-direction: column; }
 .bg-centro-title { font-family:'Fraunces',serif; font-size:.72rem; color:var(--ink3); text-align:center; padding:6px 0 0; font-style:italic; letter-spacing:.05em; }
+
+/* ══════════════════════════════════════════
+   MOBILE LAYOUT — griglia slot + bottom sheet
+   ══════════════════════════════════════════ */
+.mob-only{display:none}
+@media(max-width:480px){
+  .mob-only{display:block!important}
+  .main{display:none!important}
+  .overlay{padding:10px}
+  .overlay .modal{max-height:90vh;overflow-y:auto}
+
+  .mh{background:var(--verde);color:white;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;position:sticky;top:0;z-index:50}
+  .mh .logo{font-family:'Fraunces',serif;font-size:1rem;font-weight:700}
+  .mh .logo em{font-weight:300;color:var(--verde-p);font-style:italic}
+  .mh .hb{font-family:'DM Mono';font-size:.52rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:white;padding:5px 10px;cursor:pointer;border-radius:2px}
+  .mc{padding:10px 12px 30px}
+
+  .mmd{display:flex;gap:0;margin-bottom:8px;border:1.5px solid var(--verde3);border-radius:4px;overflow:hidden}
+  .mmd .mb{flex:1;font-family:'DM Mono';font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;padding:7px 0;text-align:center;cursor:pointer;border:none;background:white;color:var(--verde);transition:all .2s}
+  .mmd .mb.active{background:var(--verde);color:white}
+
+  .mtw{position:relative;width:180px;height:180px;margin:0 auto 6px}
+  #mCvs{display:block;margin:0 auto}
+  .mce{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;background:white;border-radius:50%;border:1.5px solid var(--bordo);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.06);pointer-events:none;z-index:2}
+  .mce .cv{font-family:'Fraunces',serif;font-size:.8rem;font-weight:700;color:var(--verde);line-height:1}
+  .mce .cs{font-size:.38rem;color:#aaa;margin-top:1px}
+
+  .mbu{display:flex;align-items:center;gap:8px;margin:0 4px 8px}
+  .mbu-l{font-size:.5rem;color:#aaa;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+  .mbu-t{flex:1;height:4px;background:var(--carta2);border-radius:2px;overflow:hidden}
+  .mbu-f{height:100%;background:var(--verde3);border-radius:2px;transition:width .5s,background .4s}
+  .mbu-f.warn{background:var(--ocra)}.mbu-f.over{background:var(--rosso)}
+  .mbu-n{font-size:.5rem;color:#aaa;white-space:nowrap}
+
+  .msl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px}
+  .msl{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 3px;border:1.5px solid var(--bordo);border-radius:6px;background:white;cursor:pointer;min-height:52px;transition:all .2s;text-align:center;-webkit-tap-highlight-color:transparent}
+  .msl:active{transform:scale(.95)}
+  .msl-c{font-size:.38rem;letter-spacing:.05em;text-transform:uppercase;color:#bbb;line-height:1;margin-bottom:2px}
+  .msl-n{font-family:'Fraunces',serif;font-size:.52rem;font-weight:700;line-height:1.15;color:var(--ink);word-break:break-word}
+  .msl.filled{border-width:2px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+  .msl.filled .msl-n{font-size:.56rem}
+  .msl-g{font-size:.38rem;color:#aaa;margin-top:1px}
+  .msl.attiva{border-color:var(--verde2);background:var(--verde-bg)}
+  .msl.attenuata{opacity:.35;filter:grayscale(.4)}
+  .msl.obbligatoria{border-color:var(--ocra);background:var(--ocra-bg);animation:mpulsa 1.8s ease-in-out infinite}
+  .msl.guida-focus{border-color:var(--verde);border-width:2.5px;box-shadow:0 0 0 3px rgba(46,125,50,.2);animation:mgfoc 1.5s ease-in-out infinite}
+  .msl.guida-done{border-color:var(--verde3);background:var(--verde-bg);opacity:.7}
+  @keyframes mpulsa{0%,100%{box-shadow:0 0 0 2px rgba(141,110,0,.15)}50%{box-shadow:0 0 0 5px rgba(141,110,0,.25)}}
+  @keyframes mgfoc{0%,100%{box-shadow:0 0 0 3px rgba(46,125,50,.15)}50%{box-shadow:0 0 0 6px rgba(46,125,50,.3)}}
+
+  .mout{background:var(--carta2);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+  .mout .ot{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--verde2);margin-bottom:6px}
+  .mbr{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+  .mbr-l{font-size:.48rem;color:var(--ink2);width:36px;flex-shrink:0;text-align:right}
+  .mbr-t{flex:1;height:12px;background:white;border-radius:3px;position:relative;overflow:hidden;border:1px solid var(--bordo)}
+  .mbr-tg{position:absolute;top:0;height:100%;background:var(--azzurro);opacity:.18;border-radius:2px;transition:width .3s}
+  .mbr-ou{position:absolute;top:0;height:100%;background:var(--verde3);border-radius:2px;transition:width .5s cubic-bezier(.34,1.2,.64,1)}
+  .mbr-v{font-size:.42rem;color:#aaa;width:24px;text-align:left;flex-shrink:0}
+  .mma{display:flex;align-items:center;justify-content:center;gap:10px;padding:8px;margin-top:6px;background:white;border-radius:6px;border:1px solid var(--bordo)}
+  .mma-p{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;line-height:1;transition:color .4s}
+  .mma-d{font-family:'Fraunces',serif;font-size:.54rem;font-style:italic;color:#aaa;flex:1;line-height:1.3}
+
+  .mpc{background:var(--ocra-bg);border:1px solid rgba(141,110,0,.2);border-radius:8px;margin-bottom:10px;overflow:hidden}
+  .mpc-h{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;cursor:pointer}
+  .mpc-t{font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--ocra)}
+  .mpc-a{font-size:.65rem;color:var(--ocra);transition:transform .2s}
+  .mpc.open .mpc-a{transform:rotate(180deg)}
+  .mpc-b{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 12px}
+  .mpc.open .mpc-b{max-height:800px;padding:0 12px 12px}
+
+  .mtg{background:white;border:1px solid var(--bordo);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+  .mtg .tt{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--azzurro);margin-bottom:5px}
+  .mtr{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+  .mtr-l{font-size:.48rem;width:36px;flex-shrink:0;color:var(--ink2);text-align:right}
+  .mtr-t{flex:1;height:10px;background:var(--carta2);border:1px solid var(--bordo);border-radius:3px;cursor:pointer;overflow:hidden}
+  .mtr-f{height:100%;background:var(--azzurro);opacity:.4;border-radius:3px;transition:width .2s}
+  .mtr-v{font-size:.44rem;color:#aaa;width:18px;text-align:right}
+
+  .mac{display:flex;gap:6px;margin-bottom:10px}
+  .mac .ab{font-family:'DM Mono';font-size:.5rem;letter-spacing:.05em;text-transform:uppercase;padding:6px 12px;cursor:pointer;border-radius:2px;border:1.5px solid}
+  .mac .av{border-color:var(--verde3);background:var(--verde-bg);color:var(--verde)}
+  .mac .ag{border-color:#999;background:#f5f5f5;color:#777;margin-left:auto}
+
+  .mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100}
+  .mov.open{display:block}
+  .msh{position:fixed;bottom:0;left:0;right:0;background:var(--carta);border-radius:14px 14px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.15);z-index:101;max-height:70vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s ease}
+  .msh.open{transform:translateY(0)}
+  .msh-ha{width:36px;height:4px;background:#ccc;border-radius:2px;margin:8px auto;flex-shrink:0}
+  .msh-hd{padding:0 16px 8px;border-bottom:1px solid var(--carta2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .msh-cat{font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ocra)}
+  .msh-cl{font-size:.52rem;color:#bbb;cursor:pointer;padding:4px 8px}
+  .msh-bd{overflow-y:auto;flex:1;padding:6px 0;-webkit-overflow-scrolling:touch}
+  .mli{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;transition:background .1s}
+  .mli:active{background:var(--verde-bg)}
+  .mli.rec{background:var(--verde-bg);border-left:3px solid var(--verde3)}
+  .mli-d{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .mli-n{font-size:.72rem;color:var(--ink)}
+  .mli-r{font-size:.44rem;color:var(--verde3);margin-left:auto;font-style:italic}
+  .mli-grp{font-size:.48rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ocra);padding:8px 16px 3px;font-weight:500;border-top:1px solid var(--carta2);margin-top:2px}
+
+  .msw{padding:16px}
+  .msw-nm{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--verde);margin-bottom:12px}
+  .msw-lb{display:flex;justify-content:space-between;margin-bottom:3px}
+  .msw-l{font-family:'Fraunces',serif;font-size:.68rem;font-style:italic;color:var(--ink2)}
+  .msw-g{font-size:.52rem;color:#bbb}
+  .mob-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--verde-bg),var(--verde3));margin:8px 0}
+  .mob-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--verde);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);border:2px solid white}
+  .msw-int{font-family:'Fraunces',serif;font-size:.85rem;font-style:italic;color:var(--verde2);text-align:center;margin:6px 0 3px}
+  .msw-gd{font-size:.52rem;color:#bbb;text-align:center;margin-bottom:6px}
+  .msw-nt{font-size:.56rem;color:#aaa;font-style:italic;font-family:'Fraunces',serif;line-height:1.35;border-top:1px solid var(--carta2);padding-top:8px;margin-top:4px}
+  .msw-ac{display:flex;gap:8px;margin-top:14px;justify-content:space-around}
+  .msw-b{font-family:'DM Mono';font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;padding:8px 14px;cursor:pointer;border-radius:2px;border:none}
+  .msw-ok{background:var(--verde);color:white}
+  .msw-ch{background:transparent;color:var(--ocra);border:1px solid var(--ocra)!important}
+  .msw-rm{background:transparent;color:#c0392b;border:1px solid #eaa!important}
+
+  .gd-dots{display:flex;gap:6px;margin-bottom:8px}
+  .gd-dot{width:8px;height:8px;border-radius:50%;background:var(--bordo);transition:all .3s}
+  .gd-dot.active{background:var(--verde);transform:scale(1.3)}
+  .gd-dot.done{background:var(--verde3)}
+  .gd-q{font-family:'Fraunces',serif;font-size:.78rem;font-weight:700;color:var(--verde);line-height:1.3;margin-bottom:6px}
+  .gd-hint{font-size:.58rem;color:#5D4037;line-height:1.45;margin-bottom:8px}
+  .gd-hint b{color:var(--verde);font-weight:700}
+  .gd-choices{display:flex;flex-wrap:wrap;gap:5px}
+  .gd-ch{font-family:'DM Mono';font-size:.54rem;padding:6px 10px;border:1.5px solid var(--verde3);border-radius:4px;background:white;color:var(--verde);cursor:pointer;transition:all .15s}
+  .gd-ch:active{background:var(--verde);color:white}
+  .gd-ch.rec{border-color:var(--verde);background:var(--verde-bg);font-weight:500}
+  .gd-skip{font-size:.5rem;color:var(--ocra);font-style:italic;margin-top:6px;cursor:pointer}
+  .gd-ok{text-align:center;padding:10px}
+  .gd-ok-i{font-size:1.5rem;margin-bottom:4px}
+  .gd-ok-m{font-family:'Fraunces',serif;font-size:.72rem;color:var(--verde);font-style:italic}
+
+  .sc-card{border:1.5px solid var(--bordo);border-radius:6px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+  .sc-card:active{background:var(--verde-bg);border-color:var(--verde3)}
+  .sc-nm{font-family:'Fraunces',serif;font-size:.82rem;font-weight:700;color:var(--verde);margin-bottom:3px}
+  .sc-desc{font-size:.56rem;color:var(--ink2);line-height:1.4;margin-bottom:6px}
+  .sc-props{display:flex;flex-wrap:wrap;gap:4px}
+  .sc-pr{font-size:.44rem;background:var(--carta2);padding:2px 6px;border-radius:2px;color:var(--ink2)}
+}
+
 </style>
 </head>
 <body>
@@ -356,6 +496,40 @@ header { display:none !important; }
   </div>
 </div>
 
+
+
+<!-- ═══ MOBILE LAYOUT ═══ -->
+<div class="mob-only" id="mob-root">
+  <div class="mh">
+    <div class="logo">Bio<em>Game</em></div>
+    <div style="display:flex;gap:6px">
+      <button class="hb" onclick="openModal()">Chiavistello</button>
+      <button class="hb" onclick="svuotaTutto()">Svuota</button>
+    </div>
+  </div>
+  <div class="mc">
+    <div class="mmd">
+      <div class="mb active" id="mm-lib" onclick="mobSetMode('libero')">Libero</div>
+      <div class="mb" id="mm-gui" onclick="mobSetMode('guidato')">Guidato</div>
+    </div>
+    <div class="mtw">
+      <canvas id="mCvs" width="180" height="180"></canvas>
+      <div class="mce"><div class="cv" id="mcv">—</div><div class="cs">su 100ml</div></div>
+    </div>
+    <div class="mbu"><span class="mbu-l">peso</span><div class="mbu-t"><div class="mbu-f" id="mbf"></div></div><span class="mbu-n" id="mbn">0g / 100ml</span></div>
+    <div class="msl-grid" id="mSlots"></div>
+    <div class="mout"><div class="ot">Output vs Target</div><div id="mBars"></div>
+      <div class="mma"><div class="mma-p" id="mmp">—</div><div class="mma-d" id="mmd2">Aggiungi una matrice</div></div>
+    </div>
+    <div class="mpc" id="mPerche"><div class="mpc-h" onclick="mobTogglePerche()"><span class="mpc-t" id="mpt">Perché</span><span class="mpc-a">▼</span></div>
+      <div class="mpc-b" id="mpb"><div class="perche-testo" style="padding-top:4px">Tocca uno <b>slot</b> per scegliere un ingrediente.<br>Parti dalla <b>matrice</b>.</div></div>
+    </div>
+    <div class="mtg"><div class="tt">Chiavistello (target)</div><div id="mTgt"></div></div>
+    <div class="mac"><button class="ab av" onclick="openModal()">Chiavistello ▸</button><button class="ab ag" onclick="svuotaTutto()">Svuota tutto</button></div>
+  </div>
+</div>
+<div class="mov" id="mOv" onclick="mobCloseSheet()"></div>
+<div class="msh" id="mSh"><div class="msh-ha"></div><div class="msh-hd"><span class="msh-cat" id="mShCat"></span><span class="msh-cl" onclick="mobCloseSheet()">chiudi ×</span></div><div class="msh-bd" id="mShBd"></div></div>
 
 </div><!-- /bg-wrapper -->
 
@@ -1425,6 +1599,394 @@ function svuotaTutto(){
   updateAll();
 }
 
+
+// ══════════════════════════════════════════
+// MOBILE — funzioni parallele, stesso slotData/target
+// ══════════════════════════════════════════
+const MOB = window.innerWidth <= 480;
+let mobMode = 'libero';
+
+function mobInit() {
+  if (!document.getElementById('mob-root')) return;
+  mobBuildSlots();
+  mobBuildBars();
+  mobBuildTgt();
+}
+
+function mobBuildSlots() {
+  const el = document.getElementById('mSlots');
+  if (!el) return;
+  el.innerHTML = SLOT_CFG.map(s =>
+    `<div class="msl" id="ms-${s.id}" onclick="mobTapSlot('${s.id}')"><div class="msl-c" id="msc-${s.id}">${s.cat}</div><div class="msl-n" id="msn-${s.id}">${s.label}</div><div class="msl-g" id="msg-${s.id}"></div></div>`
+  ).join('');
+}
+
+function mobUpdSlot(id) {
+  const s = SLOT_CFG.find(x => x.id === id);
+  const el = document.getElementById('ms-' + id);
+  if (!el) return;
+  const c = document.getElementById('msc-' + id);
+  const n = document.getElementById('msn-' + id);
+  const g = document.getElementById('msg-' + id);
+  const d = slotData[id];
+  if (d && ING[d.ingId]) {
+    const i = ING[d.ingId];
+    el.classList.add('filled');
+    el.style.borderColor = i.colore;
+    el.style.background = i.colore + '10';
+    c.textContent = s.cat; c.style.color = i.colore + '99';
+    n.textContent = i.nome; n.style.color = i.colore;
+    g.textContent = d.grammi.toFixed(0) + 'g';
+  } else {
+    el.classList.remove('filled');
+    el.style.borderColor = ''; el.style.background = '';
+    c.textContent = s.cat; c.style.color = '';
+    n.textContent = s.label; n.style.color = '';
+    g.textContent = '';
+  }
+}
+
+function mobTapSlot(id) {
+  if (mobMode === 'guidato' && BioGameGuida && BioGameGuida.isActive()) {
+    const st = BioGameGuida.getState();
+    if (st && st.currentStep < st.totalSteps) {
+      const step = BioGameGuida.getCurrentStepInfo();
+      if (step && step.slotTarget === id && !slotData[id]) { mobOpenList(id); return; }
+    }
+    if (slotData[id]) { mobOpenSlider(id); return; }
+    return;
+  }
+  slotData[id] ? mobOpenSlider(id) : mobOpenList(id);
+}
+
+function mobOpenSheet() {
+  document.getElementById('mOv').classList.add('open');
+  document.getElementById('mSh').classList.add('open');
+}
+function mobCloseSheet() {
+  document.getElementById('mOv').classList.remove('open');
+  document.getElementById('mSh').classList.remove('open');
+}
+
+function mobOpenList(sid) {
+  const s = SLOT_CFG.find(x => x.id === sid);
+  const used = new Set(Object.values(slotData).map(d => d.ingId));
+  const isL = s.fam === 'libero';
+  const cands = (FAM_CANDIDATI[s.fam] || []).filter(id => !used.has(id) && ING[id]);
+
+  document.getElementById('mShCat').textContent = isL ? 'tutti' : s.cat;
+  const bd = document.getElementById('mShBd');
+  if (isL) {
+    const O = ['matrice','plastificante','reticolante','lipide','carica','colorante','additivo'];
+    const L = {matrice:'Matrici',plastificante:'Plastificanti',reticolante:'Reticolanti',lipide:'Lipidi',carica:'Cariche',colorante:'Coloranti',additivo:'Additivi'};
+    const gr = {};
+    cands.forEach(id => { const c = ING[id]?.cat || 'altro'; if (!gr[c]) gr[c] = []; gr[c].push(id); });
+    bd.innerHTML = O.filter(c => gr[c]?.length).map(c =>
+      `<div class="mli-grp">${L[c]}</div>` + gr[c].map(id => mobLiH(sid, id)).join('')
+    ).join('');
+  } else {
+    bd.innerHTML = cands.map(id => mobLiH(sid, id)).join('');
+  }
+  mobOpenSheet();
+}
+
+function mobLiH(sid, iid) {
+  const i = ING[iid];
+  return `<div class="mli" onclick="mobSelIng('${sid}','${iid}')"><div class="mli-d" style="background:${i.colore}"></div><span class="mli-n">${i.nome}</span></div>`;
+}
+
+function mobOpenSlider(sid) {
+  const d = slotData[sid]; if (!d) return;
+  const i = ING[d.ingId]; if (!i) return;
+  const ratio = (d.grammi - i.gMin) / (i.gMax - i.gMin);
+  document.getElementById('mShCat').textContent = i.cat;
+  document.getElementById('mShBd').innerHTML = `<div class="msw">
+    <div class="msw-nm">${i.nome}</div>
+    <div class="msw-lb"><span class="msw-l">poco</span><span class="msw-l">molto</span></div>
+    <input type="range" class="mob-slider" min="${i.gMin}" max="${i.gMax}" step="${i.gMax <= 8 ? 0.2 : 0.5}" value="${d.grammi}" oninput="mobOnSl('${sid}',this.value)">
+    <div class="msw-lb"><span class="msw-g">${i.gMin}g</span><span class="msw-g">${i.gMax}g</span></div>
+    <div class="msw-int" id="msint">${intensitaLabel(ratio)}</div>
+    <div class="msw-gd" id="msgd">${d.grammi.toFixed(1)}g su 100ml</div>
+    <div class="msw-nt">${i.nota_slider || i.ns || ''}</div>
+    <div class="msw-ac">
+      <button class="msw-b msw-ok" onclick="mobCloseSheet()">Chiudi</button>
+      <button class="msw-b msw-ch" onclick="mobCambia('${sid}')">Cambia</button>
+      <button class="msw-b msw-rm" onclick="mobRemIng('${sid}')">Rimuovi</button>
+    </div></div>`;
+  mobOpenSheet();
+}
+
+function mobOnSl(sid, v) {
+  slotData[sid].grammi = parseFloat(v);
+  const i = ING[slotData[sid].ingId];
+  const r = (parseFloat(v) - i.gMin) / (i.gMax - i.gMin);
+  const e1 = document.getElementById('msint'), e2 = document.getElementById('msgd');
+  if (e1) e1.textContent = intensitaLabel(r);
+  if (e2) e2.textContent = parseFloat(v).toFixed(1) + 'g su 100ml';
+  updateAll();
+}
+
+function mobCambia(sid) { mobCloseSheet(); setTimeout(() => mobOpenList(sid), 280); }
+
+function mobSelIng(sid, iid) {
+  const i = ING[iid];
+  slotData[sid] = { ingId: iid, grammi: (i.gMin + i.gMax) / 2 };
+  mobCloseSheet();
+  if (mobMode === 'guidato' && BioGameGuida && BioGameGuida.isActive()) {
+    BioGameGuida.syncWithSlots(slotData);
+    updateAll();
+    setTimeout(() => mobOpenSlider(sid), 400);
+  } else {
+    mobShowPerche(iid);
+    updateAll();
+    setTimeout(() => mobOpenSlider(sid), 300);
+  }
+}
+
+function mobRemIng(sid) {
+  delete slotData[sid];
+  mobCloseSheet();
+  updateAll();
+}
+
+function mobBuildBars() {
+  const el = document.getElementById('mBars'); if (!el) return;
+  el.innerHTML = PROPS.map(p =>
+    `<div class="mbr"><span class="mbr-l">${PROP_LABELS[p]}</span><div class="mbr-t"><div class="mbr-tg" id="mbt-${p}" style="width:${target[p]}%"></div><div class="mbr-ou" id="mbo-${p}" style="width:0%"></div></div><span class="mbr-v" id="mbv-${p}">0</span></div>`
+  ).join('');
+}
+
+function mobUpdBars(pr) {
+  PROPS.forEach(k => {
+    const v = pr ? Math.round(pr[k] || 0) : 0;
+    const bo = document.getElementById('mbo-' + k);
+    const bt = document.getElementById('mbt-' + k);
+    const bv = document.getElementById('mbv-' + k);
+    if (bo) bo.style.width = v + '%';
+    if (bt) bt.style.width = target[k] + '%';
+    if (bv) bv.textContent = v;
+  });
+}
+
+function mobBuildTgt() {
+  const el = document.getElementById('mTgt'); if (!el) return;
+  el.innerHTML = PROPS.map(p =>
+    `<div class="mtr"><span class="mtr-l">${PROP_LABELS[p]}</span><div class="mtr-t" onclick="mobClickTgt('${p}',event)"><div class="mtr-f" id="mtf-${p}" style="width:${target[p]}%"></div></div><span class="mtr-v" id="mtv-${p}">${target[p]}</span></div>`
+  ).join('');
+}
+
+function mobClickTgt(p, e) {
+  const r = e.currentTarget.getBoundingClientRect();
+  const v = Math.max(0, Math.min(100, Math.round(((e.clientX - r.left) / r.width) * 100)));
+  target[p] = v;
+  const tf = document.getElementById('mtf-' + p);
+  const tv = document.getElementById('mtv-' + p);
+  const bt = document.getElementById('mbt-' + p);
+  if (tf) tf.style.width = v + '%';
+  if (tv) tv.textContent = v;
+  if (bt) bt.style.width = v + '%';
+  // Also sync desktop target display
+  const dtf = document.getElementById('tf-' + p);
+  const dtv = document.getElementById('tv-' + p);
+  if (dtf) dtf.style.width = v + '%';
+  if (dtv) dtv.textContent = v;
+  mobUpdMatch(calcProfilo());
+}
+
+function mobDrawTorta() {
+  const c = document.getElementById('mCvs'); if (!c) return;
+  const ctx = c.getContext('2d'), W = c.width, cx = W/2, cy = W/2, r = W/2 - 4;
+  ctx.clearRect(0, 0, W, W);
+  const f = Object.entries(slotData).filter(([,d]) => ING[d.ingId]);
+  if (!f.length) {
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#D0CCC3'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#ccc'; ctx.font = 'italic 10px Fraunces,serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('tocca uno slot', cx, cy); return;
+  }
+  const tot = f.reduce((s, [, d]) => s + d.grammi, 0); let sa = -Math.PI / 2;
+  f.forEach(([sid, d]) => {
+    const i = ING[d.ingId], sl = (d.grammi / tot) * Math.PI * 2, ea = sa + sl;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, sa, ea); ctx.closePath();
+    ctx.fillStyle = i.colore + 'cc'; ctx.fill(); ctx.strokeStyle = 'white'; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+    if (sl > .35) {
+      const ma = sa + sl/2, lx = cx + (r*.6)*Math.cos(ma), ly = cy + (r*.6)*Math.sin(ma);
+      ctx.save(); ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.font = 'bold 9px DM Mono,monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(d.grammi.toFixed(0) + 'g', lx, ly); ctx.restore();
+    }
+    sa = ea;
+  });
+}
+
+function mobTogglePerche() { document.getElementById('mPerche').classList.toggle('open'); }
+
+function mobShowPerche(iid) {
+  if (mobMode === 'guidato') return;
+  const i = ING[iid]; if (!i) return;
+  const eff = Object.entries(i.effetti || {}).map(([p, e]) =>
+    `<div class="effetto-row"><span class="ef-label">${PROP_LABELS[p]}</span><span class="ef-arrow ${e.dir}">${e.dir === 'su' ? '↑' : e.dir === 'giu' ? '↓' : '→'}</span><span class="ef-desc">${e.note}</span></div>`
+  ).join('');
+  const rl = Object.values(slotData).length ? `<div class="rl-wrap"><div class="rl-title">In ricetta</div>${Object.values(slotData).filter(d => ING[d.ingId]).map(d => {
+    const x = ING[d.ingId];
+    return `<div class="rl-item" onclick="mobShowPerche('${d.ingId}')"><div class="rl-dot" style="background:${x.colore}"></div><span class="rl-nome">${x.nome}</span><span class="rl-g">${d.grammi.toFixed(0)}g</span></div>`;
+  }).join('')}</div>` : '';
+  document.getElementById('mpb').innerHTML = `<div class="perche-ing-nome">${i.nome}</div><div class="perche-ing-fam">${i.cat}</div><div class="perche-testo">${i.perche}</div>${eff ? `<div class="effetti-wrap">${eff}</div>` : ''}${rl}`;
+  document.getElementById('mPerche').classList.add('open');
+}
+
+function mobCascata() {
+  if (mobMode === 'guidato') return;
+  const ms = Object.values(slotData).filter(d => ING[d.ingId]?.fam === 'matrice').map(d => d.ingId);
+  if (!ms.length) { SLOT_CFG.forEach(s => { const e = document.getElementById('ms-' + s.id); if (e) e.classList.remove('attiva', 'attenuata', 'obbligatoria'); }); return; }
+  let sb = new Set(), ob = new Set();
+  ms.forEach(id => { const im = IMPLICAZIONI[id]; if (!im) return; (im.sblocca || []).forEach(f => sb.add(f)); (im.obbliga || []).forEach(x => ob.add(x)); });
+  SLOT_CFG.forEach(s => {
+    const e = document.getElementById('ms-' + s.id); if (!e) return;
+    if (s.fam === 'matrice' || slotData[s.id]) { e.classList.remove('attiva', 'attenuata', 'obbligatoria'); return; }
+    e.classList.remove('attiva', 'attenuata', 'obbligatoria');
+    const fo = FAM_CANDIDATI[s.fam]?.some(id => ob.has(id));
+    if (fo) e.classList.add('obbligatoria');
+    else if (sb.has(s.fam)) e.classList.add('attiva');
+    else e.classList.add('attenuata');
+  });
+}
+
+function mobScoreCol(s) {
+  let h; if (s >= 80) h = 60 + (s-80)*3; else if (s >= 60) h = 25 + (s-60)*1.75; else h = s*.42;
+  return `hsl(${Math.round(h)},72%,38%)`;
+}
+
+function mobUpdMatch(pr) {
+  const el = document.getElementById('mmp'), desc = document.getElementById('mmd2');
+  if (!el || !desc) return;
+  const pen = calcPenalty ? calcPenalty() : null;
+  if (pen) { el.textContent = '—'; el.style.color = '#aaa'; desc.textContent = pen; desc.style.color = mobScoreCol(20); return; }
+  if (!pr) { el.textContent = '—'; el.style.color = '#aaa'; desc.textContent = 'Aggiungi una matrice'; desc.style.color = ''; return; }
+  let t = 0; PROPS.forEach(p => t += (100 - Math.abs((pr[p] || 0) - target[p])));
+  const sc = Math.round(t / PROPS.length);
+  el.textContent = sc + '%'; el.style.color = mobScoreCol(sc); desc.style.color = '';
+  desc.textContent = sc >= 80 ? 'La chiave entra!' : sc >= 60 ? 'Zona negoziazione' : 'Lontano dal target';
+}
+
+// Hook into desktop updateAll
+const _origUpdateAll = typeof updateAll === 'function' ? updateAll : null;
+
+function mobUpdateAll() {
+  if (!document.getElementById('mob-root')) return;
+  const f = Object.entries(slotData).filter(([,d]) => ING[d.ingId]);
+  const tot = f.reduce((s, [, d]) => s + d.grammi, 0);
+  const pct = Math.min((tot / 75) * 100, 100);
+  const bf = document.getElementById('mbf');
+  if (bf) { bf.style.width = pct + '%'; bf.className = 'mbu-f' + (pct > 95 ? ' over' : pct > 70 ? ' warn' : ''); }
+  const bn = document.getElementById('mbn'); if (bn) bn.textContent = tot.toFixed(0) + 'g / 100ml';
+  const cv = document.getElementById('mcv'); if (cv) cv.textContent = f.length ? tot.toFixed(0) + 'g' : '—';
+  mobDrawTorta();
+  mobCascata();
+  const pr = calcProfilo();
+  mobUpdBars(pr);
+  mobUpdMatch(pr);
+  SLOT_CFG.forEach(s => mobUpdSlot(s.id));
+}
+
+// Mode toggle (mobile)
+function mobSetMode(m) {
+  mobMode = m;
+  const lib = document.getElementById('mm-lib'), gui = document.getElementById('mm-gui');
+  if (lib) lib.classList.toggle('active', m === 'libero');
+  if (gui) gui.classList.toggle('active', m === 'guidato');
+  const pt = document.getElementById('mpt');
+  if (pt) pt.textContent = m === 'guidato' ? 'Guida' : 'Perché';
+  // Also sync desktop mode
+  if (typeof setMode === 'function') setMode(m);
+  if (m === 'guidato') {
+    mobUpdateGuidaPerche();
+  } else {
+    mobClearGuida();
+    document.getElementById('mpb').innerHTML = '<div class="perche-testo" style="padding-top:4px">Tocca uno <b>slot</b> per scegliere.<br>Parti dalla <b>matrice</b>.</div>';
+    document.getElementById('mPerche').classList.add('open');
+  }
+}
+
+function mobClearGuida() {
+  SLOT_CFG.forEach(s => { const e = document.getElementById('ms-' + s.id); if (e) e.classList.remove('guida-focus', 'guida-done'); });
+}
+
+function mobUpdateGuidaPerche() {
+  if (!BioGameGuida || !BioGameGuida.isActive()) {
+    // Show scenario picker in accordion
+    mobShowScenariPicker();
+    return;
+  }
+  const st = BioGameGuida.getState();
+  if (!st) return;
+  mobClearGuida();
+
+  if (st.currentStep >= st.totalSteps) {
+    // Complete
+    const dots = Array(st.totalSteps).fill('<div class="gd-dot done"></div>').join('');
+    document.getElementById('mpb').innerHTML = `<div class="gd-dots">${dots}</div><div class="gd-ok"><div class="gd-ok-i">✓</div><div class="gd-ok-m">Ricetta completata!<br>Regola le dosi con gli slider.</div></div>`;
+    document.getElementById('mPerche').classList.add('open');
+    return;
+  }
+
+  const step = BioGameGuida.getCurrentStepInfo();
+  if (!step) return;
+
+  // Focus current slot
+  const fel = document.getElementById('ms-' + step.slotTarget);
+  if (fel) fel.classList.add('guida-focus');
+  // Mark completed
+  st.completedSlots?.forEach(sid => { const e = document.getElementById('ms-' + sid); if (e) e.classList.add('guida-done'); });
+
+  // Dots
+  const dots = Array(st.totalSteps).fill(0).map((_, i) => {
+    let cls = 'gd-dot';
+    if (i < st.currentStep) cls += ' done';
+    if (i === st.currentStep) cls += ' active';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  document.getElementById('mpb').innerHTML = `<div class="gd-dots">${dots}</div>
+    <div class="gd-q">${step.question || 'Scegli un ingrediente'}</div>
+    <div class="gd-hint">${step.hint || ''}</div>
+    <div class="gd-skip" onclick="mobTapSlot('${step.slotTarget}')">↑ Tocca ${step.slotTarget.toUpperCase()} nella griglia</div>`;
+  document.getElementById('mPerche').classList.add('open');
+  setTimeout(() => document.getElementById('mPerche')?.scrollIntoView({behavior:'smooth', block:'nearest'}), 200);
+}
+
+function mobShowScenariPicker() {
+  // Simple: show matrice picker
+  const cands = (FAM_CANDIDATI['matrice'] || []).filter(id => ING[id]);
+  document.getElementById('mpb').innerHTML = `
+    <div class="gd-q">Scegli la matrice principale</div>
+    <div class="gd-hint">La guida ti accompagna passo passo. Parti dalla <b>matrice</b>.</div>
+    <div class="gd-choices">${cands.map(id => {
+      const i = ING[id];
+      return `<div class="gd-ch" onclick="mobGuidaPickMatrice('${id}')">${i.nome}</div>`;
+    }).join('')}</div>`;
+  document.getElementById('mPerche').classList.add('open');
+}
+
+function mobGuidaPickMatrice(matId) {
+  // Use desktop guida flow
+  const ing = ING[matId];
+  slotData['m1'] = { ingId: matId, grammi: (ing.gMin + ing.gMax) / 2 };
+  if (BioGameGuida.hasScenario && BioGameGuida.hasScenario(matId)) {
+    BioGameGuida.activate(matId);
+    if (typeof handleAutoRequire === 'function') handleAutoRequire();
+    if (typeof applyGuidaChiavistello === 'function') applyGuidaChiavistello();
+    BioGameGuida.syncWithSlots(slotData);
+  }
+  updateAll();
+  mobUpdateGuidaPerche();
+}
+
+
+// Patch updateAll to also update mobile
+const _desktopUpdateAll = updateAll;
+updateAll = function() { _desktopUpdateAll(); mobUpdateAll(); };
+
+mobInit();
 init();
 </script>
 </body>

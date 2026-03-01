@@ -103,6 +103,15 @@ const BioLab = {
     },
 
     // ---- Pannello carrello laterale ----
+    toggleMobileNav() {
+        const nav = document.getElementById('blNavMobile');
+        const ov = document.getElementById('blNavOverlay');
+        if (nav && ov) {
+            nav.classList.toggle('open');
+            ov.classList.toggle('open');
+        }
+    },
+
     toggleCartPanel() {
         const panel = document.getElementById('cartPanel');
         if (!panel) return;
@@ -318,6 +327,9 @@ const BioLab = {
               + '</div>'
               + '<div class="bl-brand-spacer"></div>'
               + '<div class="bl-nav-right">'
+              + '<button class="bl-hamburger" onclick="BioLab.toggleMobileNav()" aria-label="Menu">'
+              + '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>'
+              + '</button>'
               + '<div id="google_translate_element" class="bl-translate-widget"></div>'
               + '<button class="bl-info-btn" onclick="BioLab.showInfoModal()" title="Info e credits">'
               + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>'
@@ -359,6 +371,35 @@ const BioLab = {
                 }
             });
             h += '</nav>';
+
+            // Mobile nav (hamburger menu)
+            h += '<div class="bl-nav-mobile-overlay" id="blNavOverlay" onclick="BioLab.toggleMobileNav()"></div>';
+            h += '<div class="bl-nav-mobile" id="blNavMobile">';
+            h += '<div class="bl-nav-mobile-header"><span class="title">BioLab</span><button class="bl-nav-mobile-close" onclick="BioLab.toggleMobileNav()">&times;</button></div>';
+            let lastZone = '';
+            this.navLinks.forEach(link => {
+                if (link.type === 'separator') return;
+                const zone = link.zone || '';
+                if (zone && zone !== lastZone) {
+                    const zoneLabels = {scoperta: 'Studio', cerniera: 'Esplora', esperto: 'Esperta'};
+                    h += '<div class="nav-zone-label">' + (zoneLabels[zone] || zone) + '</div>';
+                    lastZone = zone;
+                }
+                if (link.action === 'guide') {
+                    h += '<a href="#" onclick="event.preventDefault();BioLab.toggleMobileNav();BioLab.showGuideModal()">';
+                    h += '<span class="nm">' + link.name + '</span><span class="ns">' + link.sub + '</span></a>';
+                } else {
+                    const page = link.href.replace('.html','').replace(/#.*/, '');
+                    const active = (page === this.currentPage) ? ' active' : '';
+                    h += '<a href="' + link.href + '" class="' + active + '">';
+                    h += '<span class="nm">' + link.name + '</span><span class="ns">' + link.sub + '</span></a>';
+                    if (link.dropdown === 'biogame') {
+                        h += '<a href="biogame_crescite.html" class="' + (this.currentPage === 'biogame_crescite' ? ' active' : '') + '">';
+                        h += '<span class="nm" style="padding-left:12px">↳ Crescite</span><span class="ns" style="padding-left:12px">SCOBY, Micelio, Spirulina</span></a>';
+                    }
+                }
+            });
+            h += '</div>';
             header.innerHTML = h;
         } else {
             // Fallback: header già nell'HTML (retrocompatibilità)

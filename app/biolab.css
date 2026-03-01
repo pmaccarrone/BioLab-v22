@@ -2289,3 +2289,87 @@ td.grams.modified { color: #e65100; font-weight: 600; }
 .act-claude { background: #f5f0eb; color: #b35c2a; border-color: #e0cfc0; }
 .act-claude:hover { background: #efe5da; border-color: #b35c2a; }
 @media print { .lab-action-bar { display: none; } }
+
+/* ══════════════════════════════════════════════════
+   MOBILE FIXES — 480px e sotto
+   Hamburger, header compatto, carrello, lab, criticità
+   ══════════════════════════════════════════════════ */
+
+/* --- Hamburger menu --- */
+.bl-hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    padding: 4px; color: #fff; line-height: 0;
+}
+.bl-hamburger svg { stroke: currentColor; }
+.bl-nav-mobile-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.4); z-index: 199;
+}
+.bl-nav-mobile-overlay.open { display: block; }
+.bl-nav-mobile {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 280px; height: 100vh; background: #fff;
+    z-index: 200; flex-direction: column; overflow-y: auto;
+    box-shadow: 4px 0 24px rgba(0,0,0,.15);
+    transform: translateX(-100%); transition: transform .25s ease;
+}
+.bl-nav-mobile.open { display: flex; transform: translateX(0); }
+.bl-nav-mobile-header {
+    padding: 16px; background: #1B5E20; color: white;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.bl-nav-mobile-header .title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.1rem; font-weight: 700;
+}
+.bl-nav-mobile-close {
+    background: none; border: none; color: white;
+    font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 4px;
+}
+.bl-nav-mobile a {
+    display: flex; flex-direction: column; padding: 14px 20px;
+    text-decoration: none; color: #333; border-bottom: 1px solid #f0f0f0;
+    transition: background .1s;
+}
+.bl-nav-mobile a:active { background: #E8F5E9; }
+.bl-nav-mobile a .nm { font-size: .92rem; font-weight: 600; }
+.bl-nav-mobile a .ns { font-size: .72rem; color: #999; margin-top: 2px; }
+.bl-nav-mobile a.active { background: #E8F5E9; border-left: 3px solid #1B5E20; }
+.bl-nav-mobile a.active .nm { color: #1B5E20; }
+.bl-nav-mobile .nav-zone-label {
+    font-size: .6rem; letter-spacing: .08em; text-transform: uppercase;
+    color: #bbb; padding: 12px 20px 4px; font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    /* --- Hamburger visible, tab-bar hidden --- */
+    .bl-hamburger { display: block; }
+    .bl-tab-bar { display: none !important; }
+
+    /* --- Header compatto --- */
+    .bl-brand-bar { padding: .3rem .6rem; gap: .4rem; }
+    .bl-brand-logo { width: 26px; height: 26px; }
+    .bl-brand-title { font-size: .82rem; }
+    .bl-brand-sub { display: none; }
+    .bl-translate-widget { transform: scale(.8); transform-origin: right center; }
+    .bl-info-btn, .bl-cart-btn { padding: 4px; }
+
+    /* --- Carrello full-width --- */
+    .bl-cart-panel { width: 100%; right: -100%; }
+    .bl-cart-panel.open { right: 0; }
+
+    /* --- Lab: badge più piccoli --- */
+    .lab-badge, .tw-badge { font-size: .58rem !important; padding: 2px 6px !important; }
+    .bar-label { min-width: 55px; font-size: .6rem; }
+    .lab-action-bar .lab-action-btn { font-size: .55rem; padding: 5px 8px; }
+
+    /* --- Criticità: stack verticale --- */
+    .tabD-sidebar { position: fixed; right: -100%; width: 100%; }
+    .tabD-sidebar.mobile-open { right: 0; }
+    .td-filter-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; }
+    .td-problem-card { margin: 0 0 6px; }
+    .td-pc-title { font-size: .72rem; }
+    .td-pc-text { font-size: .72rem; }
+    .td-context-chips { gap: 3px; }
+    .td-context-chip { font-size: .6rem; padding: 2px 5px; }
+}
