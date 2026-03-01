@@ -366,6 +366,25 @@ header { display:none !important; }
   .sc-pr{font-size:.44rem;background:var(--carta2);padding:2px 6px;border-radius:2px;color:var(--ink2)}
 }
 
+
+/* Obiettivo picker (guida 2 livelli) */
+.guida-obiettivo-picker { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.guida-obiettivo-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px;
+  background: white; cursor: pointer; text-align: left;
+  transition: all .15s; font-family: inherit;
+}
+.guida-obiettivo-btn:hover { border-color: #2d5a3d; background: #E8F5E9; }
+.gob-icona { font-size: 1.3rem; width: 32px; text-align: center; flex-shrink: 0; color: #2d5a3d; }
+.gob-nome { font-size: .82rem; font-weight: 700; color: #222; display: block; line-height: 1.2; }
+.gob-desc { font-size: .68rem; color: #888; display: block; line-height: 1.3; margin-top: 1px; }
+.guida-back-btn {
+  margin-top: 6px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px;
+  background: #f5f5f5; color: #888; cursor: pointer; font-size: .72rem;
+  font-family: inherit; transition: all .15s;
+}
+.guida-back-btn:hover { background: #eee; color: #555; }
 </style>
 </head>
 <body>
@@ -645,23 +664,80 @@ function exitGuidedMode() {
 }
 
 function showGuidaMatricePicker() {
-  const matriciDisp = BioGameGuida.getMatriciDisponibili()
-    .filter(id => ING[id]); // solo quelli presenti nel BioGame
-  const body = document.getElementById('perche-body');
-  let h = `<div class="perche-ing-nome">Scegli la matrice</div>
-    <div class="perche-ing-fam">modalità guidata</div>
-    <div class="perche-testo">La modalità guidata ti accompagna passo-passo nella costruzione della ricetta. Scegli la base del materiale:</div>
-    <div class="guida-matrice-picker">`;
+  showObiettivoPicker();
+}
 
-  matriciDisp.forEach(id => {
-    const sc = BioGameGuida.SCENARI_GUIDA[id];
-    const nome = ING[id]?.nome || id;
-    const intro = sc.intro.substring(0, 80) + (sc.intro.length > 80 ? '...' : '');
-    h += `<button class="guida-matrice-btn" onclick="selectGuidaMatrice('${id}')">
-      ${nome}<span class="gmb-intro">${intro}</span></button>`;
+function showObiettivoPicker() {
+  const body = document.getElementById('perche-body');
+  const obis = BioGameGuida.OBIETTIVI_PROGETTUALI || [];
+  let h = `<div class="perche-ing-nome">Cosa vuoi realizzare?</div>
+    <div class="perche-ing-fam">modalità guidata</div>
+    <div class="perche-testo">Parti dal tuo progetto. La guida ti accompagna nella scelta degli ingredienti.</div>
+    <div class="guida-obiettivo-picker">`;
+  obis.forEach(ob => {
+    h += `<button class="guida-obiettivo-btn" onclick="selectObiettivo('${ob.id}')">
+      <span class="gob-icona">${ob.icona}</span>
+      <span class="gob-nome">${ob.nome}</span>
+      <span class="gob-desc">${ob.desc}</span></button>`;
   });
   h += '</div>';
   body.innerHTML = h;
+}
+
+function selectObiettivo(obId) {
+  const obis = BioGameGuida.OBIETTIVI_PROGETTUALI || [];
+  const ob = obis.find(o => o.id === obId);
+  if (!ob) return;
+  // Show matrice sub-picker filtered by this obiettivo
+  const body = document.getElementById('perche-body');
+  const matriciFilt = ob.matrici.filter(id => ING[id] && BioGameGuida.hasScenario(id));
+  let h = `<div class="perche-ing-nome">${ob.nome}</div>
+    <div class="perche-ing-fam">${ob.desc}</div>
+    <div class="perche-testo">Scegli la <b>matrice</b> principale per questo tipo di materiale:</div>
+    <div class="guida-matrice-picker">`;
+  matriciFilt.forEach(id => {
+    const sc = BioGameGuida.SCENARI_GUIDA[id];
+    const nome = ING[id]?.nome || id;
+    const intro = sc.intro.substring(0, 80) + (sc.intro.length > 80 ? '...' : '');
+    h += `<button class="guida-matrice-btn" onclick="selectGuidaMatriceWithObiettivo('${id}','${obId}')">
+      ${nome}<span class="gmb-intro">${intro}</span></button>`;
+  });
+  h += `<button class="guida-back-btn" onclick="showObiettivoPicker()">← Cambia obiettivo</button>`;
+  h += '</div>';
+  body.innerHTML = h;
+}
+
+let _skipMatriceChiavistello = false;
+
+function selectGuidaMatriceWithObiettivo(matriceId, obId) {
+  // Apply obiettivo chiavistello — questo è il target dello studente
+  const obis = BioGameGuida.OBIETTIVI_PROGETTUALI || [];
+  const ob = obis.find(o => o.id === obId);
+  if (ob && ob.chiavistello) {
+    PROPS.forEach(p => {
+      if (ob.chiavistello[p] !== undefined) target[p] = ob.chiavistello[p];
+    });
+    syncTargetDisplay();
+  }
+  // Impedisci che selectGuidaMatrice sovrascriva con il chiavistello della matrice
+  _skipMatriceChiavistello = true;
+  selectGuidaMatrice(matriceId);
+  _skipMatriceChiavistello = false;
+}
+
+function syncTargetDisplay() {
+  PROPS.forEach(p => {
+    const tf = document.getElementById('tf-' + p);
+    const tv = document.getElementById('tv-' + p);
+    const mtf = document.getElementById('mtf-' + p);
+    const mtv = document.getElementById('mtv-' + p);
+    const mbt = document.getElementById('mbt-' + p);
+    if (tf) tf.style.width = target[p] + '%';
+    if (tv) tv.textContent = target[p];
+    if (mtf) mtf.style.width = target[p] + '%';
+    if (mtv) mtv.textContent = target[p];
+    if (mbt) mbt.style.width = target[p] + '%';
+  });
 }
 
 function selectGuidaMatrice(matriceId) {
@@ -677,7 +753,7 @@ function selectGuidaMatrice(matriceId) {
 
   BioGameGuida.activate(matriceId);
   handleAutoRequire();
-  applyGuidaChiavistello();
+  if (!_skipMatriceChiavistello) applyGuidaChiavistello();
   BioGameGuida.syncWithSlots(slotData);
   updateAll();
   updateGuidaPerche();
@@ -1955,16 +2031,48 @@ function mobUpdateGuidaPerche() {
 }
 
 function mobShowScenariPicker() {
-  // Simple: show matrice picker
-  const cands = (FAM_CANDIDATI['matrice'] || []).filter(id => ING[id]);
+  const obis = BioGameGuida.OBIETTIVI_PROGETTUALI || [];
+  if (!obis.length) return;
   document.getElementById('mpb').innerHTML = `
-    <div class="gd-q">Scegli la matrice principale</div>
-    <div class="gd-hint">La guida ti accompagna passo passo. Parti dalla <b>matrice</b>.</div>
-    <div class="gd-choices">${cands.map(id => {
-      const i = ING[id];
-      return `<div class="gd-ch" onclick="mobGuidaPickMatrice('${id}')">${i.nome}</div>`;
-    }).join('')}</div>`;
+    <div class="gd-q">Cosa vuoi realizzare?</div>
+    <div class="gd-hint">Parti dal tuo <b>progetto</b>. La guida ti accompagna nella scelta.</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">${obis.map(ob =>
+      `<div class="gd-ch rec" style="display:flex;align-items:center;gap:8px;padding:8px 10px;text-align:left;width:100%;box-sizing:border-box" onclick="mobSelectObiettivo('${ob.id}')">
+        <span style="font-size:1.1rem;width:24px;text-align:center;flex-shrink:0">${ob.icona}</span>
+        <span><b style="font-size:.72rem">${ob.nome}</b><br><span style="font-size:.56rem;color:#888">${ob.desc}</span></span>
+      </div>`
+    ).join('')}</div>`;
   document.getElementById('mPerche').classList.add('open');
+}
+
+function mobSelectObiettivo(obId) {
+  const obis = BioGameGuida.OBIETTIVI_PROGETTUALI || [];
+  const ob = obis.find(o => o.id === obId);
+  if (!ob) return;
+  const matriciFilt = ob.matrici.filter(id => ING[id] && BioGameGuida.hasScenario(id));
+  document.getElementById('mpb').innerHTML = `
+    <div class="gd-q">${ob.nome}</div>
+    <div class="gd-hint">${ob.desc}. Scegli la <b>matrice</b>:</div>
+    <div class="gd-choices">${matriciFilt.map(id => {
+      const i = ING[id];
+      return `<div class="gd-ch rec" onclick="mobGuidaPickMatriceWithOb('${id}','${obId}')">${i.nome}</div>`;
+    }).join('')}
+    <div class="gd-skip" onclick="mobShowScenariPicker()">← Cambia obiettivo</div></div>`;
+  document.getElementById('mPerche').classList.add('open');
+}
+
+function mobGuidaPickMatriceWithOb(matId, obId) {
+  // Apply obiettivo chiavistello — il target dello studente
+  const obis = BioGameGuida.OBIETTIVI_PROGETTUALI || [];
+  const ob = obis.find(o => o.id === obId);
+  if (ob && ob.chiavistello) {
+    PROPS.forEach(p => { if (ob.chiavistello[p] !== undefined) target[p] = ob.chiavistello[p]; });
+    if (typeof syncTargetDisplay === 'function') syncTargetDisplay();
+  }
+  // Impedisci sovrascrittura dal chiavistello matrice
+  _skipMatriceChiavistello = true;
+  mobGuidaPickMatrice(matId);
+  _skipMatriceChiavistello = false;
 }
 
 function mobGuidaPickMatrice(matId) {
@@ -1974,7 +2082,7 @@ function mobGuidaPickMatrice(matId) {
   if (BioGameGuida.hasScenario && BioGameGuida.hasScenario(matId)) {
     BioGameGuida.activate(matId);
     if (typeof handleAutoRequire === 'function') handleAutoRequire();
-    if (typeof applyGuidaChiavistello === 'function') applyGuidaChiavistello();
+    if (typeof applyGuidaChiavistello === 'function' && !_skipMatriceChiavistello) applyGuidaChiavistello();
     BioGameGuida.syncWithSlots(slotData);
   }
   updateAll();

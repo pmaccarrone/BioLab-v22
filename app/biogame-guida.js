@@ -281,6 +281,64 @@ Object.keys(SCENARI_GUIDA).forEach(matId => {
 });
 
 // ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+// OBIETTIVI PROGETTUALI — entry point per la guida
+// ═══════════════════════════════════════════
+// Lo studente parte dal progetto, non dalla chimica.
+// Ogni obiettivo suggerisce 2-3 matrici e pre-imposta il chiavistello.
+
+const OBIETTIVI_PROGETTUALI = [
+  {
+    id: 'pellicola',
+    nome: 'Pellicola / Wrapping',
+    desc: 'Devo avvolgere o proteggere qualcosa con un film sottile',
+    icona: '◇',
+    matrici: ['gelatina', 'agar', 'amido_mais', 'amido_tapioca', 'carragenina'],
+    chiavistello: { trasparenza:80, flessibilita:75, resistenzaH2O:25, resistenzaMecc:35, biodegradabilita:90 }
+  },
+  {
+    id: 'contenitore',
+    nome: 'Contenitore / Vaschetta',
+    desc: 'Devo contenere qualcosa \u2014 serve forma stabile e un po\u2019 di rigidità',
+    icona: '▢',
+    matrici: ['agar', 'amido_mais', 'amido_patata', 'alginato', 'pectina'],
+    chiavistello: { trasparenza:40, flessibilita:30, resistenzaH2O:45, resistenzaMecc:65, biodegradabilita:90 }
+  },
+  {
+    id: 'oggetto',
+    nome: 'Oggetto solido / Gioiello',
+    desc: 'Devo creare un pezzo rigido, modellabile, tipo plastica',
+    icona: '●',
+    matrici: ['caseina', 'cheratina', 'albumina', 'zeina'],
+    chiavistello: { trasparenza:20, flessibilita:15, resistenzaH2O:55, resistenzaMecc:80, biodegradabilita:80 }
+  },
+  {
+    id: 'pelle',
+    nome: 'Pelle vegetale / Tessuto',
+    desc: 'Devo fare un materiale flessibile, cucibile, piegabile',
+    icona: '≈',
+    matrici: ['gelatina', 'chitosano', 'alginato', 'carragenina'],
+    chiavistello: { trasparenza:30, flessibilita:85, resistenzaH2O:40, resistenzaMecc:50, biodegradabilita:85 }
+  },
+  {
+    id: 'coating',
+    nome: 'Rivestimento / Finitura',
+    desc: 'Devo proteggere una superficie con uno strato sottile',
+    icona: '▬',
+    matrici: ['zeina', 'gomma_arabica', 'chitosano', 'alginato'],
+    chiavistello: { trasparenza:50, flessibilita:40, resistenzaH2O:65, resistenzaMecc:40, biodegradabilita:85 }
+  },
+  {
+    id: 'composito',
+    nome: 'Composito strutturale',
+    desc: 'Devo fare qualcosa di resistente con fibre o polveri',
+    icona: '▤',
+    matrici: ['amido_mais', 'gelatina', 'agar', 'caseina', 'chitosano'],
+    chiavistello: { trasparenza:15, flessibilita:35, resistenzaH2O:35, resistenzaMecc:75, biodegradabilita:90 }
+  }
+];
+
 // AFFINITÀ: ingredienti consigliati per matrice
 // ═══════════════════════════════════════════
 const AFFINITA_GUIDA = {
@@ -532,6 +590,7 @@ function getMatriciDisponibili() {
 // ESPORTA
 // ═══════════════════════════════════════════
 window.BioGameGuida = {
+  OBIETTIVI_PROGETTUALI,
   isActive, getState, getScenario, hasScenario,
   activate, deactivate,
   completeStep, skipStep, advanceToNext, syncWithSlots,
